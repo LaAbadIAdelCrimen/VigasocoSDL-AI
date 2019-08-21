@@ -13,7 +13,7 @@ std::ofstream& Abadia::operator<< (
 		std::ofstream& out,
 		const PosicionJuego* const pos )
 {
-	out << pos->orientacion << "// orientacion\n";
+	out << pos->orientacion << "// posOrientacion\n";
 	out << pos->posX << "// posX\n";
 	out << pos->posY << "// posY\n";
 	out << pos->altura << "// altura\n";
