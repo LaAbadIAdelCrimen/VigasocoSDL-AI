@@ -33,4 +33,4 @@ RUN cd /home/abadIA \
 
 
 WORKDIR /home/abadIA/VigasocoSDL-AI/VigasocoSDL
-ENTRYPOINT ["./loop-abadIA.sh", ""]
+ENTRYPOINT ["./loop-abadIA-HEADLESS.sh", ""]
