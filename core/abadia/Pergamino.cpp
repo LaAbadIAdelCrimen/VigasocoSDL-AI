@@ -6,7 +6,9 @@
 
 #include <SDL_endian.h>
 #include "../systems/cpc6128.h"
+#ifndef  __libabadIA__
 #include "../TimingHandler.h"
+#endif
 
 #include "Controles.h"
 #include "Juego.h"

@@ -1,0 +1,31 @@
+#CXXFLAGS=-march=native -frecord-gcc-switches -Ofast -fopenmp -std=c++11 -I../core `sdl-config --cflags` 
+CXXFLAGS=-D __libabadIA__ -D__abadIA__ -D__abadIA_FAST__ -D__abadIA_HEADLESS__ -march=x86-64 -mtune=generic -frecord-gcc-switches -Ofast -fopenmp -std=c++11 -I../core `sdl-config --cflags` 
+LDFLAGS=-frecord-gcc-switches
+VPATH=.:../core:../core/abadia:../core/util:../core/systems
+
+# en OBJECTS_CORE falta Operations.o ??
+#OBJECTS_CORE = AbadiaDriver.o FontManager.o GameDriver.o ICriticalSection.o InputPort.o IThread.o TimingHandler.o Vigasoco.o FileLoader.o GameDataEntity.o GfxData.o InputHandler.o IPalette.o NormalLoadHandler.o UncompressedLoader.o cpc6128.o DskReader.o
+OBJECTS_CORE = AbadiaDriver.o GameDriver.o ICriticalSection.o InputPort.o IThread.o TimingHandler.o Vigasoco.o FileLoader.o GameDataEntity.o GfxData.o InputHandler.o IPalette.o NormalLoadHandler.o UncompressedLoader.o cpc6128.o DskReader.o
+
+#OBJECTS_ABADIA = Abad.o AccionesDia.o Adso.o Berengario.o Bernardo.o BuscadorRutas.o Comandos.o Controles.o EntidadJuego.o FijarOrientacion.o GeneradorPantallas.o GestorFrases.o Guillermo.o InfoJuego.o Jorge.o Juego.o Logica.o Malaquias.o Marcador.o MezcladorSprites.o Monje.o MotorGrafico.o Objeto.o Paleta.o Pergamino.o PergaminoTextos.o PersonajeConIA.o Personaje.o Puerta.o RejillaPantalla.o Severino.o Sprite.o SpriteLuz.o SpriteMonje.o TransformacionesCamara.o Serializar.o
+
+#Quito InfoJuego porque no quiero tener que lidiar con el FontManager y el Plugin gráfico en esta versión
+OBJECTS_ABADIA = Abad.o AccionesDia.o Adso.o Berengario.o Bernardo.o BuscadorRutas.o Comandos.o Controles.o EntidadJuego.o FijarOrientacion.o GeneradorPantallas.o GestorFrases.o Guillermo.o Jorge.o Juego.o Logica.o Malaquias.o Marcador.o MezcladorSprites.o Monje.o MotorGrafico.o Objeto.o Paleta.o Pergamino.o PergaminoTextos.o PersonajeConIA.o Personaje.o Puerta.o RejillaPantalla.o Severino.o Sprite.o SpriteLuz.o SpriteMonje.o TransformacionesCamara.o Serializar.o
+
+OBJECTS_SDL = PluginHandler.o SDLTimer.o SDLCriticalSection.o SDLPalette.o SDLThread.o VigasocoSDL.o SDLMain.o
+
+#OBJECTS = $(OBJECTS_CORE) $(OBJECTS_ABADIA) $(OBJECTS_SDL) 
+OBJECTS = $(OBJECTS_ABADIA) ICriticalSection.o SDLCriticalSection.o TimingHandler.o cpc6128.o IPalette.o SDLPalette.o  VigasocoLibSDL.o
+
+TARGETS=libtest
+
+libtest: $(OBJECTS) libtest.o
+	$(CXX) $^ `sdl-config --libs` -o $@
+
+all: $(TARGETS)
+
+clean:
+	rm -f $(OBJECTS) $(OBJECTS_abadIA) $(OBJECTS_abadIA-HEADLESS) $(OBJECTS_profile) $(TARGETS)
+
+mrproper: clean
+	rm -f core *.gcda gmon.out

@@ -2,7 +2,11 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#ifdef  __libabadIA__ 
+#include "../../VigasocoSDL/VigasocoLibSDL.h"
+#else
 #include "../TimingHandler.h"
+#endif
 
 #include "Abad.h"
 #include "AccionesDia.h"

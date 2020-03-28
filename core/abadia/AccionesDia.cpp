@@ -3,7 +3,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "../systems/cpc6128.h"
+#ifndef __libabadIA__
 #include "../TimingHandler.h"
+#endif
 
 #include "Abad.h"
 #include "AccionesDia.h"

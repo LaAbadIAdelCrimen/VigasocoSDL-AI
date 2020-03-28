@@ -11,6 +11,10 @@
 
 #include "sonidos.h"
 
+#ifdef  __libabadIA__
+#include "../../VigasocoSDL/VigasocoLibSDL.h"
+#endif
+
 using namespace Abadia;
 
 /////////////////////////////////////////////////////////////////////////////

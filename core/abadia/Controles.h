@@ -7,8 +7,11 @@
 #ifndef _CONTROLES_H_
 #define _CONTROLES_H_
 
-
+#ifdef  __libabadIA__
+#include "../../VigasocoSDL/VigasocoLibSDL.h"
+#else
 #include "../InputHandler.h"
+#endif
 #include "../util/Singleton.h"
 
 namespace Abadia {

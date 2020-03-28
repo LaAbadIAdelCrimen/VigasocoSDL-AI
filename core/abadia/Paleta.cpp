@@ -2,7 +2,11 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "../systems/cpc6128.h"
+#ifdef  __libabadIA__
+#include "../../VigasocoSDL/VigasocoLibSDL.h" 
+#else
 #include "../Vigasoco.h"
+#endif
 
 #include "Juego.h"
 #include "Paleta.h"

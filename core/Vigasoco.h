@@ -34,7 +34,13 @@ class IThread;			// defined in IThread.h
 class ITimer;			// defined in Timer.h
 class TimingHandler;	// defined in TimingHandler.h
 
+//#ifdef __libabadIA__
+//#include "../VigasocoSDL/VigasocoLibSDL.h"
+////class VigasocoLibSDL;
+//extern VigasocoLibSDL* VigasocoMain;
+//#else
 #define VigasocoMain Vigasoco::getSingletonPtr()
+//#endif
 
 class Vigasoco : public Singleton<Vigasoco>
 {

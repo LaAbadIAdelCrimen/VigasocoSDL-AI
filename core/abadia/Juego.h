@@ -22,7 +22,9 @@ class TimingHandler;			// definido en TimingHandler.h
 namespace Abadia {
 
 class Controles;				// definido en Controles.h
+#ifndef __libabadIA__
 class InfoJuego;				// definido en InfoJuego.h
+#endif
 class Logica;					// definido en Logica.h
 class Marcador;					// definido en Marcador.h
 class MotorGrafico;				// definido en MotorGrafico.h
@@ -90,7 +92,9 @@ public:
 	bool pausa;								// indica si el juego está pausado
 	bool modoInformacion;					// modo de información del juego
 	bool cambioModoInformacion; // se ha cambiado el estado
+#ifndef __libabadIA__
 	InfoJuego *infoJuego;					// objeto para mostrar información interna del juego
+#endif
 #ifdef __abadIA__
 	std::stack<int> frases; // una pila con todas las frases dichas desde el Ãltimo dump
 #endif

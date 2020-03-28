@@ -8,8 +8,12 @@
 #ifndef _Vigasoco_SONIDOS_H_
 #define _Vigasoco_SONIDOS_H_
 
+#ifndef __libabadIA__
 #include "../IAudioPlugin.h"
 #include "../Vigasoco.h"
+#else
+#include "../../VigasocoSDL/VigasocoLibSDL.h"
+#endif
 
 namespace Abadia {
 

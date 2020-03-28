@@ -8,7 +8,11 @@
 #include "../systems/cpc6128.h"
 #include "Juego.h"
 #include "../IDrawPlugin.h"
+#ifndef __libabadIA__
 #include "../TimingHandler.h"
+#else
+#include "../../VigasocoSDL/VigasocoLibSDL.h"
+#endif
 #include "GeneradorPantallas.h"
 
 // para printf

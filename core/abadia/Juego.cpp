@@ -5,11 +5,18 @@
 #include <string>
 
 #include "../systems/cpc6128.h"
+#ifndef __libabadIA__
 #include "../IAudioPlugin.h"
 #include "../InputHandler.h"
+#endif
 #include "../IPalette.h"
+#ifndef __libabadIA__
 #include "../TimingHandler.h"
 #include "../Vigasoco.h"
+#else
+#include "../VigasocoSDL/VigasocoLibSDL.h"
+#endif
+#include "../IPalette.h"
 
 #include "Abad.h"
 #include "Adso.h"
@@ -19,7 +26,9 @@
 #include "Controles.h"
 #include "GestorFrases.h"
 #include "Guillermo.h"
+#ifndef __libabadIA__
 #include "InfoJuego.h"
+#endif
 #include "Jorge.h"
 #include "Juego.h"
 #include "Logica.h"
@@ -51,6 +60,9 @@
 extern bool gb_test;
 extern std::string g_test;
 #endif
+
+// para trazas volcar la rom
+//#include <iostream>
 
 using namespace Abadia;
 
@@ -99,6 +111,17 @@ Juego::Juego(UINT8 *romData, CPC6128 *cpc)
 	mute=false; 
 	slot=0;
 	GraficosCPC=false;
+
+/* Para volcar lo que sería la ROM completa SDL
+   con presentación, rom original y gráficos VGA y CGA + gráficos flipeados 
+   No se incluyen los sonidos al estar en wav externos */
+/*std::ofstream kk("volcadorom",std::ofstream::binary);
+for (int i=0;i<(0x24000+(174065+21600)*3);i++) {
+	std::cout << i << std::endl;
+ kk << romData[i]; 
+}*/
+
+fprintf(stderr,"j1\n");
 	// apunta a los datos del juego, pero saltándose la de la presentación
 	roms = romData + 0x4000;
 
@@ -108,33 +131,45 @@ Juego::Juego(UINT8 *romData, CPC6128 *cpc)
 	for (int i = 0; i < numSprites; i++){
 		sprites[i] = 0;
 	}
+fprintf(stderr,"j2\n");
 
 	// inicia los personajes del juego
 	for (int i = 0; i < numPersonajes; i++){
 		personajes[i] = 0;
 	}
+fprintf(stderr,"j3\n");
 
 	// inicia las puertas del juego
 	for (int i = 0; i < numPuertas; i++){
 		puertas[i] = 0;
 	}
+fprintf(stderr,"j4\n");
 
 	// inicia los objetos del juego
 	for (int i = 0; i < numObjetos; i++){
 		objetos[i] = 0;
 	}
+fprintf(stderr,"j4.1\n");
 
 	timer = 0;
 
 	// crea los objetos principales que usará el juego
 	//paleta = new Paleta();
 	paleta = new Paleta(romData+0x24000-1); // le pasamos los datos de la paleta VGA
+fprintf(stderr,"j5\n");
 	pergamino = new Pergamino();
+fprintf(stderr,"j6\n");
 	motor = new MotorGrafico(buffer, 8192);
+fprintf(stderr,"j7\n");
 	marcador = new Marcador();
+fprintf(stderr,"j8\n");
 	logica = new Logica(roms, buffer, 8192); 
+fprintf(stderr,"j9\n");
+#ifndef __libabadIA__
 	infoJuego = new InfoJuego();
+#endif
 	controles = new Controles();
+fprintf(stderr,"j10\n");
 
 	pausa = false;
 	modoInformacion = false;
@@ -162,7 +197,9 @@ Juego::~Juego()
 		delete objetos[i];
 	}
 
+#ifndef __libabadIA__
 	delete infoJuego;
+#endif
 	delete logica;
 	delete marcador;
 	delete motor;
@@ -1725,13 +1762,16 @@ void Juego::run()
 	timer = VigasocoMain->getTimingHandler();
 	controles->init(VigasocoMain->getInputHandler());
 	audio_plugin = VigasocoMain->getAudioPlugin();
+fprintf(stderr,"run\n");
 
 	// muestra la imagen de presentación
 #ifndef __abadIA__
 	muestraPresentacion();
 #endif
+fprintf(stderr,"run1\n");
 	// para borrar la presentacion antes del menu
 	marcador->limpiaAreaMarcador();
+fprintf(stderr,"run2\n");
 
 	// llevo menu y pergamino mas atras para
 	// que el menu se encuentre ya objetos inicializados
@@ -1749,18 +1789,22 @@ void Juego::run()
 
 	// crea las entidades del juego (sprites, personajes, puertas y objetos)
 	creaEntidadesJuego();
+fprintf(stderr,"run3\n");
 
 
 	// genera los gráficos flipeados en x de las entidades que lo necesiten
 	generaGraficosFlipeados();
+fprintf(stderr,"run4\n");
 
 
 	// inicialmente la cámara sigue a guillermo
 	motor->personaje = personajes[0];
+fprintf(stderr,"run5\n");
 
-
+#ifndef __libabadIA__
 	// inicia el objeto que muestra información interna del juego
 	infoJuego->inicia();
+#endif
 
 	//esto se hacia en muestraIntroduccion
 	//pero ahora muestraIntroduccion va despues
@@ -1805,6 +1849,7 @@ despues_de_cargar_o_iniciar:
 		ReiniciaPantalla();
 
 		while (true){	// el bucle principal del juego empieza aquí
+fprintf(stderr,"run6\n");
 #ifdef __abadIA__
 			if (chivato_partida_perfecta && laLogica->obsequium!=31) {
 				fprintf(stderr,"¡¡¡ OH, VAYA, NO ES LA PARTIDA PERFECTA !!!\n");
@@ -1813,8 +1858,10 @@ despues_de_cargar_o_iniciar:
 //__gcov_flush();
 			VigasocoMain->getInputHandler()->acquire();
 #endif
+fprintf(stderr,"run7\n");
 
 			controles->actualizaEstado();
+fprintf(stderr,"run8\n");
 
 #ifdef __abadIA_HEADLESS__
 //TODO:headless o en abadIA también???
@@ -1822,6 +1869,7 @@ despues_de_cargar_o_iniciar:
 				goto fin;
 			}
 #endif
+fprintf(stderr,"run9\n");
 
 #ifdef __abadIA__
                         if (controles->seHaPulsado(SERVICE_1)){
@@ -1842,7 +1890,9 @@ despues_de_cargar_o_iniciar:
                         }
 
 		        if (controles->seHaPulsado(KEYBOARD_D)){  // D de DUMP
+#ifndef __libabadIA__
 				infoJuego->muestraInfo();
+#endif
 				// si ha pedido volcado el agente, borramos la lista de frases
 				// para que la siguiente vez tenga solo las frases desde la ultima
 				// vez que nos pidio un dump
@@ -1985,7 +2035,9 @@ despues_de_cargar_o_iniciar:
 
 #ifndef __abadIA__
 			if (modoInformacion){
+#ifndef __libabadIA__
 				infoJuego->muestraInfo();
+#endif
 			} else 
 #endif
 			{
@@ -2485,8 +2537,10 @@ bool Juego::compruebaMenu()
 // muestra la imagen de presentación del juego
 void Juego::muestraPresentacion()
 {
+fprintf(stderr,"jmp1\n");
 	// fija la paleta de la presentación
 	paleta->setIntroPalette();
+fprintf(stderr,"jmp2\n");
 
 	// muestra la pantalla de la presentación
 
@@ -2496,10 +2550,13 @@ void Juego::muestraPresentacion()
 
 	//VGA
 	UINT8 *romsVGA = &roms[0x24000-1-0x4000];
+fprintf(stderr,"jmp3\n");
 	cpc6128->showVGAScreen(romsVGA + 0x1ADF0);
+fprintf(stderr,"jmp4 %p\n", timer);
 
 	// espera 5 segundos
 	timer->sleep(5000);
+fprintf(stderr,"jmp5\n");
 }
 
 // muestra el pergamino de presentación

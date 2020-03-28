@@ -1,5 +1,6 @@
-// Controles.cpp
-//
+// FakeLibControles.cpp
+// Un metodo Fake para cuando en la versión Lib no uso plugin para recibir los
+// controles
 /////////////////////////////////////////////////////////////////////////////
 
 #include "Controles.h"
@@ -36,10 +37,8 @@ void Controles::init(InputHandler *input)
 // actualiza el estado de los controles
 void Controles::actualizaEstado()
 {
-#ifndef __libabadIA__
 	// obtiene el estado de los controles
 	ih->copyInputsState(_controles);
-#endif
 
 	// combina el estado actual de los controles con el anterior para poder detectar pulsaciones
 	for (int i = 0; i < END_OF_INPUTS; i++){
