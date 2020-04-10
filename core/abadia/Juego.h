@@ -133,12 +133,21 @@ private:
 #ifdef __abadIA__
 	void compruebaEscenarioPrueba(void);
 #endif
+	int step(void);
 public:
+#ifdef __libabadIA__
+	void init(void);
+#endif
 	void muestraFinal();
 	void limpiaAreaJuego(int color);
 
 	// bucle principal del juego
 	void run();
+#ifdef __libabadIA__
+	//int step2(int controles[END_OF_INPUTS]);
+	//int step2(void);
+	int step(int *source); //TODO ¿const? ¿o usar references?
+#endif
 
 	// inicialización y limpieza
 	Juego(UINT8 *romData, CPC6128 *cpc);

@@ -25,11 +25,16 @@ public:
 
 // TODO: quitar los .o inncesarios del makefile
 class InputHandler {
+private:
+	int _controles[END_OF_INPUTS];
 // methods
 public:
+	void copyInputsState(int *dest) { memcpy(dest,_controles,sizeof(int)*END_OF_INPUTS); dest[P1_UP]=1; fprintf(stderr,"InputHandler::copyInputsState fake UP\n");};
 	// getters
 	void acquire() {};
         void unAcquire() {};
+
+	void process(int controles[END_OF_INPUTS]) { memcpy(_controles,controles,sizeof(int)*END_OF_INPUTS); fprintf(stderr,"InputHandler::process fake UP\n"); };
 };
 
 class TimingHandler {

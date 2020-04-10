@@ -41,8 +41,28 @@ fprintf(stderr,"m4\n");
 	_abadiaGame = new Abadia::Juego(romData, cpc6128);
 fprintf(stderr,"m5\n");
 
-	_abadiaGame->run();
+//	_abadiaGame->run();
+	_abadiaGame->init();
+
+int controles[END_OF_INPUTS];
+memset(controles,sizeof(int)*END_OF_INPUTS,'\0');
+// ¿tiene sentido todo el rato pasar controles
+// o pasarlo al inicio en el init??
+controles[P1_UP]=1;
+	_abadiaGame->step(controles);
+controles[P1_UP]=1;
+	_abadiaGame->step(controles);
+controles[P1_UP]=1;
+	_abadiaGame->step(controles);
+controles[P1_UP]=1;
+	_abadiaGame->step(controles);
+
+
 fprintf(stderr,"m6\n");
+
+// 666 en vez de un run, habría que cargar el estado
+//  llamar al process del InputHandler y
+// llamar a un step() para avanzar un paso
 
 	// destruye la sección crítica
 	if (cs != 0){

@@ -80,6 +80,7 @@ void Guillermo::ejecutaMovimiento()
 		} else if (losControles->estaSiendoPulsado(P1_RIGHT)){
 			gira(-1);
 		} else if (losControles->estaSiendoPulsado(P1_UP)){
+fprintf(stderr,"guillermo trata de avanzar\n");
 			int difAltura1, difAltura2, avanceX, avanceY;
 
 			// obtiene la altura de las posiciones hacia las que se va a mover

@@ -1756,120 +1756,90 @@ bool Juego::menu()
 // método principal del juego
 /////////////////////////////////////////////////////////////////////////////
 
-void Juego::run()
+#ifdef __libabadIA__
+void Juego::init()
 {
 	// obtiene los recursos para el juego
 	timer = VigasocoMain->getTimingHandler();
 	controles->init(VigasocoMain->getInputHandler());
 	audio_plugin = VigasocoMain->getAudioPlugin();
-fprintf(stderr,"run\n");
-
-	// muestra la imagen de presentación
-#ifndef __abadIA__
-	muestraPresentacion();
-#endif
-fprintf(stderr,"run1\n");
-	// para borrar la presentacion antes del menu
-	marcador->limpiaAreaMarcador();
-fprintf(stderr,"run2\n");
-
-	// llevo menu y pergamino mas atras para
-	// que el menu se encuentre ya objetos inicializados
-	//
-	// limpia el área que ocupa el marcador
-	// no se limpia en menu() porque cuando se llame al menu 
-	// dentro del juego, no se debe borrar el marcador
-//	marcador->limpiaAreaMarcador();
-	// menu, sobretodo para permitir cambiar el idioma al empezar
-	// y ver el pergamino inicial en tu idioma
-//	menu();
-
-	// muestra el pergamino de presentación
-//	muestraIntroduccion();
 
 	// crea las entidades del juego (sprites, personajes, puertas y objetos)
 	creaEntidadesJuego();
-fprintf(stderr,"run3\n");
-
 
 	// genera los gráficos flipeados en x de las entidades que lo necesiten
 	generaGraficosFlipeados();
-fprintf(stderr,"run4\n");
-
 
 	// inicialmente la cámara sigue a guillermo
 	motor->personaje = personajes[0];
-fprintf(stderr,"run5\n");
 
 #ifndef __libabadIA__
+// TODO: soportar esto en algún momento para libabadIA
 	// inicia el objeto que muestra información interna del juego
 	infoJuego->inicia();
 #endif
 
-	//esto se hacia en muestraIntroduccion
-	//pero ahora muestraIntroduccion va despues
-	// limpia el área que ocupa el marcador
-//	marcador->limpiaAreaMarcador();
-
-
 	// obtiene las direcciones de los datos relativos a la habitación del espejo
 	logica->despHabitacionEspejo();
 
-	//iniciar antes del menu, para que si a alguien le da por 
-	//grabar antes de empezar una partida, se guarden
-	//datos inicializados.
-	//otra opcion seria desactivar el menu grabar
-	//si se ha entrado en el menu antes de empezar a jugar
-	//TODO: cambiar el bucle principal de inicializar
-	//porque se esta liando bastante
-	logica->inicia();
-	// menu, para permitir cambiar el idioma al empezar
-	// y ver el pergamino inicial en tu idioma
-#ifndef __abadIA__
-	if (menu()) goto despues_de_cargar_o_iniciar;
+	//TODO: contemplar cambiar el idioma en init
 
-	// muestra el pergamino de presentación
-
-	muestraIntroduccion();
-#endif
-
+// TODO: ¿necesitamos marcador? ¿o solo si generamos imagen?
+// porque se podría generar fuera
 	// limpia el área que ocupa el marcador
 	marcador->limpiaAreaMarcador();
+}
 
-	// aquí ya se ha completado la inicialización de datos para el juego
-	// ahora realiza la inicialización para poder empezar a jugar una partida
-	while (true){
-		// inicia la lógica del juego
-		logica->inicia();
-		//creaEntidadesJuego();
+#ifdef __libabadIA__
+//int Juego::step2(int controles[END_OF_INPUTS]) {
+//int Juego::step2(void) {
+int Juego::step(int *source) {
+fprintf(stderr,"Juego::step UP %d\n",source[P1_UP]);
+	controles->libabadIAInput(source);
+	return step();
+}
+#endif
 
+// TODO , ¿step o mainLoop?
+int Juego::step(void)
+{
+	controles->actualizaEstado();
 
-despues_de_cargar_o_iniciar:
-		bool chivato_partida_perfecta=true;
-		ReiniciaPantalla();
+	// TODO, no cargar de fichero, y recibir la partida
+	// cargar(0);
+	// TODO, no grabar a fichero, y devolver la partida
+	//save(0);
+	// no tiene sentido cargar y grabar en el step
+	// vale solo para el escenario serverless
+	// pero para un uso como lib embebida, el juego 
+	// sigue en memoria en cada paso
 
-		while (true){	// el bucle principal del juego empieza aquí
-fprintf(stderr,"run6\n");
+//		while (true){	// el bucle principal del juego empieza aquí
+//fprintf(stderr,"run6\n");
+fprintf(stderr,"x %d y %d\n", personajes[0]->posX, personajes[0]->posY);
 #ifdef __abadIA__
+/*
 			if (chivato_partida_perfecta && laLogica->obsequium!=31) {
 				fprintf(stderr,"¡¡¡ OH, VAYA, NO ES LA PARTIDA PERFECTA !!!\n");
 				chivato_partida_perfecta=false;
 			}
+*/
 //__gcov_flush();
 			VigasocoMain->getInputHandler()->acquire();
 #endif
-fprintf(stderr,"run7\n");
+//fprintf(stderr,"run7\n");
 
 			controles->actualizaEstado();
-fprintf(stderr,"run8\n");
+//fprintf(stderr,"run8\n");
 
 #ifdef __abadIA_HEADLESS__
 //TODO:headless o en abadIA también???
 			if (controles->seHaPulsado(KEYBOARD_F)) {
-				goto fin;
+//				goto fin;
+				return -1;
 			}
 #endif
-fprintf(stderr,"run9\n");
+//fprintf(stderr,"run9\n");
 
 #ifdef __abadIA__
                         if (controles->seHaPulsado(SERVICE_1)){
@@ -1878,7 +1848,8 @@ fprintf(stderr,"run9\n");
                                 _numInterruptsPerLogicUpdate=_numInterruptsPerLogicUpdate/2;
                                 //TODO: ¿se puede quedar a cero y ya no se podría recuperar la velocidad con SLOWDOWN?
                                 VigasocoMain->getInputHandler()->unAcquire();
-                                continue;
+//                                continue;
+				return 0;
                         }
 
                         if (controles->seHaPulsado(SERVICE_2)){
@@ -1886,7 +1857,8 @@ fprintf(stderr,"run9\n");
                                 // a cámara lenta
                                 _numInterruptsPerLogicUpdate=_numInterruptsPerLogicUpdate*2;
                                 VigasocoMain->getInputHandler()->unAcquire();
-                                continue;
+                        //        continue;
+				return 0;
                         }
 
 		        if (controles->seHaPulsado(KEYBOARD_D)){  // D de DUMP
@@ -1916,14 +1888,18 @@ fprintf(stderr,"run9\n");
 				// que al hacer un DUMP y no movernos
 				// TODO: ¿y si en modo multicomando me llega el DUMP junto con alguna otra pulsación?
 				// ¿tiene sentido?En teoría el agente no actuará hasta examinar con el DUMP la situación
-				continue;
+//				continue;
+				return 0;
 			}
 			if (compruebaReinicio()) {
 				VigasocoMain->getInputHandler()->unAcquire();
-				goto despues_de_cargar_o_iniciar;
+//				goto despues_de_cargar_o_iniciar;
+				return 1;
 			}
 #else
-			if (compruebaReinicio()) goto despues_de_cargar_o_iniciar;
+			if (compruebaReinicio()) 
+//				goto despues_de_cargar_o_iniciar;
+				return 1;
 #endif
 
 			// obtiene el contador de la animación de guillermo para saber si se generan caminos en esta iteración
@@ -1952,7 +1928,8 @@ fprintf(stderr,"run9\n");
 
 				VigasocoMain->getInputHandler()->unAcquire();
 #endif
-				goto despues_de_cargar_o_iniciar;
+//				goto despues_de_cargar_o_iniciar;
+				return 1;
 			}
 
 
@@ -1961,7 +1938,9 @@ fprintf(stderr,"run9\n");
 			compruebaCambioCPC_VGA();
 
 			// comprueba si se quiere entrar al menu
-			if ( compruebaMenu() ) goto despues_de_cargar_o_iniciar;
+			if ( compruebaMenu() ) 
+				//goto despues_de_cargar_o_iniciar;
+				return 1;
 
 
 			// actualiza las variables relacionadas con el paso del tiempo
@@ -1969,7 +1948,8 @@ fprintf(stderr,"run9\n");
 
 			// si guillermo ha muerto, empieza una partida
 			if (muestraPantallaFinInvestigacion()){
-				break;
+//				break;
+				return -1;
 			}
 
 			// comprueba si guillermo lee el libro, y si lo hace sin guantes, lo mata
@@ -2066,11 +2046,118 @@ fprintf(stderr,"run9\n");
 #endif
 			// reinicia el contador de la interrupción
 			contadorInterrupcion = 0;
+//		}
+
+	return 0;
+}
+#endif
+/*
+void Juego::mainLoop()
+{
+}
+*/
+void Juego::run()
+{
+	// obtiene los recursos para el juego
+	timer = VigasocoMain->getTimingHandler();
+	controles->init(VigasocoMain->getInputHandler());
+	audio_plugin = VigasocoMain->getAudioPlugin();
+fprintf(stderr,"run\n");
+
+	// muestra la imagen de presentación
+#ifndef __abadIA__
+	muestraPresentacion();
+#endif
+//fprintf(stderr,"run1\n");
+	// para borrar la presentacion antes del menu
+	marcador->limpiaAreaMarcador();
+//fprintf(stderr,"run2\n");
+
+	// llevo menu y pergamino mas atras para
+	// que el menu se encuentre ya objetos inicializados
+	//
+	// limpia el área que ocupa el marcador
+	// no se limpia en menu() porque cuando se llame al menu 
+	// dentro del juego, no se debe borrar el marcador
+//	marcador->limpiaAreaMarcador();
+	// menu, sobretodo para permitir cambiar el idioma al empezar
+	// y ver el pergamino inicial en tu idioma
+//	menu();
+
+	// muestra el pergamino de presentación
+//	muestraIntroduccion();
+
+	// crea las entidades del juego (sprites, personajes, puertas y objetos)
+	creaEntidadesJuego();
+//fprintf(stderr,"run3\n");
+
+
+	// genera los gráficos flipeados en x de las entidades que lo necesiten
+	generaGraficosFlipeados();
+//fprintf(stderr,"run4\n");
+
+
+	// inicialmente la cámara sigue a guillermo
+	motor->personaje = personajes[0];
+//fprintf(stderr,"run5\n");
+
+#ifndef __libabadIA__
+	// inicia el objeto que muestra información interna del juego
+	infoJuego->inicia();
+#endif
+
+	//esto se hacia en muestraIntroduccion
+	//pero ahora muestraIntroduccion va despues
+	// limpia el área que ocupa el marcador
+//	marcador->limpiaAreaMarcador();
+
+
+	// obtiene las direcciones de los datos relativos a la habitación del espejo
+	logica->despHabitacionEspejo();
+
+	//iniciar antes del menu, para que si a alguien le da por 
+	//grabar antes de empezar una partida, se guarden
+	//datos inicializados.
+	//otra opcion seria desactivar el menu grabar
+	//si se ha entrado en el menu antes de empezar a jugar
+	//TODO: cambiar el bucle principal de inicializar
+	//porque se esta liando bastante
+	logica->inicia();
+	// menu, para permitir cambiar el idioma al empezar
+	// y ver el pergamino inicial en tu idioma
+#ifndef __abadIA__
+	if (menu()) goto despues_de_cargar_o_iniciar;
+
+	// muestra el pergamino de presentación
+
+	muestraIntroduccion();
+#endif
+
+	// limpia el área que ocupa el marcador
+	marcador->limpiaAreaMarcador();
+
+	bool status=0; // <0 finalizar partida, 0 seguir bucle, >0 se ha cargado o reiniciado
+	// aquí ya se ha completado la inicialización de datos para el juego
+	// ahora realiza la inicialización para poder empezar a jugar una partida
+	while (status>=0){
+
+		// solo iniciar si se ha finalizado la partida normalmente
+		// y empiza otra
+		if (status==0) {
+			// inicia la lógica del juego
+			logica->inicia();
+			//creaEntidadesJuego();
 		}
+despues_de_cargar_o_iniciar:
+		bool chivato_partida_perfecta=true;
+		ReiniciaPantalla();
+
+		while (status==0) status=step();
+
 	}
 #ifdef __abadIA_HEADLESS__
 //TODO, muy cutre usar goto
-fin:
+//fin:
 	;
 #endif
 }

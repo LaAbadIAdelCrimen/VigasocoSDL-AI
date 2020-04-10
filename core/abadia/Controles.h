@@ -35,6 +35,10 @@ public:
 	bool estaSiendoPulsado(Inputs input) const { return (_controles[input] > 0); }
 	bool seHaPulsado(Inputs input);
 
+#ifdef __libabadIA__
+	void libabadIAInput(int controles[END_OF_INPUTS]);
+#endif
+
 	// inicialización y limpieza
 	Controles();
 	~Controles();
