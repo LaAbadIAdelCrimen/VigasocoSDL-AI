@@ -5,25 +5,102 @@
 
 #include "VigasocoLibSDL.h"
 #include "SDLCriticalSection.h"
+#include <fstream>
+
+extern unsigned char abadiaROM[];
+extern int abadiaROM_size;
+
+// TODO: revisar si con el singleton es más fácil
+/*
+extern "C" {
+	VigasocoLibSDL* LibAbadIA_new() { return new VigasocoLibSDL(); }
+	void LibAbadIA_init(VigasocoLibSDL *abadia) { abadia->init(); }	
+//	void LibAbadIA_step(VigasocoLibSDL *abadia) { abadia->step(); }	
+	VigasocoLibSDL* LibAbadIA_singleton() { return VigasocoLibSDL::getSingletonPtr(); }
+} */
+extern "C" {
+	void LibAbadIA_init() { VigasocoLibSDL::getSingletonPtr()->init(); }
+	void LibAbadIA_step(int *controles) { VigasocoLibSDL::getSingletonPtr()->step(controles); }
+}
+
+VigasocoLibSDL _LibabadIA; // La instancia para no tener que exponer un new() a python
+
+
+// VigasocoLibSDL::getSingletonPtr() 
+// TODO: ¿este modo se puede eliminar?
+bool gb_test(false);  // Âestamos en modo normal o ejecutando tests de pruebas?
+std::string g_test("");  // Escenario de pruebas
 
 VigasocoLibSDL::VigasocoLibSDL() {
+
+	// para no copiar todo el código que interpretaba la ROM
+	// la reordenaba y añadia los gráficos VGA y CPC
+	// aquí tenemos embebido directamente un volcado de esa
+	// información
+	assert(abadiaROM_size==734451);
+
 	_palette=new SDLPalette();
 	_palette->init(256);
 	_audioPlugin=new IAudioPlugin;
 	_inputHandler=new InputHandler;
 	_timingHandler=new TimingHandler;
+
+	cs = new SDLCriticalSection();
+	cs->init();
+
+	cpc6128 = new CPC6128(cs);
+std::ifstream kk("volcadorom");
+const unsigned int size = 734451;
+UINT8 romData[size];
+kk.read((char *)romData,size);
+fprintf(stderr,"romData %d*%d\n", romData[0],romData[734451]); 	
+fprintf(stderr,"abadiaROM %d*%d\n", abadiaROM[0],abadiaROM[734451]); 	
+fprintf(stderr,"romData %d*%d\n", romData[1],romData[734450]); 	
+fprintf(stderr,"abadiaROM %d*%d\n", abadiaROM[1],abadiaROM[734450]); 	
+fprintf(stderr,"size abadiaROM %d\n", abadiaROM_size);
+bool ok=true;
+for (int i=0; i< size; i++) {
+	if (romData[i]!=abadiaROM[i]) { ok=false; fprintf(stderr,"diff en %d\n",i); }
+}
+fprintf(stderr,"ok %d\n", ok);
+
+	_abadiaGame = new Abadia::Juego(abadiaROM, cpc6128);
+//	_abadiaGame = new Abadia::Juego(romData, cpc6128);
 }
 
 VigasocoLibSDL::~VigasocoLibSDL()
 {
-}
+	// destruye la sección crítica
+	if (cs != 0){
+		cs->destroy();
+		delete cs;
+	}
 
+	// borra el objeto de ayuda para los gráficos
+	if (cpc6128) delete cpc6128;
+
+	// borra el objeto del juego
+	if (_abadiaGame) delete _abadiaGame;
+}
+/*
 ICriticalSection * VigasocoLibSDL::createCriticalSection()
 {
 	return new SDLCriticalSection();
 }
+*/
+void VigasocoLibSDL::init(void) {
+	_abadiaGame->init();
+}
+
+void VigasocoLibSDL::step(int *controles) {
+fprintf(stderr,"\tVigasocoLibSDL::step\n");
+	_abadiaGame->step(controles);
+fprintf(stderr,"\tFIN VigasocoLibSDL::step\n");
+}
 
 
+
+/* ORIGINAL */ 
 /*
 // VigasocoSDL.cpp
 //

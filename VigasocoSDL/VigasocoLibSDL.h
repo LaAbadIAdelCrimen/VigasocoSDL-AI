@@ -13,6 +13,9 @@
 //#include "IPalette.h"
 #include "SDLPalette.h"
 
+#include "../core/abadia/Juego.h"
+#include "../core/systems/cpc6128.h"
+
 class IAudioPlugin {
 // getters
 public:
@@ -29,12 +32,13 @@ private:
 	int _controles[END_OF_INPUTS];
 // methods
 public:
-	void copyInputsState(int *dest) { memcpy(dest,_controles,sizeof(int)*END_OF_INPUTS); dest[P1_UP]=1; fprintf(stderr,"InputHandler::copyInputsState fake UP\n");};
+	//void copyInputsState(int *dest) { memcpy(dest,_controles,sizeof(int)*END_OF_INPUTS); dest[P1_UP]=1; };  // fprintf(stderr,"InputHandler::copyInputsState fake UP\n");};
+	void copyInputsState(int *dest) { memcpy(dest,_controles,sizeof(int)*END_OF_INPUTS); };  // fprintf(stderr,"InputHandler::copyInputsState fake UP\n");};
 	// getters
 	void acquire() {};
         void unAcquire() {};
 
-	void process(int controles[END_OF_INPUTS]) { memcpy(_controles,controles,sizeof(int)*END_OF_INPUTS); fprintf(stderr,"InputHandler::process fake UP\n"); };
+	void process(int controles[END_OF_INPUTS]) { memcpy(_controles,controles,sizeof(int)*END_OF_INPUTS); }; // fprintf(stderr,"InputHandler::process fake UP\n"); };
 };
 
 class TimingHandler {
@@ -56,6 +60,11 @@ class ICriticalSection;	// defined in ICriticalSection.h
 //class VigasocoLibSDL : public Vigasoco
 class VigasocoLibSDL:  public Singleton<VigasocoLibSDL> 
 {
+// private
+	Abadia::Juego *_abadiaGame=NULL;
+	CPC6128 *cpc6128=NULL;
+	ICriticalSection *cs=NULL;	
+
 // fields
 protected:
 	IAudioPlugin *_audioPlugin=NULL;
@@ -67,14 +76,18 @@ public:
 	// initialization and cleanup
 	VigasocoLibSDL();
 	virtual ~VigasocoLibSDL();
+	void init(void);
 	// platform services
-	virtual ICriticalSection *createCriticalSection();
+	//virtual ICriticalSection *createCriticalSection();
 
 	// getters
 	IPalette *getPalette() const { return _palette; }
 	IAudioPlugin *getAudioPlugin() const { return _audioPlugin; }
 	InputHandler *getInputHandler() const { return _inputHandler; }
         TimingHandler *getTimingHandler() const { return _timingHandler; }
+
+	//
+	void step(int *controles);
 };
 
 #endif	// _VIGASOCO_LIBSDL_H_

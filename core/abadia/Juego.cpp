@@ -1,4 +1,4 @@
-///Juego.cpp
+//Juego.cpp
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -121,7 +121,6 @@ for (int i=0;i<(0x24000+(174065+21600)*3);i++) {
  kk << romData[i]; 
 }*/
 
-fprintf(stderr,"j1\n");
 	// apunta a los datos del juego, pero saltándose la de la presentación
 	roms = romData + 0x4000;
 
@@ -131,45 +130,35 @@ fprintf(stderr,"j1\n");
 	for (int i = 0; i < numSprites; i++){
 		sprites[i] = 0;
 	}
-fprintf(stderr,"j2\n");
 
 	// inicia los personajes del juego
 	for (int i = 0; i < numPersonajes; i++){
 		personajes[i] = 0;
 	}
-fprintf(stderr,"j3\n");
 
 	// inicia las puertas del juego
 	for (int i = 0; i < numPuertas; i++){
 		puertas[i] = 0;
 	}
-fprintf(stderr,"j4\n");
 
 	// inicia los objetos del juego
 	for (int i = 0; i < numObjetos; i++){
 		objetos[i] = 0;
 	}
-fprintf(stderr,"j4.1\n");
 
 	timer = 0;
 
 	// crea los objetos principales que usará el juego
 	//paleta = new Paleta();
 	paleta = new Paleta(romData+0x24000-1); // le pasamos los datos de la paleta VGA
-fprintf(stderr,"j5\n");
 	pergamino = new Pergamino();
-fprintf(stderr,"j6\n");
 	motor = new MotorGrafico(buffer, 8192);
-fprintf(stderr,"j7\n");
 	marcador = new Marcador();
-fprintf(stderr,"j8\n");
 	logica = new Logica(roms, buffer, 8192); 
-fprintf(stderr,"j9\n");
 #ifndef __libabadIA__
 	infoJuego = new InfoJuego();
 #endif
 	controles = new Controles();
-fprintf(stderr,"j10\n");
 
 	pausa = false;
 	modoInformacion = false;
@@ -1796,7 +1785,10 @@ void Juego::init()
 int Juego::step(int *source) {
 fprintf(stderr,"Juego::step UP %d\n",source[P1_UP]);
 	controles->libabadIAInput(source);
-	return step();
+//	return step();
+int tmp=step();
+fprintf(stderr,"FIN Juego::step UP %d\n",source[P1_UP]);
+return tmp;
 }
 #endif
 
@@ -1816,7 +1808,7 @@ int Juego::step(void)
 
 //		while (true){	// el bucle principal del juego empieza aquí
 //fprintf(stderr,"run6\n");
-fprintf(stderr,"x %d y %d\n", personajes[0]->posX, personajes[0]->posY);
+fprintf(stderr,"step inicio x %d y %d UP %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP));
 #ifdef __abadIA__
 /*
 			if (chivato_partida_perfecta && laLogica->obsequium!=31) {
@@ -2047,6 +2039,7 @@ fprintf(stderr,"x %d y %d\n", personajes[0]->posX, personajes[0]->posY);
 			// reinicia el contador de la interrupción
 			contadorInterrupcion = 0;
 //		}
+fprintf(stderr,"step FIN x %d y %d UP %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP));
 
 	return 0;
 }
@@ -2089,7 +2082,7 @@ fprintf(stderr,"run\n");
 
 	// crea las entidades del juego (sprites, personajes, puertas y objetos)
 	creaEntidadesJuego();
-//fprintf(stderr,"run3\n");
+//printf(stderr,"run3\n");
 
 
 	// genera los gráficos flipeados en x de las entidades que lo necesiten
@@ -2624,10 +2617,8 @@ bool Juego::compruebaMenu()
 // muestra la imagen de presentación del juego
 void Juego::muestraPresentacion()
 {
-fprintf(stderr,"jmp1\n");
 	// fija la paleta de la presentación
 	paleta->setIntroPalette();
-fprintf(stderr,"jmp2\n");
 
 	// muestra la pantalla de la presentación
 
@@ -2637,13 +2628,10 @@ fprintf(stderr,"jmp2\n");
 
 	//VGA
 	UINT8 *romsVGA = &roms[0x24000-1-0x4000];
-fprintf(stderr,"jmp3\n");
 	cpc6128->showVGAScreen(romsVGA + 0x1ADF0);
-fprintf(stderr,"jmp4 %p\n", timer);
 
 	// espera 5 segundos
 	timer->sleep(5000);
-fprintf(stderr,"jmp5\n");
 }
 
 // muestra el pergamino de presentación
@@ -2820,20 +2808,23 @@ bool Juego::muestraPantallaFinInvestigacion()
 void Juego::creaEntidadesJuego()
 {
 	// sprites de los personajes
-
+fprintf(stderr,"Juego::creaEntidadesJuego 1\n");
 	// sprite de guillermo
 	if (sprites[0]) delete sprites[0];
 	sprites[0] = new Sprite();
+fprintf(stderr,"Juego::creaEntidadesJuego 2\n");
 
 	// sprite de adso
 	if (sprites[1]) delete sprites[1];
 	sprites[1] = new Sprite();
+fprintf(stderr,"Juego::creaEntidadesJuego 3\n");
 
 	// sprite de los monjes
 	for (int i = 2; i < 8; i++){
 		if (sprites[i]) delete sprites[i];
 		sprites[i] = new SpriteMonje();
 	}
+fprintf(stderr,"Juego::creaEntidadesJuego 4\n");
 
 	// sprite de las puertas
 	for (int i = primerSpritePuertas; i < primerSpritePuertas + numPuertas; i++){
@@ -2842,6 +2833,7 @@ void Juego::creaEntidadesJuego()
 		sprites[i]->ancho = sprites[i]->oldAncho = 0x06;
 		sprites[i]->alto = sprites[i]->oldAlto = 0x28;
 	}
+fprintf(stderr,"Juego::creaEntidadesJuego 5\n");
 
 	// CPC int despObjetos[8] = { 0x88f0, 0x9fb0, 0x9f80, 0xa010, 0x9fe0, 0x9fe0, 0x9fe0, 0x88c0 };
 	// VGA
@@ -2870,6 +2862,7 @@ void Juego::creaEntidadesJuego()
 	};// TODO: los desplazamientos estan bien, lo que no se si se corresponde
 	// del todo es el indice, o sea, que el objeto 7 en el juego es la lampara
 	// y el 3 el pergamino... 
+fprintf(stderr,"Juego::creaEntidadesJuego 6\n");
 
 	// sprite de los objetos
 	for (int i = primerSpriteObjetos; i < primerSpriteObjetos + numObjetos; i++){
@@ -2892,21 +2885,25 @@ void Juego::creaEntidadesJuego()
 		sprites[i]->despGfx = despObjetos[i - primerSpriteObjetos];
 
 	}
+fprintf(stderr,"Juego::creaEntidadesJuego 7\n");
 
 	// sprite de los reflejos en el espejo
 	if (sprites[spritesReflejos]) delete sprites[spritesReflejos];
 	sprites[spritesReflejos] = new Sprite();
 	if (sprites[spritesReflejos+1]) delete sprites[spritesReflejos+1];
 	sprites[spritesReflejos + 1] = new Sprite();
+fprintf(stderr,"Juego::creaEntidadesJuego 8\n");
 
 	// sprite de la luz
 	if (sprites[spriteLuz]) delete sprites[spriteLuz];
 	sprites[spriteLuz] = new SpriteLuz();
+fprintf(stderr,"Juego::creaEntidadesJuego 9\n");
 
 	// crea los personajes del juego
 	for (int i = 0; i < 8; i++){
 		if (personajes[i]) delete personajes[i];
 	}
+fprintf(stderr,"Juego::creaEntidadesJuego 10\n");
 	personajes[0] = new Guillermo(sprites[0]);
 	personajes[1] = new Adso(sprites[1]);
 	personajes[2] = new Malaquias((SpriteMonje *)sprites[2]);
@@ -2915,6 +2912,7 @@ void Juego::creaEntidadesJuego()
 	personajes[5] = new Severino((SpriteMonje *)sprites[5]);
 	personajes[6] = new Jorge((SpriteMonje *)sprites[6]);
 	personajes[7] = new Bernardo((SpriteMonje *)sprites[7]);
+fprintf(stderr,"Juego::creaEntidadesJuego 11\n");
 
 	// inicia los valores comunes
 	for (int i = 0; i < 8; i++){
@@ -2923,17 +2921,21 @@ void Juego::creaEntidadesJuego()
 	}
 	personajes[1]->despY = -32;
 	
+fprintf(stderr,"Juego::creaEntidadesJuego 12\n");
 	// crea las puertas del juego
 	for (int i = 0; i < numPuertas; i++){
 		if(puertas[i]) delete puertas[i];
 		puertas[i] = new Puerta(sprites[primerSpritePuertas + i]);
 	}
 
+fprintf(stderr,"Juego::creaEntidadesJuego 14\n");
 	// crea los objetos del juego
 	for (int i = 0; i < numObjetos; i++){
 		if(objetos[i]) delete objetos[i];
 		objetos[i] = new Objeto(sprites[primerSpriteObjetos + i]);
 	}
+fprintf(stderr,"Juego::creaEntidadesJuego 15\n");
 
 	logica->inicia();
+fprintf(stderr,"Juego::creaEntidadesJuego 16\n");
 }

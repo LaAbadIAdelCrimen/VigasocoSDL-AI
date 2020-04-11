@@ -1,4 +1,4 @@
-// Controles.cpp
+// Controles.cip
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -39,7 +39,7 @@ void Controles::actualizaEstado()
 //#ifndef __libabadIA__
 	// obtiene el estado de los controles
 	ih->copyInputsState(_controles);
-fprintf(stderr,"Controles::actualizaEstado llamo a copyInputsState\n");
+//fprintf(stderr,"Controles::actualizaEstado llamo a copyInputsState\n");
 
 
 //#else
@@ -53,7 +53,7 @@ fprintf(stderr,"Controles::actualizaEstado llamo a copyInputsState\n");
 			_oldControles[i] |= 1;
 		}
 	}
-fprintf(stderr,"Controles::actualizaEstado _oldControles UP %d\n",_oldControles[P1_UP]);
+//fprintf(stderr,"Controles::actualizaEstado _oldControles UP %d\n",_oldControles[P1_UP]);
 }
 
 // comprueba si se acaba de pulsar una tecla
@@ -66,9 +66,10 @@ bool Controles::seHaPulsado(Inputs input)
 }
 
 #ifdef __libabadIA__
-void Controles::libabadIAInput(int controles[END_OF_INPUTS]) {
+//void Controles::libabadIAInput(int controles[END_OF_INPUTS]) {
+void Controles::libabadIAInput(int *controles) {
 	ih->process(controles);
-fprintf(stderr,"Controles::libabadIAInput UP %d\n", controles[P1_UP]);
+//fprintf(stderr,"Controles::libabadIAInput UP %d\n", controles[P1_UP]);
 }
 #endif
 

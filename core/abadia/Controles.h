@@ -36,7 +36,8 @@ public:
 	bool seHaPulsado(Inputs input);
 
 #ifdef __libabadIA__
-	void libabadIAInput(int controles[END_OF_INPUTS]);
+//	void libabadIAInput(int controles[END_OF_INPUTS]);
+	void libabadIAInput(int *controles);
 #endif
 
 	// inicialización y limpieza

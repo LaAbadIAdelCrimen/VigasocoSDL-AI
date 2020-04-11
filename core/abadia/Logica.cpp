@@ -114,6 +114,7 @@ void Logica::inicia()
 	elMotorGrafico->personaje = guillermo;
 
 	buscRutas->generadoCamino = false;
+fprintf(stderr,"Logica::inicia 100\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////
