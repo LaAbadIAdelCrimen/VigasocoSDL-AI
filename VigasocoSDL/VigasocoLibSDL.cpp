@@ -6,6 +6,7 @@
 #include "VigasocoLibSDL.h"
 #include "SDLCriticalSection.h"
 #include <fstream>
+//#include <string>
 
 extern unsigned char abadiaROM[];
 extern int abadiaROM_size;
@@ -20,7 +21,13 @@ extern "C" {
 } */
 extern "C" {
 	void LibAbadIA_init() { VigasocoLibSDL::getSingletonPtr()->init(); }
-	void LibAbadIA_step(int *controles) { VigasocoLibSDL::getSingletonPtr()->step(controles); }
+	const char *LibAbadIA_step(int *controles) { 
+//		std::string tmp= VigasocoLibSDL::getSingletonPtr()->step(controles);
+//const		char *t=tmp.c_str();
+//		return t;
+fprintf(stderr,"C wrapper UP %d RESET %d\n",controles[P1_UP], controles[KEYBOARD_E]);
+return VigasocoLibSDL::getSingletonPtr()->step(controles).c_str(); 
+}
 }
 
 VigasocoLibSDL _LibabadIA; // La instancia para no tener que exponer un new() a python
@@ -49,6 +56,7 @@ VigasocoLibSDL::VigasocoLibSDL() {
 	cs->init();
 
 	cpc6128 = new CPC6128(cs);
+/*
 std::ifstream kk("volcadorom");
 const unsigned int size = 734451;
 UINT8 romData[size];
@@ -63,6 +71,7 @@ for (int i=0; i< size; i++) {
 	if (romData[i]!=abadiaROM[i]) { ok=false; fprintf(stderr,"diff en %d\n",i); }
 }
 fprintf(stderr,"ok %d\n", ok);
+*/
 
 	_abadiaGame = new Abadia::Juego(abadiaROM, cpc6128);
 //	_abadiaGame = new Abadia::Juego(romData, cpc6128);
@@ -92,10 +101,12 @@ void VigasocoLibSDL::init(void) {
 	_abadiaGame->init();
 }
 
-void VigasocoLibSDL::step(int *controles) {
-fprintf(stderr,"\tVigasocoLibSDL::step\n");
-	_abadiaGame->step(controles);
-fprintf(stderr,"\tFIN VigasocoLibSDL::step\n");
+//void VigasocoLibSDL::step(int *controles) {
+std::string VigasocoLibSDL::step(int *controles) {
+fprintf(stderr,"\tVigasocoLibSDL::step %d %d\n",controles[P1_UP],controles[KEYBOARD_E]);
+//controles[KEYBOARD_E]=1; //666
+return	_abadiaGame->step(controles);
+//fprintf(stderr,"\tFIN VigasocoLibSDL::step\n");
 }
 
 

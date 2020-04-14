@@ -284,6 +284,7 @@ void MotorGrafico::actualizaPersonajes()
 		if (actualizaCoordCamara(pers, posXPant, posYPant, sprPosY) != -1){
 			pers->notificaVisibleEnPantalla(posXPant, posYPant, sprPosY);
 		} else {
+fprintf(stderr," MotorGrafico::actualizaPersonajes %d no es visible\n",i);
 			pers->sprite->esVisible = false;
 		}
 

@@ -23,6 +23,7 @@ public:
 	virtual void Stop(int sample) {};
         virtual void setProperty(std::string prop, int data) {};
         virtual void setProperty(std::string prop, int index, int data) {};
+	virtual int getProperty(std::string prop,int index) { return 0; };
 };
 
 
@@ -32,7 +33,7 @@ private:
 	int _controles[END_OF_INPUTS];
 // methods
 public:
-	//void copyInputsState(int *dest) { memcpy(dest,_controles,sizeof(int)*END_OF_INPUTS); dest[P1_UP]=1; };  // fprintf(stderr,"InputHandler::copyInputsState fake UP\n");};
+//	void copyInputsState(int *dest) { memcpy(dest,_controles,sizeof(int)*END_OF_INPUTS); dest[KEYBOARD_E]=1; };  // fprintf(stderr,"InputHandler::copyInputsState fake UP\n");};
 	void copyInputsState(int *dest) { memcpy(dest,_controles,sizeof(int)*END_OF_INPUTS); };  // fprintf(stderr,"InputHandler::copyInputsState fake UP\n");};
 	// getters
 	void acquire() {};
@@ -87,7 +88,8 @@ public:
         TimingHandler *getTimingHandler() const { return _timingHandler; }
 
 	//
-	void step(int *controles);
+	//void step(int *controles);
+	std::string step(int *controles);
 };
 
 #endif	// _VIGASOCO_LIBSDL_H_

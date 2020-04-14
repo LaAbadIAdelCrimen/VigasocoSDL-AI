@@ -14,6 +14,9 @@
 #ifdef __abadIA__
 #include <stack>
 #endif
+#ifdef __libabadIA__
+#include <string>
+#endif
 
 class CPC6128;					// definido en CPC6128.h
 class IAudioPlugin;				// definido en IAudioPlugin.h
@@ -137,6 +140,7 @@ private:
 public:
 #ifdef __libabadIA__
 	void init(void);
+	std::string dump(void);
 #endif
 	void muestraFinal();
 	void limpiaAreaJuego(int color);
@@ -146,7 +150,8 @@ public:
 #ifdef __libabadIA__
 	//int step2(int controles[END_OF_INPUTS]);
 	//int step2(void);
-	int step(int *source); //TODO ¿const? ¿o usar references?
+	//int step(int *source); //TODO ¿const? ¿o usar references?
+	std::string step(int *source); //TODO ¿const? ¿o usar references?
 #endif
 
 	// inicialización y limpieza

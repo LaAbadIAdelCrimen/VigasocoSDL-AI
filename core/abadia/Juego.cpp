@@ -28,6 +28,10 @@
 #include "Guillermo.h"
 #ifndef __libabadIA__
 #include "InfoJuego.h"
+#else
+#include "../util/json.hpp"
+#include "Berengario.h"
+#include "sonidos.h"
 #endif
 #include "Jorge.h"
 #include "Juego.h"
@@ -1754,7 +1758,7 @@ void Juego::init()
 	audio_plugin = VigasocoMain->getAudioPlugin();
 
 	// crea las entidades del juego (sprites, personajes, puertas y objetos)
-	creaEntidadesJuego();
+	creaEntidadesJuego(); // esto ya llama a logica->inicia en la ver abadia,no en el original
 
 	// genera los gráficos flipeados en x de las entidades que lo necesiten
 	generaGraficosFlipeados();
@@ -1777,25 +1781,35 @@ void Juego::init()
 // porque se podría generar fuera
 	// limpia el área que ocupa el marcador
 	marcador->limpiaAreaMarcador();
+
+	//TODO: revisar
+//	logica->inicia();
+//	ReiniciaPantalla(); // para forzar que se establezca numPantalla		
 }
 
 #ifdef __libabadIA__
 //int Juego::step2(int controles[END_OF_INPUTS]) {
 //int Juego::step2(void) {
-int Juego::step(int *source) {
-fprintf(stderr,"Juego::step UP %d\n",source[P1_UP]);
+
+int kk_tmp;
+//int Juego::step(int *source) {
+std::string Juego::step(int *source) {
+fprintf(stderr,"%d Juego::step UP %d RESET %d\n",kk_tmp,source[P1_UP],source[KEYBOARD_E]);
 	controles->libabadIAInput(source);
 //	return step();
 int tmp=step();
-fprintf(stderr,"FIN Juego::step UP %d\n",source[P1_UP]);
-return tmp;
+fprintf(stderr,"%d FIN Juego::step UP RESET %d %d\n",kk_tmp,source[P1_UP],source[KEYBOARD_E]);
+if (kk_tmp<5) save(kk_tmp); // grabar los 5 primeros pasos para depurar
+kk_tmp++;
+//return tmp;
+return dump();
 }
 #endif
 
 // TODO , ¿step o mainLoop?
 int Juego::step(void)
 {
-	controles->actualizaEstado();
+//666	controles->actualizaEstado();
 
 	// TODO, no cargar de fichero, y recibir la partida
 	// cargar(0);
@@ -1808,7 +1822,7 @@ int Juego::step(void)
 
 //		while (true){	// el bucle principal del juego empieza aquí
 //fprintf(stderr,"run6\n");
-fprintf(stderr,"step inicio x %d y %d UP %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP));
+fprintf(stderr,"step inicio x %d y %d UP %d RESET %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP),controles->seHaPulsado(KEYBOARD_E));
 #ifdef __abadIA__
 /*
 			if (chivato_partida_perfecta && laLogica->obsequium!=31) {
@@ -1822,6 +1836,7 @@ fprintf(stderr,"step inicio x %d y %d UP %d\n", personajes[0]->posX, personajes[
 //fprintf(stderr,"run7\n");
 
 			controles->actualizaEstado();
+fprintf(stderr,"DESPUES ACTUALIZA ESTADO step inicio x %d y %d UP %d RESET %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP),controles->seHaPulsado(KEYBOARD_E));
 //fprintf(stderr,"run8\n");
 
 #ifdef __abadIA_HEADLESS__
@@ -1852,10 +1867,13 @@ fprintf(stderr,"step inicio x %d y %d UP %d\n", personajes[0]->posX, personajes[
                         //        continue;
 				return 0;
                         }
+fprintf(stderr,"guillermo visible %d\n",elJuego->personajes[0]->sprite->esVisible);
 
 		        if (controles->seHaPulsado(KEYBOARD_D)){  // D de DUMP
 #ifndef __libabadIA__
 				infoJuego->muestraInfo();
+#else
+fprintf(stderr,"DUMP %s\n",dump().c_str());
 #endif
 				// si ha pedido volcado el agente, borramos la lista de frases
 				// para que la siguiente vez tenga solo las frases desde la ultima
@@ -1886,13 +1904,17 @@ fprintf(stderr,"step inicio x %d y %d UP %d\n", personajes[0]->posX, personajes[
 			if (compruebaReinicio()) {
 				VigasocoMain->getInputHandler()->unAcquire();
 //				goto despues_de_cargar_o_iniciar;
+//#ifndef __libabadIA__
 				return 1;
+//#endif
 			}
 #else
 			if (compruebaReinicio()) 
 //				goto despues_de_cargar_o_iniciar;
 				return 1;
 #endif
+fprintf(stderr,"despues reinicio guillermo visible %d\n",elJuego->personajes[0]->sprite->esVisible);
+fprintf(stderr,"despues reinicio camara guillermo %d\n",motor->personaje==elJuego->personajes[0]);
 
 			// obtiene el contador de la animación de guillermo para saber si se generan caminos en esta iteración
 			elBuscadorDeRutas->contadorAnimGuillermo = laLogica->guillermo->contadorAnimacion;
@@ -2039,7 +2061,7 @@ fprintf(stderr,"step inicio x %d y %d UP %d\n", personajes[0]->posX, personajes[
 			// reinicia el contador de la interrupción
 			contadorInterrupcion = 0;
 //		}
-fprintf(stderr,"step FIN x %d y %d UP %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP));
+fprintf(stderr,"step FIN x %d y %d UP %d RESET %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP),controles->seHaPulsado(KEYBOARD_E));
 
 	return 0;
 }
@@ -2360,14 +2382,18 @@ void Juego::reinicio()
 //	logica->inicia();
 	// no es suficiente con reiniciar la lógica
 	creaEntidadesJuego();
+fprintf(stderr,"reinicio motor->personaje es Guillermo %d\n",motor->personaje==personajes[0]);
+ReiniciaPantalla(); //666
 }
 
 // comprueba si se solicita reiniciar la partida
 // con una pulsacion de tecla (no desde el menu)
 bool Juego::compruebaReinicio()
 {
+fprintf(stderr,"comprueba reinicio\n");
         // si se ha pulsado suprimir, se para hasta que se vuelva a pulsar
         if (controles->seHaPulsado(KEYBOARD_E)){  // ?E de rEset
+fprintf(stderr,"pedido reinicio\n");
                 reinicio();
                 return true;
         }
@@ -2939,3 +2965,139 @@ fprintf(stderr,"Juego::creaEntidadesJuego 15\n");
 	logica->inicia();
 fprintf(stderr,"Juego::creaEntidadesJuego 16\n");
 }
+
+#ifdef __libabadIA__
+// Para simplificar y no tener que usar InfoJuego
+// con toda la parafernalia de gráficos que tiene
+// si solo queremos un save que vuelca en JSON
+std::string Juego::dump(void) {
+//                std::ofstream out("abadIA.dump",
+//                                std::ofstream::out|std::ofstream::trunc);
+//              out << "test\n";
+                nlohmann::json dump;
+                dump["dia"]=laLogica->dia;
+                dump["momentoDia"]= laLogica->momentoDia;
+                dump["obsequium"]= laLogica->obsequium;
+                dump["numeroRomano"]=laLogica->numeroRomano;
+                dump["haFracasado"]=laLogica->haFracasado;
+                dump["bonus"]=laLogica->bonus;
+                dump["investigacionCompleta"]=laLogica->investigacionCompleta;
+                if (laLogica->investigacionCompleta)
+                        // para evitar llamar a laLogica y entrar
+                        // en bucle
+                        dump["porcentaje"]=100;
+                else
+                        dump["porcentaje"]=laLogica->calculaPorcentajeMision();
+                dump["numPantalla"]=elJuego->motor->numPantalla;
+                dump["numPantalla"]=elJuego->motor->numPantalla;
+                dump["planta"]=elMotorGrafico->obtenerPlanta(
+                                elMotorGrafico->obtenerAlturaBasePlanta(
+                                elMotorGrafico->personaje->altura));
+                // Sonidos
+                nlohmann::json Sonidos = nlohmann::json::array();
+                for (int index=0;index<12;index++) { // TODO quitar el 12 a fuego
+                        nlohmann::json sonido = // (bool)
+                                VigasocoMain->getAudioPlugin()->getProperty("sonidos",index);
+                        Sonidos.push_back(sonido);
+                }
+                dump["sonidos"]=Sonidos;
+                // reiniciamos para volver a guardar solo los sonidos entre dump y dump
+// NO, ahora
+// se vacia en el bucle principal de juego,no aqui  
+// se vacia solo cuando el agente ha pedido un dump 
+//                for (int index=0;index<12;index++)
+//                        VigasocoMain->getAudioPlugin()->setProperty("sonidos",index,false);
+
+                // Frases
+                nlohmann::json Frases = nlohmann::json::array();
+// se vacia en el bucle principal de juego,no aqui  
+// se vacia solo cuando el agente ha pedido un dump 
+/*
+                while (!elJuego->frases.empty()) {
+                        nlohmann::json frase = elJuego->frases.top();
+                        Frases.push_back(frase);
+                        elJuego->frases.pop();
+                }
+*/
+//TODO: optimizar , esto de copiar la lista entera para recorrerla no mola
+		std::stack <int> duplicadoFrases = elJuego->frases;
+                while (!duplicadoFrases.empty()) {
+                        nlohmann::json frase = duplicadoFrases.top();
+                        Frases.push_back(frase);
+                        duplicadoFrases.pop();
+                }
+
+                dump["frases"]=Frases;
+
+                // Personajes
+                static const std::string tablaNombresPersonajes[] = {
+                        "Guillermo" ,  // 0
+                        "Adso", // 1
+                        "Malaquias", // 2
+                        "Abad", // 3
+                        "Berengario", // 4
+                        "Severino", // 5
+                        "Jorge", // 6
+                        "Bernardo" // 7
+                };
+                nlohmann::json Personajes = nlohmann::json::array();
+                for(int i=0;i<elJuego->numPersonajes;i++) {
+                        Personaje *pers=elJuego->personajes[i];
+                        if (pers->sprite->esVisible) {
+                                nlohmann::json personaje;
+                                personaje["id"]=i;
+                                if (i==4) {
+                                        Berengario *ber=(Berengario *)pers;
+                                        //Monje*ber=(Monje *)pers;
+                                        if (ber->datosCara[0]==69308) personaje["nombre"]="Encapuchado";
+                                        else personaje["nombre"]=tablaNombresPersonajes[i];
+                                } else personaje["nombre"]=tablaNombresPersonajes[i];
+                                personaje["posX"]=pers->posX;
+                                personaje["posY"]=pers->posY;
+                                personaje["altura"]=pers->altura;
+                                personaje["orientacion"]=pers->orientacion;
+                                if (i==0 || i==1) { // solo sabemos los objetos que tienen Guillermo y Adso
+                                        personaje["objetos"]=pers->objetos;
+                                }
+                                Personajes.push_back(personaje);
+                        }
+                }
+                dump["Personajes"]=Personajes;
+                // Objetos
+                nlohmann::json Objetos = nlohmann::json::array();
+                for(int i=0;i<elJuego->numObjetos;i++) {
+                        Objeto *obj=elJuego->objetos[i];
+                        if (obj->sprite->esVisible) {
+                                nlohmann::json objeto;
+                                objeto["id"]=i;
+                                objeto["posX"]=obj->posX;
+                                objeto["posY"]=obj->posX;
+                                objeto["altura"]=obj->altura;
+                                objeto["orientacion"]=obj->orientacion;
+                                Objetos.push_back(objeto);
+                        }
+                }
+                dump["Objetos"]=Objetos;
+                // Rejilla
+                // Rejilla
+                nlohmann::json Rejilla = nlohmann::json::array();
+                RejillaPantalla *rejilla = elMotorGrafico->rejilla;
+                for (int j = 0; j < 24; j++) {
+                        nlohmann::json Fila = nlohmann::json::array();
+                        for (int i = 0; i < 24; i++) {
+                                Fila.push_back((int)rejilla->bufAlturas[j][i]);
+                        }
+                        Rejilla.push_back(Fila);
+                }
+                dump["Rejilla"]=Rejilla;
+                // Una forma de verlo cuadrado en vim es sacar
+                // el array del json y
+                // :1,$ s/ \([0-9]\)\,/ 0\1\,/g
+                // :1,$ s/\[\([0-9]\)\,/\[0\1\,/g
+
+                // Volcado completo
+//		out << dump;
+//		VigasocoMain->getInputHandler()->setStringProperty("DUMP",dump.dump());
+	return dump.dump();
+}
+#endif

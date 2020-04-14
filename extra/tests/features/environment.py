@@ -7,8 +7,8 @@ import sys
 def before_all(context):
 	sys.path.append('./steps/');
 	if ("interfaz" not in context.config.userdata):
-		#por defecto, interfaz HTTP
-		interfaz="http"
+		#por defecto, interfaz lib
+		interfaz="lib"
 	else:
 		interfaz=context.config.userdata["interfaz"]
 
@@ -39,7 +39,9 @@ def before_all(context):
 		if (interfaz=="http"):
 			context.url="http://"+context.host+":"+context.port+"/abadIA/game"
 			from http_steps import http_steps
-		#por defecto, interfaz HTTP
+		#por defecto, interfaz lib 
 		else:
-			context.url="http://"+context.host+":"+context.port+"/abadIA/game"
-			from http_steps import http_steps
+#			context.url="http://"+context.host+":"+context.port+"/abadIA/game"
+			from lib_steps import lib_steps
+			from lib_steps.lib_steps import AbadIA
+			context.abadIA = AbadIA()
