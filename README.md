@@ -1,11 +1,22 @@
-# VigasocoSDL-AI
+Pruebas abadia compilada como lib
 
-Headless version of https://github.com/luzbel/VigasocoSDL optimised to be used with https://github.com/LaAbadIAdelCrimen/abadia-gym
+git checkout libabadia
+make -f Makefile.libtest  libtest  LibAbadIA.so
+ver test.py testpython.py libtest.cpp extra/tests/features/environment.py y /extra/tests/features/steps/lib_steps/lib_steps.py* para ejemplos de uso
 
-Need to update this: 
+probar en extra/tests/features/ haciendo un enlace a LibAbadia.so
+ln -s ../../../VigasocoSDL/LibAbadIA.so . 
+behave -D interfaz=libtest XXX.feature -n "NoMBRE ESCENARIO"
 
-We need new Dockerfiles and ready to use VigasocoSDL images. 
+para comparar comportamiento con 
+behave -D interfaz=http XXX.feature -n "NoMBRE ESCENARIO"
+(hay que tener un abadia-HEADLESS antiguo arrancado)
 
-## How to launch a docker for testing or developing with this engine 
+da core dump si se prueba
 
-https://github.com/LaAbadIAdelCrimen/VigasocoSDL-AI/blob/master/Howto-Dockers.md
+behave -D interfaz=libtest ResolverAbadIA.feature
+
+sin embardo no da core con
+behave -D interfaz=libtest ResolverAbadIA.feature abadIA.feature
+
+

@@ -17,13 +17,37 @@
 #include "../core/systems/cpc6128.h"
 
 class IAudioPlugin {
+private:
+	bool sonidos[12]; 
+	// TODO, creo que se puede simplificar los sonidos
+	// ahora que se devuelve dump en cada paso
 // getters
 public:
-	virtual void Play(int sample, bool loop=false) { };
+	virtual void Play(int sample, bool loop=false) { 
+		// TODO: falta assert para comprobar rango
+//fprintf(stderr,"IAudioPlugin::Play %d\n",sample);
+		sonidos[sample]=true;
+	};
 	virtual void Stop(int sample) {};
         virtual void setProperty(std::string prop, int data) {};
-        virtual void setProperty(std::string prop, int index, int data) {};
-	virtual int getProperty(std::string prop,int index) { return 0; };
+        virtual void setProperty(std::string prop, int index, int data) {
+//fprintf(stderr,"IAudioPlugin setproperty %s index %d data %d\n",prop.c_str(),index,data);
+		if (prop == "sonidos"){
+                	//if ((index >= 0) && (index < SONIDOS::END_OF_SOUNDS)){
+	                if ((index >= 0) && (index < 12)){ // TODO: no usar constante 12
+                        	sonidos[index]=data;
+                	}
+		}
+        };
+
+	virtual int getProperty(std::string prop,int index) { 
+		if (prop == "sonidos"){
+			//if ((index >= 0) && (index < SONIDOS::END_OF_SOUNDS)){
+			if ((index >= 0) && (index < 12)){ // TODO: no usar constante 1
+				return sonidos[index];
+			}
+		}
+	};
 };
 
 

@@ -41,7 +41,15 @@ def before_all(context):
 			from http_steps import http_steps
 		#por defecto, interfaz lib 
 		else:
+			if (interfaz=="bugcore"):
+				context.url="http://"+context.host+":"+context.port+"/abadIA/game"
+				from bugcore_steps import bugcore_steps
+				from bugcore_steps.bugcore_steps import AbadIA
+				print ("¡¡¡bugcore_steps!!!")
+				context.abadIA = AbadIA()
+			else:
 #			context.url="http://"+context.host+":"+context.port+"/abadIA/game"
-			from lib_steps import lib_steps
-			from lib_steps.lib_steps import AbadIA
-			context.abadIA = AbadIA()
+				from lib_steps import lib_steps
+				from lib_steps.lib_steps import AbadIA
+				print ("¡¡¡lib_steps!!!")
+				context.abadIA = AbadIA()

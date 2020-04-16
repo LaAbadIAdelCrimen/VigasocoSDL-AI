@@ -1787,22 +1787,48 @@ void Juego::init()
 //	ReiniciaPantalla(); // para forzar que se establezca numPantalla		
 }
 
-#ifdef __libabadIA__
+//666 #ifdef __libabadIA__
 //int Juego::step2(int controles[END_OF_INPUTS]) {
 //int Juego::step2(void) {
 
 int kk_tmp;
 //int Juego::step(int *source) {
 std::string Juego::step(int *source) {
-fprintf(stderr,"%d Juego::step UP %d RESET %d\n",kk_tmp,source[P1_UP],source[KEYBOARD_E]);
+
+
+// borramos la lista de frases
+// para que la siguiente vez tenga solo las frases desde la ultima
+// vez que nos pidio un dump
+//while (!elJuego->frases.empty()) {
+//	elJuego->frases.pop();
+//}
+//TODO: ahora que se devuelve dump en cada paso
+// igual no tiene sentido tener esta pila de frases
+// ya que no se van a acumular varias ...
+// igual con un array como los sonidos vale
+
+
+
+//fprintf(stderr,"%d Juego::step UP %d RESET %d LEFT %d\n",kk_tmp,source[P1_UP],source[KEYBOARD_E],source[P1_LEFT]);
 	controles->libabadIAInput(source);
 //	return step();
 int tmp=step();
-fprintf(stderr,"%d FIN Juego::step UP RESET %d %d\n",kk_tmp,source[P1_UP],source[KEYBOARD_E]);
+//fprintf(stderr,"%d FIN Juego::step UP %d RESET %d LEFT %d\n",kk_tmp,source[P1_UP],source[KEYBOARD_E],source[P1_LEFT]);
 if (kk_tmp<5) save(kk_tmp); // grabar los 5 primeros pasos para depurar
 kk_tmp++;
 //return tmp;
+if (tmp==2) {
+	// ñapa DUMP
+	std::string tmp=dump();	
+	while (!elJuego->frases.empty()) {
+		elJuego->frases.pop();
+	}
+	for (int index=0;index<12;index++)
+		VigasocoMain->getAudioPlugin()->setProperty("sonidos",index,false);
+	return tmp;
+} else {
 return dump();
+}
 }
 #endif
 
@@ -1822,7 +1848,7 @@ int Juego::step(void)
 
 //		while (true){	// el bucle principal del juego empieza aquí
 //fprintf(stderr,"run6\n");
-fprintf(stderr,"step inicio x %d y %d UP %d RESET %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP),controles->seHaPulsado(KEYBOARD_E));
+//fprintf(stderr,"step inicio x %d y %d UP %d RESET %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP),controles->seHaPulsado(KEYBOARD_E));
 #ifdef __abadIA__
 /*
 			if (chivato_partida_perfecta && laLogica->obsequium!=31) {
@@ -1836,7 +1862,7 @@ fprintf(stderr,"step inicio x %d y %d UP %d RESET %d\n", personajes[0]->posX, pe
 //fprintf(stderr,"run7\n");
 
 			controles->actualizaEstado();
-fprintf(stderr,"DESPUES ACTUALIZA ESTADO step inicio x %d y %d UP %d RESET %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP),controles->seHaPulsado(KEYBOARD_E));
+//fprintf(stderr,"DESPUES ACTUALIZA ESTADO step inicio x %d y %d UP %d RESET %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP),controles->seHaPulsado(KEYBOARD_E));
 //fprintf(stderr,"run8\n");
 
 #ifdef __abadIA_HEADLESS__
@@ -1867,14 +1893,14 @@ fprintf(stderr,"DESPUES ACTUALIZA ESTADO step inicio x %d y %d UP %d RESET %d\n"
                         //        continue;
 				return 0;
                         }
-fprintf(stderr,"guillermo visible %d\n",elJuego->personajes[0]->sprite->esVisible);
+//fprintf(stderr,"guillermo visible %d\n",elJuego->personajes[0]->sprite->esVisible);
 
 		        if (controles->seHaPulsado(KEYBOARD_D)){  // D de DUMP
 #ifndef __libabadIA__
 				infoJuego->muestraInfo();
-#else
-fprintf(stderr,"DUMP %s\n",dump().c_str());
-#endif
+//#else
+//fprintf(stderr,"DUMP %s\n",dump().c_str());
+//#endif
 				// si ha pedido volcado el agente, borramos la lista de frases
 				// para que la siguiente vez tenga solo las frases desde la ultima
 				// vez que nos pidio un dump
@@ -1900,6 +1926,9 @@ fprintf(stderr,"DUMP %s\n",dump().c_str());
 				// ¿tiene sentido?En teoría el agente no actuará hasta examinar con el DUMP la situación
 //				continue;
 				return 0;
+#else
+return 2;
+#endif
 			}
 			if (compruebaReinicio()) {
 				VigasocoMain->getInputHandler()->unAcquire();
@@ -1913,8 +1942,8 @@ fprintf(stderr,"DUMP %s\n",dump().c_str());
 //				goto despues_de_cargar_o_iniciar;
 				return 1;
 #endif
-fprintf(stderr,"despues reinicio guillermo visible %d\n",elJuego->personajes[0]->sprite->esVisible);
-fprintf(stderr,"despues reinicio camara guillermo %d\n",motor->personaje==elJuego->personajes[0]);
+//fprintf(stderr,"despues reinicio guillermo visible %d\n",elJuego->personajes[0]->sprite->esVisible);
+//fprintf(stderr,"despues reinicio camara guillermo %d\n",motor->personaje==elJuego->personajes[0]);
 
 			// obtiene el contador de la animación de guillermo para saber si se generan caminos en esta iteración
 			elBuscadorDeRutas->contadorAnimGuillermo = laLogica->guillermo->contadorAnimacion;
@@ -2061,11 +2090,11 @@ fprintf(stderr,"despues reinicio camara guillermo %d\n",motor->personaje==elJueg
 			// reinicia el contador de la interrupción
 			contadorInterrupcion = 0;
 //		}
-fprintf(stderr,"step FIN x %d y %d UP %d RESET %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP),controles->seHaPulsado(KEYBOARD_E));
+//fprintf(stderr,"step FIN x %d y %d UP %d RESET %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP),controles->seHaPulsado(KEYBOARD_E));
 
 	return 0;
 }
-#endif
+// 666 #endif
 /*
 void Juego::mainLoop()
 {
@@ -2077,7 +2106,7 @@ void Juego::run()
 	timer = VigasocoMain->getTimingHandler();
 	controles->init(VigasocoMain->getInputHandler());
 	audio_plugin = VigasocoMain->getAudioPlugin();
-fprintf(stderr,"run\n");
+//fprintf(stderr,"run\n");
 
 	// muestra la imagen de presentación
 #ifndef __abadIA__
@@ -2138,6 +2167,12 @@ fprintf(stderr,"run\n");
 	//TODO: cambiar el bucle principal de inicializar
 	//porque se esta liando bastante
 	logica->inicia();
+
+	bool status=0; // <0 finalizar partida, 0 seguir bucle, >0 se ha cargado o reiniciado
+	// aquí ya se ha completado la inicialización de datos para el juego
+	// ahora realiza la inicialización para poder empezar a jugar una partida
+
+
 	// menu, para permitir cambiar el idioma al empezar
 	// y ver el pergamino inicial en tu idioma
 #ifndef __abadIA__
@@ -2151,7 +2186,7 @@ fprintf(stderr,"run\n");
 	// limpia el área que ocupa el marcador
 	marcador->limpiaAreaMarcador();
 
-	bool status=0; // <0 finalizar partida, 0 seguir bucle, >0 se ha cargado o reiniciado
+//	bool status=0; // <0 finalizar partida, 0 seguir bucle, >0 se ha cargado o reiniciado
 	// aquí ya se ha completado la inicialización de datos para el juego
 	// ahora realiza la inicialización para poder empezar a jugar una partida
 	while (status>=0){
@@ -2382,7 +2417,7 @@ void Juego::reinicio()
 //	logica->inicia();
 	// no es suficiente con reiniciar la lógica
 	creaEntidadesJuego();
-fprintf(stderr,"reinicio motor->personaje es Guillermo %d\n",motor->personaje==personajes[0]);
+//fprintf(stderr,"reinicio motor->personaje es Guillermo %d\n",motor->personaje==personajes[0]);
 ReiniciaPantalla(); //666
 }
 
@@ -2390,10 +2425,10 @@ ReiniciaPantalla(); //666
 // con una pulsacion de tecla (no desde el menu)
 bool Juego::compruebaReinicio()
 {
-fprintf(stderr,"comprueba reinicio\n");
+//fprintf(stderr,"comprueba reinicio\n");
         // si se ha pulsado suprimir, se para hasta que se vuelva a pulsar
         if (controles->seHaPulsado(KEYBOARD_E)){  // ?E de rEset
-fprintf(stderr,"pedido reinicio\n");
+//fprintf(stderr,"pedido reinicio\n");
                 reinicio();
                 return true;
         }
@@ -2834,23 +2869,23 @@ bool Juego::muestraPantallaFinInvestigacion()
 void Juego::creaEntidadesJuego()
 {
 	// sprites de los personajes
-fprintf(stderr,"Juego::creaEntidadesJuego 1\n");
+//fprintf(stderr,"Juego::creaEntidadesJuego 1\n");
 	// sprite de guillermo
 	if (sprites[0]) delete sprites[0];
 	sprites[0] = new Sprite();
-fprintf(stderr,"Juego::creaEntidadesJuego 2\n");
+//fprintf(stderr,"Juego::creaEntidadesJuego 2\n");
 
 	// sprite de adso
 	if (sprites[1]) delete sprites[1];
 	sprites[1] = new Sprite();
-fprintf(stderr,"Juego::creaEntidadesJuego 3\n");
+//fprintf(stderr,"Juego::creaEntidadesJuego 3\n");
 
 	// sprite de los monjes
 	for (int i = 2; i < 8; i++){
 		if (sprites[i]) delete sprites[i];
 		sprites[i] = new SpriteMonje();
 	}
-fprintf(stderr,"Juego::creaEntidadesJuego 4\n");
+//fprintf(stderr,"Juego::creaEntidadesJuego 4\n");
 
 	// sprite de las puertas
 	for (int i = primerSpritePuertas; i < primerSpritePuertas + numPuertas; i++){
@@ -2859,7 +2894,7 @@ fprintf(stderr,"Juego::creaEntidadesJuego 4\n");
 		sprites[i]->ancho = sprites[i]->oldAncho = 0x06;
 		sprites[i]->alto = sprites[i]->oldAlto = 0x28;
 	}
-fprintf(stderr,"Juego::creaEntidadesJuego 5\n");
+//fprintf(stderr,"Juego::creaEntidadesJuego 5\n");
 
 	// CPC int despObjetos[8] = { 0x88f0, 0x9fb0, 0x9f80, 0xa010, 0x9fe0, 0x9fe0, 0x9fe0, 0x88c0 };
 	// VGA
@@ -2888,7 +2923,7 @@ fprintf(stderr,"Juego::creaEntidadesJuego 5\n");
 	};// TODO: los desplazamientos estan bien, lo que no se si se corresponde
 	// del todo es el indice, o sea, que el objeto 7 en el juego es la lampara
 	// y el 3 el pergamino... 
-fprintf(stderr,"Juego::creaEntidadesJuego 6\n");
+//fprintf(stderr,"Juego::creaEntidadesJuego 6\n");
 
 	// sprite de los objetos
 	for (int i = primerSpriteObjetos; i < primerSpriteObjetos + numObjetos; i++){
@@ -2911,25 +2946,25 @@ fprintf(stderr,"Juego::creaEntidadesJuego 6\n");
 		sprites[i]->despGfx = despObjetos[i - primerSpriteObjetos];
 
 	}
-fprintf(stderr,"Juego::creaEntidadesJuego 7\n");
+//fprintf(stderr,"Juego::creaEntidadesJuego 7\n");
 
 	// sprite de los reflejos en el espejo
 	if (sprites[spritesReflejos]) delete sprites[spritesReflejos];
 	sprites[spritesReflejos] = new Sprite();
 	if (sprites[spritesReflejos+1]) delete sprites[spritesReflejos+1];
 	sprites[spritesReflejos + 1] = new Sprite();
-fprintf(stderr,"Juego::creaEntidadesJuego 8\n");
+//fprintf(stderr,"Juego::creaEntidadesJuego 8\n");
 
 	// sprite de la luz
 	if (sprites[spriteLuz]) delete sprites[spriteLuz];
 	sprites[spriteLuz] = new SpriteLuz();
-fprintf(stderr,"Juego::creaEntidadesJuego 9\n");
+//fprintf(stderr,"Juego::creaEntidadesJuego 9\n");
 
 	// crea los personajes del juego
 	for (int i = 0; i < 8; i++){
 		if (personajes[i]) delete personajes[i];
 	}
-fprintf(stderr,"Juego::creaEntidadesJuego 10\n");
+//fprintf(stderr,"Juego::creaEntidadesJuego 10\n");
 	personajes[0] = new Guillermo(sprites[0]);
 	personajes[1] = new Adso(sprites[1]);
 	personajes[2] = new Malaquias((SpriteMonje *)sprites[2]);
@@ -2938,7 +2973,7 @@ fprintf(stderr,"Juego::creaEntidadesJuego 10\n");
 	personajes[5] = new Severino((SpriteMonje *)sprites[5]);
 	personajes[6] = new Jorge((SpriteMonje *)sprites[6]);
 	personajes[7] = new Bernardo((SpriteMonje *)sprites[7]);
-fprintf(stderr,"Juego::creaEntidadesJuego 11\n");
+//fprintf(stderr,"Juego::creaEntidadesJuego 11\n");
 
 	// inicia los valores comunes
 	for (int i = 0; i < 8; i++){
@@ -2947,23 +2982,23 @@ fprintf(stderr,"Juego::creaEntidadesJuego 11\n");
 	}
 	personajes[1]->despY = -32;
 	
-fprintf(stderr,"Juego::creaEntidadesJuego 12\n");
+//fprintf(stderr,"Juego::creaEntidadesJuego 12\n");
 	// crea las puertas del juego
 	for (int i = 0; i < numPuertas; i++){
 		if(puertas[i]) delete puertas[i];
 		puertas[i] = new Puerta(sprites[primerSpritePuertas + i]);
 	}
 
-fprintf(stderr,"Juego::creaEntidadesJuego 14\n");
+//fprintf(stderr,"Juego::creaEntidadesJuego 14\n");
 	// crea los objetos del juego
 	for (int i = 0; i < numObjetos; i++){
 		if(objetos[i]) delete objetos[i];
 		objetos[i] = new Objeto(sprites[primerSpriteObjetos + i]);
 	}
-fprintf(stderr,"Juego::creaEntidadesJuego 15\n");
+//fprintf(stderr,"Juego::creaEntidadesJuego 15\n");
 
 	logica->inicia();
-fprintf(stderr,"Juego::creaEntidadesJuego 16\n");
+//fprintf(stderr,"Juego::creaEntidadesJuego 16\n");
 }
 
 #ifdef __libabadIA__

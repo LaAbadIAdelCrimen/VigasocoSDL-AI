@@ -25,7 +25,7 @@ extern "C" {
 //		std::string tmp= VigasocoLibSDL::getSingletonPtr()->step(controles);
 //const		char *t=tmp.c_str();
 //		return t;
-fprintf(stderr,"C wrapper UP %d RESET %d\n",controles[P1_UP], controles[KEYBOARD_E]);
+//fprintf(stderr,"C wrapper UP %d RESET %d\n",controles[P1_UP], controles[KEYBOARD_E]);
 return VigasocoLibSDL::getSingletonPtr()->step(controles).c_str(); 
 }
 }
@@ -103,7 +103,7 @@ void VigasocoLibSDL::init(void) {
 
 //void VigasocoLibSDL::step(int *controles) {
 std::string VigasocoLibSDL::step(int *controles) {
-fprintf(stderr,"\tVigasocoLibSDL::step %d %d\n",controles[P1_UP],controles[KEYBOARD_E]);
+//fprintf(stderr,"\tVigasocoLibSDL::step %d %d\n",controles[P1_UP],controles[KEYBOARD_E]);
 //controles[KEYBOARD_E]=1; //666
 return	_abadiaGame->step(controles);
 //fprintf(stderr,"\tFIN VigasocoLibSDL::step\n");

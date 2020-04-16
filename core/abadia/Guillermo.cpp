@@ -76,11 +76,12 @@ void Guillermo::ejecutaMovimiento()
 
 		// dependiendo de la tecla que se pulse, actúa en consecuencia
 		if (losControles->estaSiendoPulsado(P1_LEFT)){
+//fprintf(stderr,"guillermo gira LEFT\n");
 			gira(1);
 		} else if (losControles->estaSiendoPulsado(P1_RIGHT)){
 			gira(-1);
 		} else if (losControles->estaSiendoPulsado(P1_UP)){
-fprintf(stderr,"guillermo trata de avanzar\n");
+//fprintf(stderr,"guillermo trata de avanzar\n");
 			int difAltura1, difAltura2, avanceX, avanceY;
 
 			// obtiene la altura de las posiciones hacia las que se va a mover

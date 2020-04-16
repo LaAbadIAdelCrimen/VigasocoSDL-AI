@@ -152,14 +152,14 @@ def step_impl(context):
 def step_impl(context):
 #    r=requests.post(context.url+'/current/actions/SPEEDUP',timeout=context.timeout)
 #    assert r.status_code==200
-	context.abadIA.controles[SERVICE_1]=1
+	context.abadIA.controles[KEYBOARD_SERVICE1]=1
 	context.status=context.abadIA.step().decode()
 
 @step('reduzco la velocidad')
 def step_impl(context):
 #    r=requests.post(context.url+'/current/actions/SLOWDOWN',timeout=context.timeout)
 #    assert r.status_code==200
-	context.abadIA.controles[SERVICE_2]=1
+	context.abadIA.controles[KEYBOARD_SERVICE2]=1
 	context.status=context.abadIA.step().decode()
 
 @when('digo que SI')
@@ -332,10 +332,6 @@ def step_impl(context):
 #    r=requests.get(context.url+'/current', headers={"accept":"application/json"},timeout=context.timeout)
 #    assert r.status_code==200
 #    print("resultDUMPtext**"+context.status.text);
-# no me gusta tener que mandar el dump, pero tal y como se
-# refrescan las frases es necesario
-    context.abadIA.controles[KEYBOARD_D]=1
-    context.status=context.abadIA.step().decode()
     print("resultDUMPtext**"+context.status);
     valid_json=False;
     try:

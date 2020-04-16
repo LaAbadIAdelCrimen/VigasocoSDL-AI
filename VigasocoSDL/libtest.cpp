@@ -68,12 +68,13 @@ fprintf(stderr,"2\n");
 
 	int controles[END_OF_INPUTS];
 	memset(controles,0,sizeof(int)*END_OF_INPUTS);
-	fprintf(stderr,"dump0 %s\n",VigasocoMain->step(controles).c_str());
+//	fprintf(stderr,"dump0 %s\n",VigasocoMain->step(controles).c_str());
 controles[KEYBOARD_E]=1;
 	fprintf(stderr,"dump0 %s\n",VigasocoMain->step(controles).c_str());
 controles[KEYBOARD_E]=0;
-	fprintf(stderr,"dump0 %s\n",VigasocoMain->step(controles).c_str());
-	fprintf(stderr,"dump0 %s\n",VigasocoMain->step(controles).c_str());
+controles[P1_LEFT]=0;
+	fprintf(stderr,"dump1 %s\n",VigasocoMain->step(controles).c_str());
+	fprintf(stderr,"dump2 %s\n",VigasocoMain->step(controles).c_str());
 /*
 	// ¿tiene sentido todo el rato pasar controles
 	// o pasarlo al inicio en el init??

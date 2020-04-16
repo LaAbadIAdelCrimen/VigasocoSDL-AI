@@ -114,7 +114,7 @@ void Logica::inicia()
 	elMotorGrafico->personaje = guillermo;
 
 	buscRutas->generadoCamino = false;
-fprintf(stderr,"Logica::inicia 100\n");
+//fprintf(stderr,"Logica::inicia 100\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -396,6 +396,7 @@ void Logica::compruebaCogerDejarObjetos()
 	// comprueba si los personajes dejan algún objeto
 	// si se pulsa el espacio, deja un objeto (si tiene)
 	if (losControles->estaSiendoPulsado(P1_BUTTON1)){
+//fprintf(stderr," Logica::compruebaCogerDejarObjetos  dejaObjeto(guillermo)\n");
 		dejaObjeto(guillermo);
 	}
 
