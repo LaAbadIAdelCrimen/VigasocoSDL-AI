@@ -15,7 +15,8 @@ OBJECTS_ABADIA = Abad.o AccionesDia.o Adso.o Berengario.o Bernardo.o BuscadorRut
 OBJECTS_SDL = PluginHandler.o SDLTimer.o SDLCriticalSection.o SDLPalette.o SDLThread.o VigasocoSDL.o SDLMain.o
 
 #OBJECTS = $(OBJECTS_CORE) $(OBJECTS_ABADIA) $(OBJECTS_SDL) 
-OBJECTS = $(OBJECTS_ABADIA) ICriticalSection.o SDLCriticalSection.o TimingHandler.o cpc6128.o IPalette.o SDLPalette.o  VigasocoLibSDL.o abadiaROM.o
+#OBJECTS = $(OBJECTS_ABADIA) ICriticalSection.o SDLCriticalSection.o TimingHandler.o cpc6128.o IPalette.o SDLPalette.o  VigasocoLibSDL.o abadiaROM.o
+OBJECTS = $(OBJECTS_ABADIA) ICriticalSection.o TimingHandler.o cpc6128.o IPalette.o SDLPalette.o  VigasocoLibSDL.o abadiaROM.o
 
 TARGETS=libtest LibAbadIA.so
 
@@ -23,7 +24,8 @@ LibAbadIA.so: $(OBJECTS)
 	$(CXX) -shared -Wl,-soname,LibAbadIA.so -o $@  $^ `sdl-config --libs`
 
 libtest: $(OBJECTS) libtest.o
-	$(CXX) $^ `sdl-config --libs` -o $@
+#	$(CXX) $^ `sdl-config --libs` -o $@
+	$(CXX) $^  -o $@
 
 all: $(TARGETS)
 

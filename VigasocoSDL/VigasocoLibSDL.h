@@ -9,12 +9,16 @@
 #include "../core/util/Singleton.h"
 #include <string>
 #include "Types.h"
-#include "SDL.h"
+//#include "SDL.h"
 //#include "IPalette.h"
 #include "SDLPalette.h"
 
 #include "../core/abadia/Juego.h"
 #include "../core/systems/cpc6128.h"
+
+#include "../core/ICriticalSection.h"
+#include <sys/time.h>
+#include <cstring>
 
 class IAudioPlugin {
 private:
@@ -70,10 +74,25 @@ class TimingHandler {
 // methods
 public:
 	// timer functions
-        INT64 getTime(){ return SDL_GetTicks(); }
+        //INT64 getTime(){ return SDL_GetTicks(); }
+	// en abadIA solo se usa para el numero aleatorio del laberinto
+        INT64 getTime(){ 
+		struct timeval tmp;
+		gettimeofday(&tmp, NULL);
+		return tmp.tv_sec*1000+tmp.tv_usec/1000;
+	}
 	//void sleep(UINT32 milliSeconds) { fprintf(stderr,"TimingHandler::sleep %d\n",milliSeconds); };
 	void sleep(UINT32 milliSeconds) { };
 	
+};
+
+class FakeCriticalSection: public ICriticalSection {
+public:
+	FakeCriticalSection() {};
+	void init() {};
+	void enter() {};
+	void leave() {};
+	void destroy() {};
 };
 
 class IPalette;
@@ -81,7 +100,7 @@ class IPalette;
 #define VigasocoMain VigasocoLibSDL::getSingletonPtr()
 
 //#include "Vigasoco.h"
-class ICriticalSection;	// defined in ICriticalSection.h
+//class ICriticalSection;	// defined in ICriticalSection.h
 //class VigasocoLibSDL : public Vigasoco
 class VigasocoLibSDL:  public Singleton<VigasocoLibSDL> 
 {

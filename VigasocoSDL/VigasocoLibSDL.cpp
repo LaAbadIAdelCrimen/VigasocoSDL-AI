@@ -4,7 +4,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "VigasocoLibSDL.h"
-#include "SDLCriticalSection.h"
+//#include "SDLCriticalSection.h"
 #include <fstream>
 //#include <string>
 
@@ -52,7 +52,8 @@ VigasocoLibSDL::VigasocoLibSDL() {
 	_inputHandler=new InputHandler;
 	_timingHandler=new TimingHandler;
 
-	cs = new SDLCriticalSection();
+	//cs = new SDLCriticalSection();
+	cs = new FakeCriticalSection();
 	cs->init();
 
 	cpc6128 = new CPC6128(cs);
