@@ -21,7 +21,8 @@ OBJECTS = $(OBJECTS_ABADIA) ICriticalSection.o TimingHandler.o cpc6128.o IPalett
 TARGETS=libtest LibAbadIA.so
 
 LibAbadIA.so: $(OBJECTS)
-	$(CXX) -shared -Wl,-soname,LibAbadIA.so -o $@  $^ `sdl-config --libs`
+#	$(CXX) -shared -Wl,-soname,LibAbadIA.so -o $@  $^ `sdl-config --libs`
+	$(CXX) -shared -Wl,-soname,LibAbadIA.so -o $@  $^ 
 
 libtest: $(OBJECTS) libtest.o
 #	$(CXX) $^ `sdl-config --libs` -o $@
