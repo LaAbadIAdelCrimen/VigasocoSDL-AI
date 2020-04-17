@@ -1,5 +1,6 @@
 #CXXFLAGS=-march=native -frecord-gcc-switches -Ofast -fopenmp -std=c++11 -I../core `sdl-config --cflags` 
-CXXFLAGS=-fPIC -D __libabadIA__ -D__abadIA__ -D__abadIA_FAST__ -D__abadIA_HEADLESS__ -march=x86-64 -mtune=generic -frecord-gcc-switches -Ofast -fopenmp -std=c++11 -I../core `sdl-config --cflags` 
+#CXXFLAGS=-fPIC -D __libabadIA__ -D__abadIA__ -D__abadIA_FAST__ -D__abadIA_HEADLESS__ -march=x86-64 -mtune=generic -frecord-gcc-switches -Ofast -fopenmp -std=c++11 -I../core `sdl-config --cflags` 
+CXXFLAGS=-fPIC -D __libabadIA__ -D__abadIA__ -D__abadIA_FAST__ -D__abadIA_HEADLESS__ -march=x86-64 -mtune=generic -frecord-gcc-switches -Ofast -fopenmp -std=c++11 -I../core 
 LDFLAGS=-fPIC -frecord-gcc-switches
 VPATH=.:../core:../core/abadia:../core/util:../core/systems
 

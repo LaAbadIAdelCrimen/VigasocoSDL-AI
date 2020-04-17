@@ -4,7 +4,13 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#ifdef __libabadIA__
+// abadIA se ejecuta siempre
+// en CPU Intel, asi que 
+#define SDL_SwapLE16(X)	(X)
+#else
 #include <SDL_endian.h>
+#endif
 #include "../systems/cpc6128.h"
 #ifndef  __libabadIA__
 #include "../TimingHandler.h"
