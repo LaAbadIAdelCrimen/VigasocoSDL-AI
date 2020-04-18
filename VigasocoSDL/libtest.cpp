@@ -61,6 +61,10 @@ fprintf(stderr,"14\n");
 
 int main(int argc, char **argv) {
 
+fprintf(stderr,"00\n");
+	VigasocoLibSDL vigasocoTest;
+fprintf(stderr,"01\n");
+
 fprintf(stderr,"END_OF_INPUTS %d\n",END_OF_INPUTS);
 fprintf(stderr,"1\n");
 	VigasocoMain->init();

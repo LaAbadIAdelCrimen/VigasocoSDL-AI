@@ -111,6 +111,7 @@ const char *Juego::savefile[7] = {
 
 Juego::Juego(UINT8 *romData, CPC6128 *cpc)
 {
+fprintf(stderr,"constructor Juego\n");
 	idioma=0; // 0 español
 	mute=false; 
 	slot=0;
@@ -170,6 +171,7 @@ for (int i=0;i<(0x24000+(174065+21600)*3);i++) {
 
 Juego::~Juego()
 {
+fprintf(stderr,"destructor Juego\n");
 	// borra los sprites del juego
 	for (int i = 0; i < numSprites; i++){
 		delete sprites[i];
@@ -1752,19 +1754,31 @@ bool Juego::menu()
 #ifdef __libabadIA__
 void Juego::init()
 {
+fprintf(stderr,"Juego::init 0\n");
 	// obtiene los recursos para el juego
 	timer = VigasocoMain->getTimingHandler();
+fprintf(stderr,"Juego::init 1\n");
 	controles->init(VigasocoMain->getInputHandler());
+fprintf(stderr,"Juego::init 2\n");
 	audio_plugin = VigasocoMain->getAudioPlugin();
+fprintf(stderr,"Juego::init 3\n");
+	// obtiene las direcciones de los datos relativos a la habitación del espejo
+//TODO; intento llevarme esto al principio
+//porque ahora en creaEntidadesJuego llamo a logica->inicia
+//y al intentar tocar la habitacion del espejo en la rom la puede liar parda
+	logica->despHabitacionEspejo();
 
 	// crea las entidades del juego (sprites, personajes, puertas y objetos)
 	creaEntidadesJuego(); // esto ya llama a logica->inicia en la ver abadia,no en el original
+fprintf(stderr,"Juego::init 4\n");
 
 	// genera los gráficos flipeados en x de las entidades que lo necesiten
 	generaGraficosFlipeados();
+fprintf(stderr,"Juego::init 5\n");
 
 	// inicialmente la cámara sigue a guillermo
 	motor->personaje = personajes[0];
+fprintf(stderr,"Juego::init 6\n");
 
 #ifndef __libabadIA__
 // TODO: soportar esto en algún momento para libabadIA
@@ -1773,7 +1787,8 @@ void Juego::init()
 #endif
 
 	// obtiene las direcciones de los datos relativos a la habitación del espejo
-	logica->despHabitacionEspejo();
+//	logica->despHabitacionEspejo();
+fprintf(stderr,"Juego::init 7\n");
 
 	//TODO: contemplar cambiar el idioma en init
 
@@ -1781,6 +1796,7 @@ void Juego::init()
 // porque se podría generar fuera
 	// limpia el área que ocupa el marcador
 	marcador->limpiaAreaMarcador();
+fprintf(stderr,"Juego::init 8\n");
 
 	//TODO: revisar
 //	logica->inicia();
@@ -2869,23 +2885,23 @@ bool Juego::muestraPantallaFinInvestigacion()
 void Juego::creaEntidadesJuego()
 {
 	// sprites de los personajes
-//fprintf(stderr,"Juego::creaEntidadesJuego 1\n");
+fprintf(stderr,"Juego::creaEntidadesJuego 1\n");
 	// sprite de guillermo
 	if (sprites[0]) delete sprites[0];
 	sprites[0] = new Sprite();
-//fprintf(stderr,"Juego::creaEntidadesJuego 2\n");
+fprintf(stderr,"Juego::creaEntidadesJuego 2\n");
 
 	// sprite de adso
 	if (sprites[1]) delete sprites[1];
 	sprites[1] = new Sprite();
-//fprintf(stderr,"Juego::creaEntidadesJuego 3\n");
+fprintf(stderr,"Juego::creaEntidadesJuego 3\n");
 
 	// sprite de los monjes
 	for (int i = 2; i < 8; i++){
 		if (sprites[i]) delete sprites[i];
 		sprites[i] = new SpriteMonje();
 	}
-//fprintf(stderr,"Juego::creaEntidadesJuego 4\n");
+fprintf(stderr,"Juego::creaEntidadesJuego 4\n");
 
 	// sprite de las puertas
 	for (int i = primerSpritePuertas; i < primerSpritePuertas + numPuertas; i++){
@@ -2894,7 +2910,7 @@ void Juego::creaEntidadesJuego()
 		sprites[i]->ancho = sprites[i]->oldAncho = 0x06;
 		sprites[i]->alto = sprites[i]->oldAlto = 0x28;
 	}
-//fprintf(stderr,"Juego::creaEntidadesJuego 5\n");
+fprintf(stderr,"Juego::creaEntidadesJuego 5\n");
 
 	// CPC int despObjetos[8] = { 0x88f0, 0x9fb0, 0x9f80, 0xa010, 0x9fe0, 0x9fe0, 0x9fe0, 0x88c0 };
 	// VGA
@@ -2923,7 +2939,7 @@ void Juego::creaEntidadesJuego()
 	};// TODO: los desplazamientos estan bien, lo que no se si se corresponde
 	// del todo es el indice, o sea, que el objeto 7 en el juego es la lampara
 	// y el 3 el pergamino... 
-//fprintf(stderr,"Juego::creaEntidadesJuego 6\n");
+fprintf(stderr,"Juego::creaEntidadesJuego 6\n");
 
 	// sprite de los objetos
 	for (int i = primerSpriteObjetos; i < primerSpriteObjetos + numObjetos; i++){
@@ -2946,25 +2962,25 @@ void Juego::creaEntidadesJuego()
 		sprites[i]->despGfx = despObjetos[i - primerSpriteObjetos];
 
 	}
-//fprintf(stderr,"Juego::creaEntidadesJuego 7\n");
+fprintf(stderr,"Juego::creaEntidadesJuego 7\n");
 
 	// sprite de los reflejos en el espejo
 	if (sprites[spritesReflejos]) delete sprites[spritesReflejos];
 	sprites[spritesReflejos] = new Sprite();
 	if (sprites[spritesReflejos+1]) delete sprites[spritesReflejos+1];
 	sprites[spritesReflejos + 1] = new Sprite();
-//fprintf(stderr,"Juego::creaEntidadesJuego 8\n");
+fprintf(stderr,"Juego::creaEntidadesJuego 8\n");
 
 	// sprite de la luz
 	if (sprites[spriteLuz]) delete sprites[spriteLuz];
 	sprites[spriteLuz] = new SpriteLuz();
-//fprintf(stderr,"Juego::creaEntidadesJuego 9\n");
+fprintf(stderr,"Juego::creaEntidadesJuego 9\n");
 
 	// crea los personajes del juego
 	for (int i = 0; i < 8; i++){
 		if (personajes[i]) delete personajes[i];
 	}
-//fprintf(stderr,"Juego::creaEntidadesJuego 10\n");
+fprintf(stderr,"Juego::creaEntidadesJuego 10\n");
 	personajes[0] = new Guillermo(sprites[0]);
 	personajes[1] = new Adso(sprites[1]);
 	personajes[2] = new Malaquias((SpriteMonje *)sprites[2]);
@@ -2973,7 +2989,7 @@ void Juego::creaEntidadesJuego()
 	personajes[5] = new Severino((SpriteMonje *)sprites[5]);
 	personajes[6] = new Jorge((SpriteMonje *)sprites[6]);
 	personajes[7] = new Bernardo((SpriteMonje *)sprites[7]);
-//fprintf(stderr,"Juego::creaEntidadesJuego 11\n");
+fprintf(stderr,"Juego::creaEntidadesJuego 11\n");
 
 	// inicia los valores comunes
 	for (int i = 0; i < 8; i++){
@@ -2982,23 +2998,23 @@ void Juego::creaEntidadesJuego()
 	}
 	personajes[1]->despY = -32;
 	
-//fprintf(stderr,"Juego::creaEntidadesJuego 12\n");
+fprintf(stderr,"Juego::creaEntidadesJuego 12\n");
 	// crea las puertas del juego
 	for (int i = 0; i < numPuertas; i++){
 		if(puertas[i]) delete puertas[i];
 		puertas[i] = new Puerta(sprites[primerSpritePuertas + i]);
 	}
 
-//fprintf(stderr,"Juego::creaEntidadesJuego 14\n");
+fprintf(stderr,"Juego::creaEntidadesJuego 14\n");
 	// crea los objetos del juego
 	for (int i = 0; i < numObjetos; i++){
 		if(objetos[i]) delete objetos[i];
 		objetos[i] = new Objeto(sprites[primerSpriteObjetos + i]);
 	}
-//fprintf(stderr,"Juego::creaEntidadesJuego 15\n");
+fprintf(stderr,"Juego::creaEntidadesJuego 15\n");
 
 	logica->inicia();
-//fprintf(stderr,"Juego::creaEntidadesJuego 16\n");
+fprintf(stderr,"Juego::creaEntidadesJuego 16\n");
 }
 
 #ifdef __libabadIA__

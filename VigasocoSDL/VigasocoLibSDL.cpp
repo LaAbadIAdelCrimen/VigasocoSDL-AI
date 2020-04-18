@@ -8,8 +8,13 @@
 #include <fstream>
 //#include <string>
 
-extern unsigned char abadiaROM[];
-extern int abadiaROM_size;
+//extern unsigned char abadiaROM[];
+//extern int abadiaROM_size;
+extern unsigned char _binary_abadiaROM_bin_start[];
+extern unsigned char _binary_abadiaROM_bin_end[];
+// no sirve por PIE
+// https://stackoverflow.com/questions/54844677/why-doesnt-a-linked-binary-files-size-symbol-work-correctly
+//extern int _binary_abadiaROM_bin_size;
 
 // TODO: revisar si con el singleton es más fácil
 /*
@@ -20,7 +25,13 @@ extern "C" {
 	VigasocoLibSDL* LibAbadIA_singleton() { return VigasocoLibSDL::getSingletonPtr(); }
 } */
 extern "C" {
-	void LibAbadIA_init() { VigasocoLibSDL::getSingletonPtr()->init(); }
+	void LibAbadIA_init() { 
+		// TODO: que solo se ejecute una vez
+		VigasocoLibSDL *vigasocoTest=new VigasocoLibSDL();
+//fprintf(stderr,"LibAbadIA_init() mio %p singleton %p\n", vigasocoTest, VigasocoLibSDL::getSingletonPtr());
+		VigasocoLibSDL::getSingletonPtr()->init(); 
+fprintf(stderr,"LibAbadIA_init() singleton %p\n", VigasocoLibSDL::getSingletonPtr());
+	}
 	const char *LibAbadIA_step(int *controles) { 
 //		std::string tmp= VigasocoLibSDL::getSingletonPtr()->step(controles);
 //const		char *t=tmp.c_str();
@@ -30,7 +41,7 @@ return VigasocoLibSDL::getSingletonPtr()->step(controles).c_str();
 }
 }
 
-VigasocoLibSDL _LibabadIA; // La instancia para no tener que exponer un new() a python
+//VigasocoLibSDL _LibabadIA; // La instancia para no tener que exponer un new() a python
 
 
 // VigasocoLibSDL::getSingletonPtr() 
@@ -40,11 +51,14 @@ std::string g_test("");  // Escenario de pruebas
 
 VigasocoLibSDL::VigasocoLibSDL() {
 
+fprintf(stderr,"constructor VigasocoLibSDL\n");
+
 	// para no copiar todo el código que interpretaba la ROM
 	// la reordenaba y añadia los gráficos VGA y CPC
 	// aquí tenemos embebido directamente un volcado de esa
 	// información
-	assert(abadiaROM_size==734451);
+	//assert(abadiaROM_size==734451);
+	assert((_binary_abadiaROM_bin_end-_binary_abadiaROM_bin_start)==734451);
 
 	_palette=new SDLPalette();
 	_palette->init(256);
@@ -74,12 +88,14 @@ for (int i=0; i< size; i++) {
 fprintf(stderr,"ok %d\n", ok);
 */
 
-	_abadiaGame = new Abadia::Juego(abadiaROM, cpc6128);
+	//_abadiaGame = new Abadia::Juego(abadiaROM, cpc6128);
+	_abadiaGame = new Abadia::Juego(_binary_abadiaROM_bin_start, cpc6128);
 //	_abadiaGame = new Abadia::Juego(romData, cpc6128);
 }
 
 VigasocoLibSDL::~VigasocoLibSDL()
 {
+fprintf(stderr,"destructir VigasocoLibSDL\n");
 	// destruye la sección crítica
 	if (cs != 0){
 		cs->destroy();
@@ -99,7 +115,9 @@ ICriticalSection * VigasocoLibSDL::createCriticalSection()
 }
 */
 void VigasocoLibSDL::init(void) {
+fprintf(stderr," VigasocoLibSDL::init\n");
 	_abadiaGame->init();
+fprintf(stderr,"FIN VigasocoLibSDL::init\n");
 }
 
 //void VigasocoLibSDL::step(int *controles) {
