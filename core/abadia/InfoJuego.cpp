@@ -256,17 +256,17 @@ void InfoJuego::muestraInfo()
                 nlohmann::json Plantas = nlohmann::json::array();
 
                 generaAlturasPlanta();
-                for (int ii=0 ; ii < 3; ii++) {
+                for (int numPlanta=0 ; numPlanta < 3; numPlanta++) {
 	                UINT8 *mapa = MotorGrafico::plantas[numPlanta];
 	                UINT8 *alturas = alturasPlanta[numPlanta];
 
-                  int zoom = 1
+                  int zoom = 1;
                   // obtiene la zona visible de la planta
-	                int minX = zonaVisiblePlanta[numPlanta][0];
-	                int maxX = zonaVisiblePlanta[numPlanta][1];
-	                int minY = zonaVisiblePlanta[numPlanta][2];
-	                int maxY = zonaVisiblePlanta[numPlanta][3];
-	                int longX = maxX - minX + 1;
+	          int minX = zonaVisiblePlanta[numPlanta][0];
+	          int maxX = zonaVisiblePlanta[numPlanta][1];
+	          int minY = zonaVisiblePlanta[numPlanta][2];
+	          int maxY = zonaVisiblePlanta[numPlanta][3];
+	          int longX = maxX - minX + 1;
                   int posX = 320 - 4 - longX*16*zoom;
 
 
@@ -293,7 +293,7 @@ void InfoJuego::muestraInfo()
                              Fila.push_back((int) numPlanta);
                              Fila.push_back((int) (i*16)+xx);
                              Fila.push_back((int) (j*16)+yy);
-                             Fila.push_back((int) alturaPantalla[yy][xx]);
+                             Fila.push_back((int) alturaPantalla[16*yy + xx]);
                              Plantas.push_back(Fila);
                            }
                         }
