@@ -288,8 +288,8 @@ void InfoJuego::muestraInfo()
                         UINT8 *alturaPantalla = &alturas[(longX*(j - minY) + i - minX)*16*16];
 
                         for (int yy = 0; yy < 24; yy++) {
-                         nlohmann::json Fila = nlohmann::json::array();
                            for (int xx = 0; xx < 24; xx++) {
+                             nlohmann::json Fila = nlohmann::json::array();
                              Fila.push_back((int) numPlanta);
                              Fila.push_back((int) (i*16)+xx);
                              Fila.push_back((int) (j*16)+yy);
