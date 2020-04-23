@@ -27,7 +27,7 @@ RUN cd /home/abadIA \
 #  && pip install behave websocket-client requests \\
   && git clone https://github.com/LaAbadIAdelCrimen/VigasocoSDL-AI.git \
   && cd VigasocoSDL-AI \
-  && git checkout plantas \
+  && git checkout plantas  \
   && make clean \
   && make 
 
