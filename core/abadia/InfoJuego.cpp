@@ -252,7 +252,6 @@ void InfoJuego::muestraInfo()
 
                 // Plantas
 
-
                 nlohmann::json Plantas = nlohmann::json::array();
 
                 generaAlturasPlanta();
@@ -287,8 +286,8 @@ void InfoJuego::muestraInfo()
                       if ((mapa[16*j + i] != 0) || ((numPlanta == 0) && (i == 0x04) && (j == 0x03))){
                         UINT8 *alturaPantalla = &alturas[(longX*(j - minY) + i - minX)*16*16];
 
-                        for (int yy = 0; yy < 24; yy++) {
-                           for (int xx = 0; xx < 24; xx++) {
+                        for (int yy = 0; yy < 16; yy++) {
+                           for (int xx = 0; xx < 16; xx++) {
                              nlohmann::json Fila = nlohmann::json::array();
                              Fila.push_back((int) numPlanta);
                              Fila.push_back((int) (i*16)+xx);

@@ -29,6 +29,7 @@ RUN cd /home/abadIA \
   && cd VigasocoSDL-AI \
   && git checkout plantas \
   && make clean \
+  && touch /tmp/s1 \
   && make 
 
 
