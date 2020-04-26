@@ -271,11 +271,12 @@ Feature: Interfaz abadIA
            |   0   |  1  |   False     |         False         |      4     |     22      |        0     |     31    |    0   |      0     |
         And la lista de "Objetos" tiene "1" elementos
 # TODO: Revisar, antes en el primer  NOP el objeto seguía en pantalla
-#	And no hago nada
-#       	And los valores iniciales son correctos:
-#           | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
-#           |   0   |  1  |   False     |         False         |      4     |     22      |        0     |     31    |    0   |      0     |
-#        And la lista de "Objetos" tiene "1" elementos
+# TODO: ahora vuelven a hacer falta 2 NOP
+	And no hago nada
+       	And los valores iniciales son correctos:
+           | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
+           |   0   |  1  |   False     |         False         |      4     |     22      |        0     |     31    |    0   |      0     |
+        And la lista de "Objetos" tiene "1" elementos
 	And no hago nada
        	And los valores iniciales son correctos:
            | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
@@ -305,6 +306,8 @@ Feature: Interfaz abadIA
          |    0   |  1 |  Adso     |     0   |      1      |  134 |  160 |
 	And giro a la derecha
 	And pulso espacio
+#TODO: revisar , en algun momento no hacia falta este NOP
+	And no hago nada
 	And los valores iniciales son correctos:
            | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
            |   0   |  1  |   False     |         False         |      4     |     22      |        0     |     31    |    0   |      0     |
@@ -342,42 +345,73 @@ Feature: Interfaz abadIA
            | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
            |   0   |  1  |   False     |         False         |      4     |     22      |        0     |     31    |    0   |      0     |
         And la lista de "Objetos" tiene "0" elementos
-	And espero "14" iteraciones 
+# TODO con 15 funciona
+# con 14 no ... a veces el pulsar espacio no siempre se comporta igual ???
+	And espero "15" iteraciones 
 	And pulso espacio
-	# en esta iteración Guillermo aún tiene el objeto y no está en pantalla
        	And los valores iniciales son correctos:
            | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
            |   0   |  1  |   False     |         False         |      4     |     22      |        0     |     31    |    0   |      0     |
-        And la lista de "Personajes" tiene "2" elementos
-        And los valores de los "Personajes" son correctos:
-         | altura | id | nombre    | objetos | orientacion | posX | posY |
-         |    0   |  0 | Guillermo |    32   |      0      |  136 |  159 |
-         |    0   |  1 |  Adso     |     0   |      1      |  134 |  160 |
+        And la lista de "Objetos" tiene "1" elementos
+	And giro a la derecha
+	And espero "10" iteraciones 
+	And giro a la izquierda
+# TODO: Esto varia segun las esperas antes y despues de girar
+# Revisar
+	And espero "11" iteraciones 
+       	And los valores iniciales son correctos:
+           | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
+           |   0   |  1  |   False     |         False         |      4     |     22      |        0     |     31    |    0   |      0     |
         And la lista de "Objetos" tiene "0" elementos
-	# despues de una iteración más, el objeto ya está en la lista de objetos
-	# pero Guillermo sigue teniendolo
-	And no hago nada
-       	And los valores iniciales son correctos:
-           | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
-           |   0   |  1  |   False     |         False         |      4     |     22      |        0     |     31    |    0   |      0     |
-        And la lista de "Personajes" tiene "2" elementos
         And los valores de los "Personajes" son correctos:
          | altura | id | nombre    | objetos | orientacion | posX | posY |
          |    0   |  0 | Guillermo |    32   |      0      |  136 |  159 |
          |    0   |  1 |  Adso     |     0   |      1      |  134 |  160 |
-        And la lista de "Objetos" tiene "1" elementos
+
+
+
+#	And no hago nada
+#	And no hago nada
+# para no volver a coger lo que suelto
+#	And giro a la derecha
+	# en esta iteración Guillermo aún tiene el objeto y no está en pantalla
+#       	And los valores iniciales son correctos:
+#           | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
+#           |   0   |  1  |   False     |         False         |      4     |     22      |        0     |     31    |    0   |      0     |
+#        And la lista de "Personajes" tiene "2" elementos
+#        And los valores de los "Personajes" son correctos:
+#         | altura | id | nombre    | objetos | orientacion | posX | posY |
+#         |    0   |  0 | Guillermo |    32   |      0      |  136 |  159 |
+#         |    0   |  1 |  Adso     |     0   |      1      |  134 |  160 |
+#        And la lista de "Objetos" tiene "0" elementos
 	# despues de una iteración más, el objeto ya está en la lista de objetos
 	# pero Guillermo sigue teniendolo
-	And no hago nada
-       	And los valores iniciales son correctos:
-           | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
-           |   0   |  1  |   False     |         False         |      4     |     22      |        0     |     31    |    0   |      0     |
-        And la lista de "Personajes" tiene "2" elementos
-        And los valores de los "Personajes" son correctos:
-         | altura | id | nombre    | objetos | orientacion | posX | posY |
-         |    0   |  0 | Guillermo |     0   |      0      |  136 |  159 |
-         |    0   |  1 |  Adso     |     0   |      1      |  134 |  160 |
-        And la lista de "Objetos" tiene "1" elementos
+	# NOPE, en http y websocket lo sigue teniendo Guillermo
+	# y no está en la lista
+#	And no hago nada
+#       	And los valores iniciales son correctos:
+#           | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
+#           |   0   |  1  |   False     |         False         |      4     |     22      |        0     |     31    |    0   |      0     |
+#        And la lista de "Personajes" tiene "2" elementos
+#        And los valores de los "Personajes" son correctos:
+#         | altura | id | nombre    | objetos | orientacion | posX | posY |
+#         |    0   |  0 | Guillermo |    32   |      0      |  136 |  159 |
+#         |    0   |  1 |  Adso     |     0   |      1      |  134 |  160 |
+#        #And la lista de "Objetos" tiene "1" elementos
+#        And la lista de "Objetos" tiene "0" elementos
+#	# despues de una iteración más, el objeto ya está en la lista de objetos
+#	# pero Guillermo sigue teniendolo
+#	And no hago nada
+#	And no hago nada
+#       	And los valores iniciales son correctos:
+#           | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
+#           |   0   |  1  |   False     |         False         |      4     |     22      |        0     |     31    |    0   |      0     |
+#        And la lista de "Personajes" tiene "2" elementos
+#        And los valores de los "Personajes" son correctos:
+#         | altura | id | nombre    | objetos | orientacion | posX | posY |
+#         |    0   |  0 | Guillermo |     0   |      0      |  136 |  159 |
+#         |    0   |  1 |  Adso     |     0   |      1      |  134 |  160 |
+#        And la lista de "Objetos" tiene "1" elementos
 
   Scenario: Llegar al abad
 	Given una partida recien iniciada

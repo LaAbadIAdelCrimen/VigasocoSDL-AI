@@ -33,8 +33,8 @@ public:
 	virtual ~Malaquias();
 
 	// cargar/salvar
-	friend std::ofstream& operator<<(std::ofstream&,const Malaquias* const);
-	friend std::ifstream& operator>>(std::ifstream&,Malaquias* const);
+	friend std::ostream& operator<<(std::ostream&,const Malaquias* const);
+	friend std::istream& operator>>(std::istream&,Malaquias* const);
 
 protected:
 	virtual void avanzaAnimacionOMueve();

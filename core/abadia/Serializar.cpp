@@ -9,8 +9,8 @@
 //para std::numeric_limits
 #include <limits>
 
-std::ofstream& Abadia::operator<< (
-		std::ofstream& out,
+std::ostream& Abadia::operator<< (
+		std::ostream& out,
 		const PosicionJuego* const pos )
 {
 	out << pos->orientacion << "// posOrientacion\n";
@@ -21,8 +21,8 @@ std::ofstream& Abadia::operator<< (
 	return out;
 }
 
-std::ifstream& Abadia::operator>> (
-		std::ifstream& in,
+std::istream& Abadia::operator>> (
+		std::istream& in,
 		PosicionJuego* const pos )
 {
 	std::streamsize intMAX = std::numeric_limits<int>::max();
@@ -42,8 +42,8 @@ std::ifstream& Abadia::operator>> (
 	return in;
 }
 
-std::ofstream& Abadia::operator<< (
-		std::ofstream& out,
+std::ostream& Abadia::operator<< (
+		std::ostream& out,
 		const Objeto* const obj )
 {
 	int j;
@@ -66,8 +66,8 @@ std::ofstream& Abadia::operator<< (
 	return out;
 }
 
-std::ifstream& Abadia::operator>> (
-		std::ifstream& in,
+std::istream& Abadia::operator>> (
+		std::istream& in,
 		Objeto* const obj )
 {
 	std::streamsize intMAX = std::numeric_limits<int>::max();
@@ -103,8 +103,8 @@ std::ifstream& Abadia::operator>> (
 	return in;
 }
 
-std::ofstream& Abadia::operator<< (
-		std::ofstream& out,
+std::ostream& Abadia::operator<< (
+		std::ostream& out,
 		const Puerta* const puerta )
 {
 	out << (PosicionJuego*)puerta;
@@ -118,8 +118,8 @@ std::ofstream& Abadia::operator<< (
 	return out;
 }
 
-std::ifstream& Abadia::operator>> (
-		std::ifstream& in,
+std::istream& Abadia::operator>> (
+		std::istream& in,
 		Puerta* const puerta )
 {
 	std::streamsize intMAX = std::numeric_limits<int>::max();
@@ -144,16 +144,16 @@ std::ifstream& Abadia::operator>> (
 	return in;
 }
 
-std::ofstream& Abadia::operator<< (
-		std::ofstream& out,
+std::ostream& Abadia::operator<< (
+		std::ostream& out,
 		const Sprite* const sprite )
 {
 	out << sprite->esVisible << "// esVisible\n";
 	return out;
 }
 
-std::ifstream& Abadia::operator>> (
-		std::ifstream& in,
+std::istream& Abadia::operator>> (
+		std::istream& in,
 		Sprite* const sprite )
 {
 	std::streamsize intMAX = std::numeric_limits<int>::max();
@@ -164,8 +164,8 @@ std::ifstream& Abadia::operator>> (
 	return in;
 }
 
-std::ofstream& Abadia::operator<< (
-		std::ofstream& out,
+std::ostream& Abadia::operator<< (
+		std::ostream& out,
 		const Personaje* const pers)
 {
 	out << (PosicionJuego*)pers;
@@ -191,8 +191,8 @@ std::ofstream& Abadia::operator<< (
 	return out;
 }
 
-std::ifstream& Abadia::operator>> (
-		std::ifstream& in,
+std::istream& Abadia::operator>> (
+		std::istream& in,
 		Personaje* const pers)
 {
 	std::streamsize intMAX = std::numeric_limits<int>::max();
@@ -253,8 +253,8 @@ std::ifstream& Abadia::operator>> (
 	return in;
 }
 
-std::ofstream& Abadia::operator<< (
-		std::ofstream& out,
+std::ostream& Abadia::operator<< (
+		std::ostream& out,
 		const Guillermo* const guillermo )
 {
 	out << "// GUILLERMO\n";
@@ -264,8 +264,8 @@ std::ofstream& Abadia::operator<< (
 	return out;
 }
 
-std::ifstream& Abadia::operator>> (
-		std::ifstream& in,
+std::istream& Abadia::operator>> (
+		std::istream& in,
 		Guillermo* const guillermo )
 {
 	std::streamsize intMAX = std::numeric_limits<int>::max();
@@ -278,8 +278,8 @@ std::ifstream& Abadia::operator>> (
 	return in;
 }
 
-std::ofstream& Abadia::operator<< (
-	std::ofstream& out,
+std::ostream& Abadia::operator<< (
+	std::ostream& out,
 	const PersonajeConIA* const persIA )
 {
 	out << (Personaje*)persIA ;
@@ -292,8 +292,8 @@ std::ofstream& Abadia::operator<< (
 	return out;
 }
 
-std::ifstream& Abadia::operator>> (
-	std::ifstream& in,
+std::istream& Abadia::operator>> (
+	std::istream& in,
 	PersonajeConIA* const persIA )
 {
 	std::streamsize intMAX = std::numeric_limits<int>::max();
@@ -314,8 +314,8 @@ std::ifstream& Abadia::operator>> (
 	return in;
 }
 
-std::ofstream& Abadia::operator<< (
-	std::ofstream& out,
+std::ostream& Abadia::operator<< (
+	std::ostream& out,
 	const Adso* const adso )
 {
 	out << "// ADSO\n";
@@ -328,8 +328,8 @@ std::ofstream& Abadia::operator<< (
 	return out;
 }
 
-std::ifstream& Abadia::operator>> (
-	std::ifstream& in,
+std::istream& Abadia::operator>> (
+	std::istream& in,
 	Adso* const adso )
 {
 	std::streamsize intMAX = std::numeric_limits<int>::max();
@@ -349,8 +349,8 @@ std::ifstream& Abadia::operator>> (
 	return in;
 }
 
-std::ofstream& Abadia::operator<< (
-		std::ofstream& out,
+std::ostream& Abadia::operator<< (
+		std::ostream& out,
 		const Malaquias* const malaquias )
 {
 	out << "// MALAQUIAS" << std::endl;
@@ -363,8 +363,8 @@ std::ofstream& Abadia::operator<< (
 	return out;
 }
 
-std::ifstream& Abadia::operator>> (
-		std::ifstream& in,
+std::istream& Abadia::operator>> (
+		std::istream& in,
 		Malaquias* const malaquias )
 {
 	std::streamsize intMAX = std::numeric_limits<int>::max();
@@ -384,8 +384,8 @@ std::ifstream& Abadia::operator>> (
 	return in;
 }
 
-std::ofstream& Abadia::operator<< (
-	std::ofstream& out,
+std::ostream& Abadia::operator<< (
+	std::ostream& out,
 	const Abad* const abad )
 {
 	out << "// ABAD" << std::endl;
@@ -400,8 +400,8 @@ std::ofstream& Abadia::operator<< (
 	return out;
 }
 
-std::ifstream& Abadia::operator>> (
-	std::ifstream& in,
+std::istream& Abadia::operator>> (
+	std::istream& in,
 	Abad* const abad )
 {
 	std::streamsize intMAX = std::numeric_limits<int>::max();
@@ -427,8 +427,8 @@ std::ifstream& Abadia::operator>> (
 	return in;
 }
 
-std::ofstream& Abadia::operator<< (
-	std::ofstream& out,
+std::ostream& Abadia::operator<< (
+	std::ostream& out,
 	const Berengario* const berengario )
 {
 	out << "// BERENGARIO" << std::endl;
@@ -443,8 +443,8 @@ std::ofstream& Abadia::operator<< (
 	return out;
 }
 
-std::ifstream& Abadia::operator>> (
-	std::ifstream& in,
+std::istream& Abadia::operator>> (
+	std::istream& in,
 	Berengario* const berengario )
 {
 	bool encapuchado;
@@ -469,8 +469,8 @@ std::ifstream& Abadia::operator>> (
 	return in;
 }
 
-std::ofstream& Abadia::operator<< (
-	std::ofstream& out,
+std::ostream& Abadia::operator<< (
+	std::ostream& out,
 	const Severino* const severino )
 {
 	out << "// SEVERINO" << std::endl;
@@ -480,8 +480,8 @@ std::ofstream& Abadia::operator<< (
 	return out;
 }
 
-std::ifstream& Abadia::operator>> (
-	std::ifstream& in,
+std::istream& Abadia::operator>> (
+	std::istream& in,
 	Severino* const severino )
 {
 	std::streamsize intMAX = std::numeric_limits<int>::max();
@@ -495,8 +495,8 @@ std::ifstream& Abadia::operator>> (
 	return in;
 }
 
-std::ofstream& Abadia::operator<< (
-	std::ofstream& out,
+std::ostream& Abadia::operator<< (
+	std::ostream& out,
 	const Jorge* const jorge )
 {
 	out << "// JORGE" << std::endl;
@@ -507,8 +507,8 @@ std::ofstream& Abadia::operator<< (
 	return out;
 }
 
-std::ifstream& Abadia::operator>> (
-	std::ifstream& in,
+std::istream& Abadia::operator>> (
+	std::istream& in,
 	Jorge* const jorge )
 {
 	std::streamsize intMAX = std::numeric_limits<int>::max();
@@ -525,8 +525,8 @@ std::ifstream& Abadia::operator>> (
 	return in;
 }
 
-std::ofstream& Abadia::operator<< (
-	std::ofstream& out,
+std::ostream& Abadia::operator<< (
+	std::ostream& out,
 	const Bernardo* const bernardo )
 {
 	out << "// BERNARDO" << std::endl;
@@ -536,8 +536,8 @@ std::ofstream& Abadia::operator<< (
 	return out;
 }
 
-std::ifstream& Abadia::operator>> (
-	std::ifstream& in,
+std::istream& Abadia::operator>> (
+	std::istream& in,
 	Bernardo* const bernardo )
 {
 	std::streamsize intMAX = std::numeric_limits<int>::max();
@@ -551,8 +551,8 @@ std::ifstream& Abadia::operator>> (
 	return in;
 }
 
-std::ofstream& Abadia::operator<< (
-	std::ofstream& out,
+std::ostream& Abadia::operator<< (
+	std::ostream& out,
 	const Logica* const logica)
 {
 	Guillermo *guillermo;	// guillermo
@@ -633,8 +633,8 @@ std::ofstream& Abadia::operator<< (
 	return out; // sin esto, falla en PNACL
 }
 
-std::ifstream& Abadia::operator>> (
-	std::ifstream& in,
+std::istream& Abadia::operator>> (
+	std::istream& in,
 	Logica* const logica)
 {
 	Guillermo *guillermo;	// guillermo

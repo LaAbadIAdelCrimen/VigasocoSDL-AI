@@ -50,6 +50,7 @@ using namespace Abadia;
 
 Logica::Logica(UINT8 *romData, UINT8 *buf, int lgtud)
 {
+fprintf(stderr,"constructor Logica\n");
 	// crea los objetos usados por la lógica
 	accionesDia = new AccionesDia();
 	buscRutas = new BuscadorRutas(buf, lgtud);
@@ -59,6 +60,7 @@ Logica::Logica(UINT8 *romData, UINT8 *buf, int lgtud)
 
 Logica::~Logica()
 {
+fprintf(stderr,"destructor Logica\n");
 	// borra los objetos usados por la lógica
 	delete accionesDia;
 	delete buscRutas;
@@ -72,14 +74,20 @@ Logica::~Logica()
 // inicia la lógica
 void Logica::inicia()
 {
+fprintf(stderr,"Logica::inicia 0\n");
 	// inicia las entidades del juego
 	iniciaSprites();
+fprintf(stderr,"Logica::inicia 1\n");
 	iniciaPersonajes();
+fprintf(stderr,"Logica::inicia 2\n");
 	iniciaPuertas();
+fprintf(stderr,"Logica::inicia 3\n");
 	iniciaObjetos();
+fprintf(stderr,"Logica::inicia 4\n");
 
 	// inicia la lógica relacionada con la habitación del espejo
 	iniciaHabitacionEspejo();
+fprintf(stderr,"Logica::inicia 5\n");
 
 	// inicia las variables de la lógica del juego
 	dia = 1;
@@ -114,7 +122,7 @@ void Logica::inicia()
 	elMotorGrafico->personaje = guillermo;
 
 	buscRutas->generadoCamino = false;
-//fprintf(stderr,"Logica::inicia 100\n");
+fprintf(stderr,"Logica::inicia 100\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -849,6 +857,7 @@ void Logica::despHabitacionEspejo()
 // fija el estado inicial de la habitación del espejo
 void Logica::iniciaHabitacionEspejo()
 {
+fprintf(stderr,"Logica::iniciaHabitacionEspejo 0\n");
 	// inicialmente, el espejo está cerrado y no se ha generado el número romano para el enigma del espejo
 	espejoCerrado = true;
     numeroRomano = 0;
@@ -859,12 +868,16 @@ void Logica::iniciaHabitacionEspejo()
 	for (int i = 0; i < 5; i++){
 		roms[despDatosAlturaEspejo + i] = datosAltura[i];
 	}
+fprintf(stderr,"Logica::iniciaHabitacionEspejo 1\n");
+fprintf(stderr,"Logica::iniciaHabitacionEspejo %d\n",despBloqueEspejo);
 
 	// modifica la habitación del espejo para que el espejo aparezca cerrado
 	roms[despBloqueEspejo] = 0x11;
+fprintf(stderr,"Logica::iniciaHabitacionEspejo 2\n");
 
 	// modifica la habitación del espejo para que la trampa no esté abierta
 	roms[despBloqueEspejo - 2] = 0x1f;
+fprintf(stderr,"Logica::iniciaHabitacionEspejo 3\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////

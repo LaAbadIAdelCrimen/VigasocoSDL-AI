@@ -40,12 +40,14 @@ int Marcador::duracionEtapasDia[7][7] = {
 
 Marcador::Marcador()
 {
+fprintf(stderr,"constructor marcador\n");
 	cpc6128 = elJuego->cpc6128;
 	roms = elJuego->roms;
 }
 
 Marcador::~Marcador()
 {
+fprintf(stderr,"destructor marcador\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////

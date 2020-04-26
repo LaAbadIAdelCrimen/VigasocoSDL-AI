@@ -15,11 +15,13 @@ using namespace Abadia;
 
 Controles::Controles()
 {
+fprintf(stderr,"constructor Controles\n");
 	ih = 0;
 }
 
 Controles::~Controles()
 {
+fprintf(stderr,"destructor Controles\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////

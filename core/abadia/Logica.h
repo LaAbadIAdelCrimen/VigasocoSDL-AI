@@ -141,7 +141,7 @@ public:
 	~Logica();
 
 
-	friend std::ifstream& operator>>(std::ifstream& in,
+	friend std::istream& operator>>(std::istream& in,
 			Logica* const logica);
 
 

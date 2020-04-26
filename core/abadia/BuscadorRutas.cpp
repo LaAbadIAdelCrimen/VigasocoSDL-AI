@@ -133,6 +133,7 @@ int BuscadorRutas::posDestinoOrientacion[4][2] = {
 
 BuscadorRutas::BuscadorRutas(UINT8 *buf, int lgtud)
 {
+fprintf(stderr,"constructor BuscadorRutas\n");
 	buffer = (INT32 *)buf;
 	lgtudBuffer = lgtud/4;
 	posPila = 0;
@@ -148,6 +149,7 @@ BuscadorRutas::BuscadorRutas(UINT8 *buf, int lgtud)
 
 BuscadorRutas::~BuscadorRutas()
 {
+fprintf(stderr,"destructor BuscadorRutas\n");
 	// borra los objetos para indicar las posiciones
 	for (int i = 0; i < 4; i++){
 		delete fijaPosOri[i];

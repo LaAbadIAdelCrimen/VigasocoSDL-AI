@@ -17,6 +17,8 @@
 
 #include <cassert>
 
+// 666 para fprintf
+#include <cstdio>
 
 template <typename T>
 class Singleton
@@ -28,6 +30,7 @@ public:
 	// constructor
 	Singleton()
 	{
+fprintf(stderr,"constructor Singleton %p deberia ser cero\n",g_singleton);
 		assert(!g_singleton);
 
 		// get the correct pointer in case of multiple inheritance
@@ -37,6 +40,7 @@ public:
 	// destructor
 	~Singleton()
 	{
+fprintf(stderr,"destructor Singleton %p deberia NO ser cero\n",g_singleton);
 		assert(g_singleton != 0);
 
 		g_singleton = 0;

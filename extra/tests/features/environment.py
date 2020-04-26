@@ -2,7 +2,7 @@
 # de una partida grabada, para poder cambiar todos los tests
 # facilmente si cambia el formato
 
-import sys
+import sys,gc
 
 def before_all(context):
 	sys.path.append('./steps/');
@@ -53,3 +53,9 @@ def before_all(context):
 				from lib_steps.lib_steps import AbadIA
 				print ("¡¡¡lib_steps!!!")
 				context.abadIA = AbadIA()
+
+#def after_scenario(context, scenario):
+#    gc.collect()
+#    print("after_scenario")
+#    print( gc.garbage )
+#    print("after_scenario FIN")

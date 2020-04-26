@@ -8,6 +8,9 @@
 #include <fstream>
 //#include <string>
 
+// para errno_t
+//#include <cerrno>
+
 //extern unsigned char abadiaROM[];
 //extern int abadiaROM_size;
 extern unsigned char _binary_abadiaROM_bin_start[];
@@ -32,13 +35,36 @@ extern "C" {
 		VigasocoLibSDL::getSingletonPtr()->init(); 
 fprintf(stderr,"LibAbadIA_init() singleton %p\n", VigasocoLibSDL::getSingletonPtr());
 	}
-	const char *LibAbadIA_step(int *controles) { 
+	char *LibAbadIA_step(int *controles, char *resultado, size_t resultadoMaxLength) { 
 //		std::string tmp= VigasocoLibSDL::getSingletonPtr()->step(controles);
 //const		char *t=tmp.c_str();
 //		return t;
 //fprintf(stderr,"C wrapper UP %d RESET %d\n",controles[P1_UP], controles[KEYBOARD_E]);
-return VigasocoLibSDL::getSingletonPtr()->step(controles).c_str(); 
+
+
+//return VigasocoLibSDL::getSingletonPtr()->step(controles).c_str(); 
+		std::string tmp=VigasocoLibSDL::getSingletonPtr()->step(controles);
+//		fprintf(stderr,"C step puedo grabar hasta %d y necesito %ld\n",resultadoMaxLength,tmp.length());
+		strncpy(resultado,tmp.c_str(), resultadoMaxLength>=tmp.length()+1?tmp.length()+1:resultadoMaxLength-1);
+		return resultado;
+		
 }
+	char *LibAbadIA_save(char *savedata, size_t saveMaxLength) {
+//		std::string tmp=VigasocoLibSDL::getSingletonPtr()->save();
+//		const char *temp=tmp.c_str();
+//		fprintf(stderr,"C save *%s*\n",temp);
+//		return temp;
+
+		std::string tmp=VigasocoLibSDL::getSingletonPtr()->save();
+//		fprintf(stderr,"C save puedo grabar hasta %d y necesito %ld\n",saveMaxLength,tmp.length());
+		strncpy(savedata, tmp.c_str(), saveMaxLength>=tmp.length()+1?tmp.length()+1:saveMaxLength-1);
+		return savedata;
+	}
+	bool LibAbadIA_load(const char * const input) {
+		bool res=VigasocoLibSDL::getSingletonPtr()->load(input);
+		fprintf(stderr,"C load %d un bool true es %d y un false es %d\n",res,true,false);
+		return res;
+	}
 }
 
 //VigasocoLibSDL _LibabadIA; // La instancia para no tener que exponer un new() a python
@@ -127,6 +153,15 @@ std::string VigasocoLibSDL::step(int *controles) {
 return	_abadiaGame->step(controles);
 //fprintf(stderr,"\tFIN VigasocoLibSDL::step\n");
 }
+
+std::string VigasocoLibSDL::save(void) {
+return	_abadiaGame->save();
+}
+
+bool VigasocoLibSDL::load(std::string input) {
+return	_abadiaGame->cargar(input);
+}
+
 
 
 

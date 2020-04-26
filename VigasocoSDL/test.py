@@ -8,7 +8,9 @@ class AbadIA(object):
 	def __init__(self):
 		self.lib = cdll.LoadLibrary('./LibAbadIA.so')
 		self.lib.LibAbadIA_step.restype = c_char_p
+		print("antes init\n")
 		self.lib.LibAbadIA_init()
+		print("despues init\n")
 	def step(self,controles):
 		return self.lib.LibAbadIA_step(controles)
 

@@ -54,6 +54,7 @@ public:
 	static const int spritesReflejos = primerSpriteObjetos + numObjetos;
 	static const int spriteLuz = spritesReflejos + 2;
 	static const int numSprites = spriteLuz + 1;
+	// TODO: ¿por qué esto es público?
 	static const char *savefile[7];
 
 // campos
@@ -107,6 +108,7 @@ private:
 	void reinicio();
 	bool cargar(int slot);
 	void save(int slot);
+
 	// TODO sacar todo lo relativo a menus
 	// a una clase para menu y no ensuciar la clase Juego
 	void pintaMenuCargar(int seleccionado,bool efecto=false);
@@ -141,6 +143,8 @@ public:
 #ifdef __libabadIA__
 	void init(void);
 	std::string dump(void);
+	bool cargar(std::string input);
+	std::string save(void);
 #endif
 	void muestraFinal();
 	void limpiaAreaJuego(int color);

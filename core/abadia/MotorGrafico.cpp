@@ -109,6 +109,7 @@ UINT8 MotorGrafico::plantas[3][256] = {
 
 MotorGrafico::MotorGrafico(UINT8 *buffer, int lgtudBuffer)
 {
+fprintf(stderr,"constructor MotorGrafico\n");
 	roms = elJuego->roms;
 
 	posXPantalla = posYPantalla = 0;
@@ -131,6 +132,7 @@ MotorGrafico::MotorGrafico(UINT8 *buffer, int lgtudBuffer)
 
 MotorGrafico::~MotorGrafico()
 {
+fprintf(stderr,"destructor MotorGrafico\n");
 	// borra las transformaciones depentdientes de la cámara
 	for (int i = 0; i < 4; i++){
 		delete transCamara[i];

@@ -53,6 +53,9 @@
 #include "SpriteMonje.h"
 
 #include "Serializar.h"
+//666
+#include <fstream>
+#include <sstream>
 
 #include "sonidos.h"
 
@@ -2516,6 +2519,25 @@ void Juego::compruebaCambioCPC_VGA()
 	}
 }
 
+bool Juego::cargar(std::string input) {
+				// borramos las frases que pudieran quedar de la partida anterior
+				while (!elJuego->frases.empty()) {
+					elJuego->frases.pop();
+				}
+				// borramos los sonidos que pudieran quedar de la partida anterior
+				for (int index=0;index<12;index++)
+					VigasocoMain->getAudioPlugin()->setProperty("sonidos",index,false);
+				for (int index=0;index<12;index++)
+					fprintf(stderr,"limpiando en cargar sonido %d %d\n",index,VigasocoMain->getAudioPlugin()->getProperty("sonidos", index));
+
+	std::istringstream in(input);
+	in >> logica;
+		ReiniciaPantalla();
+fprintf(stderr,"tras cargar la pantalla es %d\n",motor->numPantalla);
+	// todo , falta llamar a inicia si se hay fail
+	return in.fail();
+}
+
 bool Juego::cargar(int slot)
 {
 #ifdef __abadIA__
@@ -2551,6 +2573,17 @@ logica->inicia();
 	{
 		return true;
 	}
+}
+
+std::string Juego::save(void) {
+	std::ostringstream out;
+	out << logica;
+
+	// TODO
+	if ( out.fail() ) {
+		fprintf(stderr,"Juego::save fail\n");
+		return "ERROR";
+	} else return out.str();
 }
 
 void Juego::save(int slot)

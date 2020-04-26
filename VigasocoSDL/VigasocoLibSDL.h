@@ -133,6 +133,8 @@ public:
 	//
 	//void step(int *controles);
 	std::string step(int *controles);
+	std::string save(void);
+	bool load(std::string input);
 };
 
 #endif	// _VIGASOCO_LIBSDL_H_

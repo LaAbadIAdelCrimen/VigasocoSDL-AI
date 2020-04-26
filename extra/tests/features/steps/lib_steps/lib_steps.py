@@ -4,7 +4,7 @@ import requests
 # todo, quitar sys
 import sys
 #from ctypes import cdll,c_int,c_char_p,byref
-from ctypes import cdll,c_int,c_char_p
+from ctypes import cdll,c_int,c_char_p,c_size_t,create_string_buffer,sizeof,POINTER
 
 (P1_UP ,
 P1_LEFT,
@@ -81,9 +81,15 @@ Controles = c_int * 70
 
 class AbadIA(object):
 	def __init__(self):
+		print("AbadIA CONSTRUCTOR")
 		self.lib = cdll.LoadLibrary('./LibAbadIA.so')
 		self.lib.LibAbadIA_init()
 		self.lib.LibAbadIA_step.restype = c_char_p
+#falta revisar tipo de controles
+		self.lib.LibAbadIA_step.argtypes = [POINTER(c_int),c_char_p,c_size_t]
+		self.lib.LibAbadIA_save.restype = c_char_p
+		self.lib.LibAbadIA_save.argtypes = [c_char_p,c_size_t]
+		self.lib.LibAbadIA_load.argtypes = [c_char_p]
 #		Controles = c_int * 70
 		self.controles = Controles()
 #		print("init dump 0%d\n",self.lib.LibAbadIA_step(self.controles))
@@ -99,11 +105,18 @@ class AbadIA(object):
 #		return tmp 
 
 	def step(self):
-		tmp = self.lib.LibAbadIA_step(self.controles)
+		result = create_string_buffer(10000)
+		tmp = self.lib.LibAbadIA_step(self.controles,result,sizeof(result)).decode()
 # TODO vaya manera fea de poner todo a cero de nuevo
 		self.controles = Controles()
 		return tmp
 
+	def load(self,input):
+		return self.lib.LibAbadIA_load(input)
+#igual el create_string_buffer puede ir aqui y no por todos lados			
+#igual que en step
+	def save(self,result,resultMaxLength):
+		return self.lib.LibAbadIA_save(result,resultMaxLength)
 
 #TODO: meter la direccion y puerto en una constante, en configuracion
 # o que se inicialice al principio del escenario
@@ -127,15 +140,30 @@ def step_impl(context):
 #	controles[KEYBOARD_E]=1
 #	context.status=context.abadIA.step(controles).decode()
 	context.abadIA.controles[KEYBOARD_E]=1
-	context.status=context.abadIA.step().decode()
+#	context.status=context.abadIA.step().decode()
+	context.status=context.abadIA.step()
 
 #    r=requests.post(context.url,timeout=context.timeout)
 #    assert r.status_code==200
 
 @when('mando el comando "{comando}"')
 def step_impl(context,comando):
-    r=requests.post(context.url+'/current/actions/'+comando,timeout=context.timeout)
-    assert r.status_code==200
+#    r=requests.post(context.url+'/current/actions/'+comando,timeout=context.timeout)
+#    assert r.status_code==200
+	# en lib solo soportamos estos
+	assert comando=="UP" or comando =="QR"
+	if (comando=="UP"): 
+		context.abadIA.controles[P1_UP]=1
+#		context.status=context.abadIA.step().decode()
+		context.status=context.abadIA.step()
+	elif comando=="QR":
+		context.abadIA.controles[KEYBOARD_Q]=1
+		context.abadIA.controles[KEYBOARD_R]=1
+#		context.status=context.abadIA.step().decode()
+		context.status=context.abadIA.step()
+	else:
+		print("la version lib solo soporta ahora mismo comando UP y QR")
+		assert False
 
 #@when('no hago nada')
 @step('no hago nada')
@@ -143,7 +171,8 @@ def step_impl(context):
 #	Controles = c_int * 70
 #	controles = Controles()
 #	context.status=context.abadIA.step(controles).decode()
-	context.status=context.abadIA.step().decode()
+#	context.status=context.abadIA.step().decode()
+	context.status=context.abadIA.step()
 #    r=requests.post(context.url+'/current/actions/NOP',timeout=context.timeout)
 #    assert r.status_code==200
 
@@ -153,42 +182,48 @@ def step_impl(context):
 #    r=requests.post(context.url+'/current/actions/SPEEDUP',timeout=context.timeout)
 #    assert r.status_code==200
 	context.abadIA.controles[SERVICE_1]=1
-	context.status=context.abadIA.step().decode()
+#	context.status=context.abadIA.step().decode()
+	context.status=context.abadIA.step()
 
 @step('reduzco la velocidad')
 def step_impl(context):
 #    r=requests.post(context.url+'/current/actions/SLOWDOWN',timeout=context.timeout)
 #    assert r.status_code==200
 	context.abadIA.controles[SERVICE_2]=1
-	context.status=context.abadIA.step().decode()
+#	context.status=context.abadIA.step().decode()
+	context.status=context.abadIA.step()
 
 @when('digo que SI')
 def step_impl(context):
 #    r=requests.post(context.url+'/current/actions/SI',timeout=context.timeout)
 #    assert r.status_code==200
 	context.abadIA.controles[KEYBOARD_S]=1
-	context.status=context.abadIA.step().decode()
+#	context.status=context.abadIA.step().decode()
+	context.status=context.abadIA.step()
 
 @when('digo que NO')
 def step_impl(context):
 #    r=requests.post(context.url+'/current/actions/NO',timeout=context.timeout)
 #    assert r.status_code==200
 	context.abadIA.controles[KEYBOARD_N]=1
-	context.status=context.abadIA.step().decode()
+#	context.status=context.abadIA.step().decode()
+	context.status=context.abadIA.step()
 
 @when('giro a la izquierda')
 def step_impl(context):
 #    r=requests.post(context.url+'/current/actions/LEFT',timeout=context.timeout)
 #    assert r.status_code==200
 	context.abadIA.controles[P1_LEFT]=1
-	context.status=context.abadIA.step().decode()
+#	context.status=context.abadIA.step().decode()
+	context.status=context.abadIA.step()
 
 @when('giro a la derecha')
 def step_impl(context):
 #    r=requests.post(context.url+'/current/actions/RIGHT',timeout=context.timeout)
 #    assert r.status_code==200
 	context.abadIA.controles[P1_RIGHT]=1
-	context.status=context.abadIA.step().decode()
+#	context.status=context.abadIA.step().decode()
+	context.status=context.abadIA.step()
 
 @when('doy media vuelta')
 def step_impl(context):
@@ -197,16 +232,20 @@ def step_impl(context):
 #    r=requests.post(context.url+'/current/actions/RIGHT',timeout=context.timeout)
 #    assert r.status_code==200
 	context.abadIA.controles[P1_RIGHT]=1
-	context.status=context.abadIA.step().decode()
+#	context.status=context.abadIA.step().decode()
+	context.status=context.abadIA.step()
 	context.abadIA.controles[P1_RIGHT]=1
 	context.status=context.abadIA.step().decode()
+#	context.status=context.abadIA.step().decode()
+	context.status=context.abadIA.step()
 
 @when('avanzo')
 def step_impl(context):
 #    r=requests.post(context.url+'/current/actions/UP',timeout=context.timeout)
 #    assert r.status_code==200
 	context.abadIA.controles[P1_UP]=1
-	context.status=context.abadIA.step().decode()
+#	context.status=context.abadIA.step().decode()
+	context.status=context.abadIA.step()
 
 @when('avanzo "{numeroPasos}" pasos')
 def step_impl(context,numeroPasos):
@@ -227,9 +266,11 @@ def step_impl(context,numeroPasos):
 	i=0;
 	while i < int(numeroPasos):
 		context.abadIA.controles[P1_UP]=1
-		context.status=context.abadIA.step().decode()
+#		context.status=context.abadIA.step().decode()
+		context.status=context.abadIA.step()
 		context.abadIA.controles[P1_UP]=1
-		context.status=context.abadIA.step().decode()
+#		context.status=context.abadIA.step().decode()
+		context.status=context.abadIA.step()
 		i+=1
 
 @when('Adso avanza "{numeroPasos}" pasos')
@@ -246,7 +287,8 @@ def step_impl(context,numeroPasos):
 	i=0;
 	while i < int(numeroPasos):
 		context.abadIA.controles[P1_DOWN]=1
-		context.status=context.abadIA.step().decode()
+#		context.status=context.abadIA.step().decode()
+		context.status=context.abadIA.step()
 		i+=1
 
 
@@ -262,7 +304,9 @@ def step_impl(context,numeroIteraciones):
 #     assert r.status_code==200
 	i=0;
 	while i < int(numeroIteraciones):
-		context.status=context.abadIA.step().decode()
+#		context.status=context.abadIA.step().decode()
+		print ("iteracion "+str(i)+" en espero iteraciones")
+		context.status=context.abadIA.step()
 		i+=1
 
 @when('pulso espacio')
@@ -271,7 +315,8 @@ def step_impl(context):
 #    assert r.status_code==200
 #	context.abadIA.controles[KEYBOARD_SPACE]=1
 	context.abadIA.controles[P1_BUTTON1]=1
-	context.status=context.abadIA.step().decode()
+#	context.status=context.abadIA.step().decode()
+	context.status=context.abadIA.step()
 
 #falta no tener que pasar el json
 #y que behave lo construya en base a los comandos listados
@@ -286,34 +331,52 @@ def step_impl(context):
 
 @when('cargo una partida')
 def step_impl(context):
-    r=requests.put(context.url+'/current',context.text,timeout=context.timeout)
-    assert r.status_code==200
+#    r=requests.put(context.url+'/current',context.text,timeout=context.timeout)
+#    assert r.status_code==200
+#	print("cargo una partida cuyo texto es: *"+context.text+"*")
+	assert context.abadIA.load(context.text.encode())
+	
 
 @step('grabo la partida')
 def step_impl(context):
-    r=requests.get(context.url+'/current', headers={"accept":"text/x.abadIA+plain"},timeout=context.timeout)
-    print("***partida recibida***");
-    print(r.text);
-    assert r.status_code==200
-# TODO: no se por que en el body hay una línea en blanco al final
-    assert r.text.count('\n')==431
-# TODO: si está en la pantalla que indica el porcentaje completado
-# y se de a grabar, se devuelven sólo 430 líneas ¿por qué?
-
+#    r=requests.get(context.url+'/current', headers={"accept":"text/x.abadIA+plain"},timeout=context.timeout)
+#    print("***partida recibida***");
+#    print(r.text);
+#    assert r.status_code==200
+## TODO: no se por que en el body hay una línea en blanco al final
+#    assert r.text.count('\n')==431
+## TODO: si está en la pantalla que indica el porcentaje completado
+## y se de a grabar, se devuelven sólo 430 líneas ¿por qué?
+# da fallos el decode a veces
+#	res=context.abadIA.save().decode()
+	result = create_string_buffer(10000)
+	res=context.abadIA.save(result,sizeof(result)).decode()
+	print("grabo la partida *"+res+"*")
+	assert res.count('\n')==431
 
 @step('grabo la partida y comparo el volcado')
 def step_impl(context):
-    print("lineas partida esperada: "+context.text.count('\n')+1);
-    assert context.text.count('\n')+1==431;
-    r=requests.get(context.url+'/current', headers={"accept":"text/x.abadIA+plain"},timeout=context.timeout)
-    print("***partida recibida***");
-    print(r.text);
-    print("***partida esperada***");
-    print(context.text);
-    assert r.status_code==200
+#    print("lineas partida esperada: "+context.text.count('\n')+1);
+#    assert context.text.count('\n')+1==431;
+#    r=requests.get(context.url+'/current', headers={"accept":"text/x.abadIA+plain"},timeout=context.timeout)
+#    print("***partida recibida***");
+#    print(r.text);
+#    print("***partida esperada***");
+#    print(context.text);
+#    assert r.status_code==200
 # TODO: no se por que en el body hay una línea en blanco al final
-    assert r.text.count('\n')==431
-    assert context.text==r.text
+#    assert r.text.count('\n')==431
+#    assert context.text==r.text
+	print("lineas partida esperada: "+context.text.count('\n')+1);
+	assert context.text.count('\n')+1==431;
+	res=context.abadIA.save()
+	print("***partida recibida***");
+	print(res);
+	print("***partida esperada***");
+	print(context.text);
+	assert res.count('\n')==431
+	assert context.text==res
+	
 
 # TODO: comparar contra tabla para poder ampliar lo que se comprueba
 @then('el resultado es "{resultado}" con descripcion "{descripcion}"')
@@ -335,7 +398,8 @@ def step_impl(context):
 # no me gusta tener que mandar el dump, pero tal y como se
 # refrescan las frases es necesario
     context.abadIA.controles[KEYBOARD_D]=1
-    context.status=context.abadIA.step().decode()
+#    context.status=context.abadIA.step().decode()
+    context.status=context.abadIA.step()
     print("resultDUMPtext**"+context.status);
     valid_json=False;
     try:
