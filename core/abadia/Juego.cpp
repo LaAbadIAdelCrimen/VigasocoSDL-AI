@@ -1814,6 +1814,11 @@ int kk_tmp;
 //int Juego::step(int *source) {
 std::string Juego::step(int *source) {
 
+	// Si he muerto o acabado el juego
+	// solo respondo al RESET
+	if (logica->haFracasado and source[KEYBOARD_E]!=1) {
+		return dump();
+	}
 
 // borramos la lista de frases
 // para que la siguiente vez tenga solo las frases desde la ultima
@@ -2800,11 +2805,16 @@ bool Juego::muestraPantallaFinInvestigacion()
 	// si guillermo está vivo, sale
 	if (!logica->haFracasado) return false;
 
+
 	// indica que la cámara siga a guillermo y lo haga ya
 	laLogica->numPersonajeCamara = 0x80;
 
 	// si está mostrando una frase por el marcador, espera a que se termine de mostrar
 	if (elGestorFrases->mostrandoFrase) return false;
+
+#ifdef __libabadIA__
+	return true;
+#endif
 
 	// oculta el área de juego
 	// CPC limpiaAreaJuego(3);

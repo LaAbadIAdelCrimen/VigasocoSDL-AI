@@ -178,7 +178,7 @@ def step_impl(context):
 
 @step('grabo la partida y comparo el volcado')
 def step_impl(context):
-    print("lineas partida esperada: "+context.text.count('\n')+1);
+    print("lineas partida esperada: "+str(context.text.count('\n')+1));
     assert context.text.count('\n')+1==431;
     r=requests.get(context.url+'/current', headers={"accept":"text/x.abadIA+plain"},timeout=context.timeout)
     print("***partida recibida***");

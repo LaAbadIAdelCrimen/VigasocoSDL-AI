@@ -151,7 +151,7 @@ def step_impl(context,comando):
 #    r=requests.post(context.url+'/current/actions/'+comando,timeout=context.timeout)
 #    assert r.status_code==200
 	# en lib solo soportamos estos
-	assert comando=="UP" or comando =="QR"
+	assert comando=="UP" or comando =="QR" or comando=="RESET"
 	if (comando=="UP"): 
 		context.abadIA.controles[P1_UP]=1
 #		context.status=context.abadIA.step().decode()
@@ -161,8 +161,11 @@ def step_impl(context,comando):
 		context.abadIA.controles[KEYBOARD_R]=1
 #		context.status=context.abadIA.step().decode()
 		context.status=context.abadIA.step()
+	elif comando=="RESET":
+		context.abadIA.controles[KEYBOARD_E]=1
+		context.status=context.abadIA.step()
 	else:
-		print("la version lib solo soporta ahora mismo comando UP y QR")
+		print("la version lib solo soporta ahora mismo comando UP y QR (y RESET)")
 		assert False
 
 #@when('no hago nada')
@@ -235,7 +238,7 @@ def step_impl(context):
 #	context.status=context.abadIA.step().decode()
 	context.status=context.abadIA.step()
 	context.abadIA.controles[P1_RIGHT]=1
-	context.status=context.abadIA.step().decode()
+	context.status=context.abadIA.step()
 #	context.status=context.abadIA.step().decode()
 	context.status=context.abadIA.step()
 
@@ -305,7 +308,7 @@ def step_impl(context,numeroIteraciones):
 	i=0;
 	while i < int(numeroIteraciones):
 #		context.status=context.abadIA.step().decode()
-		print ("iteracion "+str(i)+" en espero iteraciones")
+#		print ("iteracion "+str(i)+" en espero iteraciones")
 		context.status=context.abadIA.step()
 		i+=1
 
@@ -367,7 +370,7 @@ def step_impl(context):
 # TODO: no se por que en el body hay una línea en blanco al final
 #    assert r.text.count('\n')==431
 #    assert context.text==r.text
-	print("lineas partida esperada: "+context.text.count('\n')+1);
+	print("lineas partida esperada: "+str(context.text.count('\n')+1));
 	assert context.text.count('\n')+1==431;
 	res=context.abadIA.save()
 	print("***partida recibida***");
