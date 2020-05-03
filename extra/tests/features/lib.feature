@@ -12631,13 +12631,13 @@ Scenario: DIA VI NOCHE
 	And avanzo "2" pasos
 	And los valores iniciales son correctos:
            | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
-           | 4287  |  6  |   False     |         False         |      0     |     62      |        0     |     31    |    0   |      67    |
+           | 4287  |  6  |   False     |         False         |      0     |     71      |        0     |     31    |    1   |      67    |
         And la lista de "Objetos" tiene "0" elementos
 	And la lista de "Personajes" tiene "2" elementos
         And los valores de los "Personajes" son correctos:
          | altura | id | nombre     | objetos          | orientacion | posX | posY |
-         |    2   |  0 | Guillermo  |    44            |      3      |  169 |   28 |
-         |    2   |  1 |  Adso      |     3            |      1      |  172 |   29 |
+         |   15   |  0 | Guillermo  |    44            |      1      |   57 |   50 |
+         |   15   |  1 |  Adso      |     3            |      1      |   63 |   51 |
 	And la lista de "sonidos" tiene "12" elementos
         And los elementos de la lista de "sonidos" son:
 	| sonando |
@@ -12645,7 +12645,7 @@ Scenario: DIA VI NOCHE
 	|     0   |
 	|     0   |
 	|     1   |
-	|     0   |
+	|     1   |
 	|     0   |
 	|     0   |
 	|     0   |
@@ -12653,15 +12653,10 @@ Scenario: DIA VI NOCHE
 	|     0   |
 	|     1   |
 	|     0   |
-        And la lista de "frases" tiene "3" elementos
-        And los elementos de la lista de "frases" son:
-         | id |
-         | 56 |
-         | 56 |
-         | 18 |
+        And la lista de "frases" tiene "0" elementos
 #	And grabo la partida
 
-Scenario: DIA VI NOCHE VUELTA
+Scenario: VUELTA NOCHE DIA VI
 	Given una conexion a la interfaz
 	When cargo una partida:
 """	
@@ -13187,7 +13182,35 @@ Scenario: DIA VI NOCHE VUELTA
 	And avanzo "2" pasos
 	And Adso avanza "15" pasos
 	And digo que SI
-	And grabo la partida
+	And los valores iniciales son correctos:
+           | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
+           | 4287  |  6  |   False     |         False         |      0     |     62      |        0     |     31    |    0   |     67     |
+        And la lista de "Objetos" tiene "0" elementos
+	And la lista de "Personajes" tiene "2" elementos
+        And los valores de los "Personajes" son correctos:
+         | altura | id | nombre     | objetos          | orientacion | posX | posY |
+         |    2   |  0 | Guillermo  |    44            |      3      |  169 |   28 |
+         |    2   |  1 |  Adso      |     3            |      0      |  172 |   29 |
+	And la lista de "sonidos" tiene "12" elementos
+        And los elementos de la lista de "sonidos" son:
+	| sonando |
+	|     1   |
+	|     0   |
+	|     0   |
+	|     1   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     1   |
+	|     0   |
+        And la lista de "frases" tiene "1" elementos
+        And los elementos de la lista de "frases" son:
+         | id |
+         | 18 |
+#	And grabo la partida
 
 Scenario: DIA VI PRIMA
 	Given una conexion a la interfaz
@@ -13722,7 +13745,44 @@ Scenario: DIA VI PRIMA
 	And avanzo "4" pasos
 	And giro a la derecha
 	And espero "650" iteraciones
-	And grabo la partida
+#TODO:  No se puede revisar numeroRomano porque se genera justo al juntar gafas y pergamino 
+	And los valores iniciales son correctos:
+           | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | obsequium | planta | porcentaje |
+           | 12799 |  6  |   False     |         False         |      4     |     1       |     31    |    0   |      83    |
+        And la lista de "Objetos" tiene "0" elementos
+	And la lista de "Personajes" tiene "3" elementos
+        And los valores de los "Personajes" son correctos:
+#TODO:  Revisar porque objetos Adso es 2 cuando solia ser 3 y no puede dejar objetos
+#OK en Logica::reiniciaContadoresLampara() se la quitan por haberla usado el día anterior
+         | altura | id | nombre     | objetos          | orientacion | posX | posY |
+         |    2   |  0 | Guillermo  |   124            |      1      |   56 |   57 |
+         |    2   |  1 |  Adso      |     2            |      0      |   54 |   57 |
+         |    2   |  3 |  Abad      | __DO_NOT_CHECK__ |      3      |   61 |   60 |
+	And la lista de "sonidos" tiene "12" elementos
+        And los elementos de la lista de "sonidos" son:
+	| sonando |
+	|     1   |
+	|     0   |
+	|     1   |
+	|     1   |
+	|     1   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     1   |
+	|     0   |
+	|     1   |
+	|     1   |
+        And la lista de "frases" tiene "7" elementos
+         | id |
+         | 25 |
+         | 12 |
+         | 0  |
+         | 30 |
+         | 20 |
+         | 23 |
+         | 11 |
+#	And grabo la partida
 
 Scenario: DIA VI NONA
 	Given una conexion a la interfaz
@@ -14230,7 +14290,39 @@ Scenario: DIA VI NONA
 	And giro a la derecha
 	And espero "890" iteraciones
 	#Misa
-	And grabo la partida
+	And los valores iniciales son correctos:
+           | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | obsequium | planta | porcentaje |
+           | 12799 |  6  |   False     |         False         |      6     |     34      |     31    |    0   |      85    |
+        And la lista de "Objetos" tiene "0" elementos
+	And la lista de "Personajes" tiene "3" elementos
+        And los valores de los "Personajes" son correctos:
+#TODO:  Revisar porque objetos Adso es 2 cuando solia ser 3 y no puede dejar objetos
+#OK en Logica::reiniciaContadoresLampara() se la quitan por haberla usado el día anterior
+         | altura | id | nombre     | objetos          | orientacion | posX | posY |
+         |    2   |  0 | Guillermo  |   124            |      1      |  132 |   75 |
+         |    2   |  1 |  Adso      |     3            |      0      |  132 |   77 |
+         |    4   |  3 |  Abad      | __DO_NOT_CHECK__ |      3      |  136 |   60 |
+	And la lista de "sonidos" tiene "12" elementos
+        And los elementos de la lista de "sonidos" son:
+	| sonando |
+	|     1   |
+	|     0   |
+	|     1   |
+	|     1   |
+	|     1   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     1   |
+	|     0   |
+	|     1   |
+	|     1   |
+        And la lista de "frases" tiene "3" elementos
+         | id |
+         | 13 |
+         | 23 |
+         | 11 |
+#	And grabo la partida
 
   Scenario: DIA VI COMPLETAS
 	Given una conexion a la interfaz
@@ -14685,7 +14777,36 @@ Scenario: DIA VI NONA
 	And giro a la izquierda
 	And espero "73" iteraciones
 	And digo que NO
-	And grabo la partida
+	And los valores iniciales son correctos:
+           | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
+           | 12799 |  7  |   False     |         False         |      0     |     62      |        3     |     31    |    0   |     86     |
+        And la lista de "Objetos" tiene "0" elementos
+	And la lista de "Personajes" tiene "2" elementos
+        And los valores de los "Personajes" son correctos:
+         | altura | id | nombre     | objetos          | orientacion | posX | posY |
+         |    2   |  0 | Guillermo  |   124            |      3      |  169 |   27 |
+         |    2   |  1 |  Adso      |     3            |      3      |  169 |   25 |
+	And la lista de "sonidos" tiene "12" elementos
+        And los elementos de la lista de "sonidos" son:
+	| sonando |
+	|     1   |
+	|     0   |
+	|     0   |
+	|     1   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     1   |
+	|     0   |
+        And la lista de "frases" tiene "2" elementos
+        And los elementos de la lista de "frases" son:
+         | id |
+         | 18 |
+         | 16 |
+#	And grabo la partida
 
 Scenario: DIA VII NOCHE 
 	Given una conexion a la interfaz
@@ -15220,9 +15341,34 @@ Scenario: DIA VII NOCHE
 	And giro a la izquierda
 	And avanzo "10" pasos
 	And giro a la izquierda
-	And grabo la partida
+	And los valores iniciales son correctos:
+           | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
+           | 12799 |  7  |   False     |         False         |      0     |     73      |        3     |     31    |    1   |     86     |
+        And la lista de "Objetos" tiene "0" elementos
+	And la lista de "Personajes" tiene "2" elementos
+        And los valores de los "Personajes" son correctos:
+         | altura | id | nombre     | objetos          | orientacion | posX | posY |
+         |   19   |  0 | Guillermo  |    124           |      1      |   95 |   45 |
+         |   14   |  1 |  Adso      |     3            |      0      |   86 |   45 |
+	And la lista de "sonidos" tiene "12" elementos
+        And los elementos de la lista de "sonidos" son:
+	| sonando |
+	|     1   |
+	|     0   |
+	|     0   |
+	|     1   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     1   |
+	|     0   |
+        And la lista de "frases" tiene "0" elementos
+#	And grabo la partida
 
-Scenario: DIA VII NOCHE LABERINTO
+Scenario: LABERINTO NOCHE DIA VII
 	Given una conexion a la interfaz
 	When cargo una partida:
 """
@@ -15777,7 +15923,34 @@ Scenario: DIA VII NOCHE LABERINTO
 	And giro a la derecha
 	And avanzo "10" pasos
 	And giro a la derecha
-	And grabo la partida
+	And los valores iniciales son correctos:
+           | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
+           | 13311 |  7  |   False     |         False         |      0     |    114      |        3     |     31    |    2   |     90     |
+        And la lista de "Objetos" tiene "0" elementos
+	And la lista de "Personajes" tiene "2" elementos
+        And los valores de los "Personajes" son correctos:
+         | altura | id | nombre     | objetos          | orientacion | posX | posY |
+         |   24   |  0 | Guillermo  |    124           |      1      |   37 |  111 |
+         |   24   |  1 |  Adso      |     3            |      2      |   44 |  111 |
+	And la lista de "sonidos" tiene "12" elementos
+        And los elementos de la lista de "sonidos" son:
+	| sonando |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     1   |
+	|     0   |
+        And la lista de "frases" tiene "1" elementos
+         | id |
+         | 40 |
+#	And grabo la partida 666
 
 Scenario: ESPEJO
 	Given una conexion a la interfaz
@@ -16215,7 +16388,9 @@ Scenario: ESPEJO
 1// seHaCogido
 1// numPersonaje
 """
-	
+
+#TODO : falta probar enmedio cuando se ve el libro
+# y cuando lo coge	
 	And avanzo "10" pasos
 	And giro a la izquierda
 	And avanzo "2" pasos
@@ -16265,6 +16440,35 @@ Scenario: ESPEJO
 	And los valores iniciales son correctos:
            | bonus | dia | haFracasado | investigacionCompleta | momentoDia | numPantalla | numeroRomano | obsequium | planta | porcentaje |
            | 16383 |  7  |   True      |         True          |      0     |    103      |        3     |     31    |    2   |    100     |
+        And la lista de "Objetos" tiene "0" elementos
+	And la lista de "Personajes" tiene "3" elementos
+        And los valores de los "Personajes" son correctos:
+         | altura | id | nombre     | objetos          | orientacion | posX | posY |
+         |   26   |  0 | Guillermo  |    124           |      1      |   23 |   47 |
+         |   32   |  1 |  Adso      |     3            |      2      |   29 |   47 |
+         |   26   |  6 | Jorge      | __DO_NOT_CHECK__ |      0      |   25 |   43 |
+	And la lista de "sonidos" tiene "12" elementos
+        And los elementos de la lista de "sonidos" son:
+	| sonando |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     0   |
+	|     1   |
+	|     0   |
+	|     1   |
+	|     0   |
+	|     1   |
+	|     0   |
+	|     1   |
+	|     0   |
+        And la lista de "frases" tiene "4" elementos
+        And los elementos de la lista de "frases" son:
+         | id |
+         | 47 |
+         | 35 |
+         | 46 |
+         | 33 |
 	# esperamos bastante para que se vea 
 	# lo de resuelto el 100% en las capturas
 	# de pantalla y grabaciones
