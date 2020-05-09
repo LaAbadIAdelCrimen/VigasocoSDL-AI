@@ -121,6 +121,7 @@ public:
 	VigasocoLibSDL();
 	virtual ~VigasocoLibSDL();
 	void init(void);
+void reset(void);
 	// platform services
 	//virtual ICriticalSection *createCriticalSection();
 

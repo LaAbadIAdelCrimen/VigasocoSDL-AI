@@ -2525,6 +2525,14 @@ void Juego::compruebaCambioCPC_VGA()
 }
 
 bool Juego::cargar(std::string input) {
+/*
+int controles[END_OF_INPUTS];
+controles[KEYBOARD_C]=1;
+controles[KEYBOARD_S]=1;
+step(controles);
+		ReiniciaPantalla();
+return true; */
+/* 666 */
 				// borramos las frases que pudieran quedar de la partida anterior
 				while (!elJuego->frases.empty()) {
 					elJuego->frases.pop();
@@ -2535,12 +2543,17 @@ bool Juego::cargar(std::string input) {
 				for (int index=0;index<12;index++)
 					fprintf(stderr,"limpiando en cargar sonido %d %d\n",index,VigasocoMain->getAudioPlugin()->getProperty("sonidos", index));
 
+logica->inicia();
+
 	std::istringstream in(input);
 	in >> logica;
+fprintf(stderr,"cargar in.fail() %d\n",in.fail());
+
 		ReiniciaPantalla();
 fprintf(stderr,"tras cargar la pantalla es %d\n",motor->numPantalla);
 	// todo , falta llamar a inicia si se hay fail
 	return in.fail();
+
 }
 
 bool Juego::cargar(int slot)

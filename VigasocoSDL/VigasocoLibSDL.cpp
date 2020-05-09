@@ -61,6 +61,8 @@ fprintf(stderr,"LibAbadIA_init() singleton %p\n", VigasocoLibSDL::getSingletonPt
 		return savedata;
 	}
 	bool LibAbadIA_load(const char * const input) {
+
+		VigasocoLibSDL::getSingletonPtr()->reset();
 		bool res=VigasocoLibSDL::getSingletonPtr()->load(input);
 		fprintf(stderr,"C load %d un bool true es %d y un false es %d\n",res,true,false);
 		return res;
@@ -140,6 +142,12 @@ ICriticalSection * VigasocoLibSDL::createCriticalSection()
 	return new SDLCriticalSection();
 }
 */
+void VigasocoLibSDL::reset(void) {
+// pruebas por bug primera misa en behave
+if (_abadiaGame) delete _abadiaGame;
+_abadiaGame = new Abadia::Juego(_binary_abadiaROM_bin_start, cpc6128);
+init();
+}
 void VigasocoLibSDL::init(void) {
 fprintf(stderr," VigasocoLibSDL::init\n");
 	_abadiaGame->init();
