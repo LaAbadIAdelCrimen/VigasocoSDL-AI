@@ -31,7 +31,7 @@
 #include "Berengario.h"
 #include "sonidos.h"
 
-// para pruebas cout
+// para pruebas cout 
 #include <iostream>
 #endif
 
@@ -50,7 +50,7 @@ InfoJuego::InfoJuego()
 	}
 
 	numPersonaje = Juego::numPersonajes;
-	numObjeto = Juego::numObjetos;
+	numObjeto = Juego::numObjetos;						
 	numPuerta = Juego::numPuertas;
 	mostrarLogica = false;
 	mostrarRejilla = false;
@@ -162,15 +162,15 @@ void InfoJuego::muestraInfo()
                 dump["sonidos"]=Sonidos;
                 // reiniciamos para volver a guardar solo los sonidos entre dump y dump
 // NO, ahora
-// se vacia en el bucle principal de juego,no aqui
-// se vacia solo cuando el agente ha pedido un dump
+// se vacia en el bucle principal de juego,no aqui  
+// se vacia solo cuando el agente ha pedido un dump 
 //                for (int index=0;index<12;index++)
 //                        VigasocoMain->getAudioPlugin()->setProperty("sonidos",index,false);
 
                 // Frases
                 nlohmann::json Frases = nlohmann::json::array();
-// se vacia en el bucle principal de juego,no aqui
-// se vacia solo cuando el agente ha pedido un dump
+// se vacia en el bucle principal de juego,no aqui  
+// se vacia solo cuando el agente ha pedido un dump 
 /*
                 while (!elJuego->frases.empty()) {
                         nlohmann::json frase = elJuego->frases.top();
@@ -237,7 +237,7 @@ void InfoJuego::muestraInfo()
                         }
                 }
                 dump["Objetos"]=Objetos;
-
+                // Rejilla
                 // Rejilla
                 nlohmann::json Rejilla = nlohmann::json::array();
                 RejillaPantalla *rejilla = elMotorGrafico->rejilla;
@@ -249,65 +249,6 @@ void InfoJuego::muestraInfo()
                         Rejilla.push_back(Fila);
                 }
                 dump["Rejilla"]=Rejilla;
-
-                // Plantas
-
-
-                nlohmann::json Plantas = nlohmann::json::array();
-
-                generaAlturasPlanta();
-                for (int ii=0 ; ii < 3; ii++) {
-	                UINT8 *mapa = MotorGrafico::plantas[numPlanta];
-	                UINT8 *alturas = alturasPlanta[numPlanta];
-
-                  int zoom = 1
-                  // obtiene la zona visible de la planta
-	                int minX = zonaVisiblePlanta[numPlanta][0];
-	                int maxX = zonaVisiblePlanta[numPlanta][1];
-	                int minY = zonaVisiblePlanta[numPlanta][2];
-	                int maxY = zonaVisiblePlanta[numPlanta][3];
-	                int longX = maxX - minX + 1;
-                  int posX = 320 - 4 - longX*16*zoom;
-
-
-                  /*
-                  nlohmann::json Fila = nlohmann::json::array();
-                  Fila.push_back((int) minX);
-                  Fila.push_back((int) maxX);
-                  Fila.push_back((int) minY);
-                  Fila.push_back((int) maxY);
-                  Plantas.push_back(Fila);
-                  */
-
-	                // pinta las casillas del mapa que tienen una pantalla asociada
-
-	                for (int j = minY; j <= maxY; j++){
-                    for (int i = minX; i <= maxX; i++){
-                      // si la pantalla actual está definida, la pinta
-                      if ((mapa[16*j + i] != 0) || ((numPlanta == 0) && (i == 0x04) && (j == 0x03))){
-                        UINT8 *alturaPantalla = &alturas[(longX*(j - minY) + i - minX)*16*16];
-
-                        for (int yy = 0; yy < 24; yy++) {
-                         nlohmann::json Fila = nlohmann::json::array();
-                           for (int xx = 0; xx < 24; xx++) {
-                             Fila.push_back((int) numPlanta);
-                             Fila.push_back((int) (i*16)+xx);
-                             Fila.push_back((int) (j*16)+yy);
-                             Fila.push_back((int) alturaPantalla[yy][xx]);
-                             Plantas.push_back(Fila);
-                           }
-                        }
-
-                      }
-		                }
-                  }
-
-                }
-                dump["Plantas"]=Plantas;
-
-
-
-
                 // Una forma de verlo cuadrado en vim es sacar
                 // el array del json y
                 // :1,$ s/ \([0-9]\)\,/ 0\1\,/g
@@ -323,7 +264,7 @@ std::cout << "numPantalla " << dump["numPantalla"] << std::endl;
 std::cout << "numPantalla " << dump[a] << std::endl;
 */
 #else
-/* las teclas 1 a 7 ahora se usan para hacer trampas y cambiar la camara para seguir a otros personajes
+/* las teclas 1 a 7 ahora se usan para hacer trampas y cambiar la camara para seguir a otros personajes 
 	if (losControles->seHaPulsado(KEYBOARD_1)) numPersonaje = (numPersonaje + 1) % (Juego::numPersonajes + 1);
 	if (losControles->seHaPulsado(KEYBOARD_2)) numObjeto = (numObjeto + 1) % (Juego::numObjetos + 1);
 	if (losControles->seHaPulsado(KEYBOARD_3)) numPuerta = (numPuerta + 1) % (Juego::numPuertas + 1);
@@ -333,7 +274,7 @@ std::cout << "numPantalla " << dump[a] << std::endl;
 	if (losControles->seHaPulsado(KEYBOARD_7)) mostrarMapaRestoPlantas = !mostrarMapaRestoPlantas;
 */
 /*
-	// como con el plugin actual de SDLVideo no se muestran los textos
+	// como con el plugin actual de SDLVideo no se muestran los textos 
 	// de infojuego
 	// solo remapeo teclas para mostrar mapas
 	if (losControles->seHaPulsado(KEYBOARD_8)) mostrarRejilla = !mostrarRejilla;
@@ -672,7 +613,7 @@ void InfoJuego::muestraPosicionMapa(int posX, int numPlanta)
 		int despX = (((pers->posX & 0xf0) >> 4) - minX)*zoom + (pers->posX & 0x0f)*zoom/16;
 		int despY = (((pers->posY & 0xf0) >> 4) - minY)*zoom + (pers->posY & 0x0f)*zoom/16;
 
-		bool pixelValido = (((pers->posX & 0xf0) >> 4) >= minX) && (((pers->posX & 0xf0) >> 4) <= maxX) &&
+		bool pixelValido = (((pers->posX & 0xf0) >> 4) >= minX) && (((pers->posX & 0xf0) >> 4) <= maxX) && 
 							(((pers->posY & 0xf0) >> 4) >= minY) && (((pers->posY & 0xf0) >> 4) <= maxY);
 		//assert(pixelValido);
 
@@ -714,7 +655,7 @@ void InfoJuego::muestraInfoLogica(int x, int y)
 		<< "tiempoUsoLampara = " << muestra(laLogica->tiempoUsoLampara) << std::endl
 		<< "cambioEstadoLampara = " << muestra(laLogica->cambioEstadoLampara) << std::endl
 		<< "cntTiempoAOscuras = " << muestra(laLogica->cntTiempoAOscuras) << std::endl
-
+		
 		<< "cntLeeLibroSinGuantes = " << muestra(laLogica->cntLeeLibroSinGuantes) << std::endl
 		<< "pergaminoGuardado = " << muestra(laLogica->pergaminoGuardado) << std::endl
 
@@ -780,7 +721,7 @@ void InfoJuego::muestraInfoObjeto(int i, int x, int y)
 std::string InfoJuego::muestraEntidad(EntidadJuego *entidad)
 {
 	std::ostringstream strBuf;
-	strBuf << "pos = (" + muestra(entidad->posX) + ", " + muestra(entidad->posY) + ", " + muestra(entidad->altura) + ")" << std::endl
+	strBuf << "pos = (" + muestra(entidad->posX) + ", " + muestra(entidad->posY) + ", " + muestra(entidad->altura) + ")" << std::endl 
 		<< "orientacion = " << muestra(entidad->orientacion) << std::endl;
 	return strBuf.str();
 }
@@ -817,7 +758,7 @@ std::string InfoJuego::muestraPersonaje(int i, Personaje *pers)
 std::string InfoJuego::muestraPuerta(Puerta *puerta)
 {
 	std::ostringstream strBuf;
-	strBuf << muestraEntidad(puerta)
+	strBuf << muestraEntidad(puerta) 
 		<< "identificador = " << muestra(puerta->identificador) << std::endl
 		<< "estaAbierta = " << muestra(puerta->estaAbierta) << std::endl
 		<< "haciaDentro = " << muestra(puerta->haciaDentro) << std::endl
@@ -832,11 +773,11 @@ std::string InfoJuego::muestraObjeto(Objeto *obj)
 	std::ostringstream strBuf;
 
 	if (!obj->seHaCogido){
-		strBuf << muestraEntidad(obj)
+		strBuf << muestraEntidad(obj) 
 			<< "seEstaCogiendo = " << muestra(obj->seEstaCogiendo) << std::endl
 			<< "seHaCogido = " << muestra(obj->seHaCogido) << std::endl;
 	} else {
-		strBuf << "pos = (" + muestra(obj->personaje->posX) + ", " + muestra(obj->personaje->posY) + ", " + muestra(obj->personaje->altura) + ")" << std::endl
+		strBuf << "pos = (" + muestra(obj->personaje->posX) + ", " + muestra(obj->personaje->posY) + ", " + muestra(obj->personaje->altura) + ")" << std::endl 
 		<< "orientacion = " << muestra(obj->personaje->orientacion) << std::endl
 		<< "seEstaCogiendo = " << muestra(obj->seEstaCogiendo) << std::endl
 		<< "seHaCogido = " << muestra(obj->seHaCogido) << std::endl;
