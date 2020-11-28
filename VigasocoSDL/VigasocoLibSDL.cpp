@@ -11,43 +11,32 @@
 // para errno_t
 //#include <cerrno>
 
-//extern unsigned char abadiaROM[];
-//extern int abadiaROM_size;
-extern unsigned char _binary_abadiaROM_bin_start[];
-extern unsigned char _binary_abadiaROM_bin_end[];
-// no sirve por PIE
-// https://stackoverflow.com/questions/54844677/why-doesnt-a-linked-binary-files-size-symbol-work-correctly
-//extern int _binary_abadiaROM_bin_size;
+unsigned char *abadiaROM;
 
-// TODO: revisar si con el singleton es más fácil
-/*
 extern "C" {
-	VigasocoLibSDL* LibAbadIA_new() { return new VigasocoLibSDL(); }
-	void LibAbadIA_init(VigasocoLibSDL *abadia) { abadia->init(); }	
-//	void LibAbadIA_step(VigasocoLibSDL *abadia) { abadia->step(); }	
-	VigasocoLibSDL* LibAbadIA_singleton() { return VigasocoLibSDL::getSingletonPtr(); }
-} */
-extern "C" {
-	void LibAbadIA_init() { 
-		// TODO: que solo se ejecute una vez
+	void LibAbadIA_init() {
 		VigasocoLibSDL *vigasocoTest=new VigasocoLibSDL();
-//fprintf(stderr,"LibAbadIA_init() mio %p singleton %p\n", vigasocoTest, VigasocoLibSDL::getSingletonPtr());
-		VigasocoLibSDL::getSingletonPtr()->init(); 
-fprintf(stderr,"LibAbadIA_init() singleton %p\n", VigasocoLibSDL::getSingletonPtr());
+		VigasocoLibSDL::getSingletonPtr()->init();
+    fprintf(stderr,"LibAbadIA_init() singleton %p\n", VigasocoLibSDL::getSingletonPtr());
+
 	}
-	char *LibAbadIA_step(int *controles, char *resultado, size_t resultadoMaxLength) { 
+
+char *LibAbadIA_step(int *controles, char *resultado, size_t resultadoMaxLength) {
+
+
+
 //		std::string tmp= VigasocoLibSDL::getSingletonPtr()->step(controles);
 //const		char *t=tmp.c_str();
 //		return t;
 //fprintf(stderr,"C wrapper UP %d RESET %d\n",controles[P1_UP], controles[KEYBOARD_E]);
 
 
-//return VigasocoLibSDL::getSingletonPtr()->step(controles).c_str(); 
+//return VigasocoLibSDL::getSingletonPtr()->step(controles).c_str();
 		std::string tmp=VigasocoLibSDL::getSingletonPtr()->step(controles);
 //		fprintf(stderr,"C step puedo grabar hasta %d y necesito %ld\n",resultadoMaxLength,tmp.length());
 		strncpy(resultado,tmp.c_str(), resultadoMaxLength>=tmp.length()+1?tmp.length()+1:resultadoMaxLength-1);
 		return resultado;
-		
+
 }
 	char *LibAbadIA_save(char *savedata, size_t saveMaxLength) {
 //		std::string tmp=VigasocoLibSDL::getSingletonPtr()->save();
@@ -72,7 +61,7 @@ fprintf(stderr,"LibAbadIA_init() singleton %p\n", VigasocoLibSDL::getSingletonPt
 //VigasocoLibSDL _LibabadIA; // La instancia para no tener que exponer un new() a python
 
 
-// VigasocoLibSDL::getSingletonPtr() 
+// VigasocoLibSDL::getSingletonPtr()
 // TODO: ¿este modo se puede eliminar?
 bool gb_test(false);  // Âestamos en modo normal o ejecutando tests de pruebas?
 std::string g_test("");  // Escenario de pruebas
@@ -81,12 +70,20 @@ VigasocoLibSDL::VigasocoLibSDL() {
 
 fprintf(stderr,"constructor VigasocoLibSDL\n");
 
+fprintf(stderr,"Cargando la ROM\n");
+abadiaROM = new unsigned char[734451];
+std::ifstream fin("abadiaROM.bin");
+if(!fin)
+      printf("failed to load abadiaROM.bin");
+fin.read((char *)abadiaROM, 734451);
+fin.close();
+fprintf(stderr,"Cargada\n");
 	// para no copiar todo el código que interpretaba la ROM
 	// la reordenaba y añadia los gráficos VGA y CPC
 	// aquí tenemos embebido directamente un volcado de esa
 	// información
 	//assert(abadiaROM_size==734451);
-	assert((_binary_abadiaROM_bin_end-_binary_abadiaROM_bin_start)==734451);
+	// assert((_binary_abadiaROM_bin_end-_binary_abadiaROM_bin_start)==734451);
 
 	_palette=new SDLPalette();
 	_palette->init(256);
@@ -99,26 +96,7 @@ fprintf(stderr,"constructor VigasocoLibSDL\n");
 	cs->init();
 
 	cpc6128 = new CPC6128(cs);
-/*
-std::ifstream kk("volcadorom");
-const unsigned int size = 734451;
-UINT8 romData[size];
-kk.read((char *)romData,size);
-fprintf(stderr,"romData %d*%d\n", romData[0],romData[734451]); 	
-fprintf(stderr,"abadiaROM %d*%d\n", abadiaROM[0],abadiaROM[734451]); 	
-fprintf(stderr,"romData %d*%d\n", romData[1],romData[734450]); 	
-fprintf(stderr,"abadiaROM %d*%d\n", abadiaROM[1],abadiaROM[734450]); 	
-fprintf(stderr,"size abadiaROM %d\n", abadiaROM_size);
-bool ok=true;
-for (int i=0; i< size; i++) {
-	if (romData[i]!=abadiaROM[i]) { ok=false; fprintf(stderr,"diff en %d\n",i); }
-}
-fprintf(stderr,"ok %d\n", ok);
-*/
-
-	//_abadiaGame = new Abadia::Juego(abadiaROM, cpc6128);
-	_abadiaGame = new Abadia::Juego(_binary_abadiaROM_bin_start, cpc6128);
-//	_abadiaGame = new Abadia::Juego(romData, cpc6128);
+ 	_abadiaGame = new Abadia::Juego(abadiaROM, cpc6128);
 }
 
 VigasocoLibSDL::~VigasocoLibSDL()
@@ -145,8 +123,7 @@ ICriticalSection * VigasocoLibSDL::createCriticalSection()
 void VigasocoLibSDL::reset(void) {
 // pruebas por bug primera misa en behave
 if (_abadiaGame) delete _abadiaGame;
-_abadiaGame = new Abadia::Juego(_binary_abadiaROM_bin_start, cpc6128);
-init();
+_abadiaGame = new Abadia::Juego(abadiaROM, cpc6128); init();
 }
 void VigasocoLibSDL::init(void) {
 fprintf(stderr," VigasocoLibSDL::init\n");
@@ -173,7 +150,7 @@ return	_abadiaGame->cargar(input);
 
 
 
-/* ORIGINAL */ 
+/* ORIGINAL */
 /*
 // VigasocoSDL.cpp
 //
@@ -263,7 +240,7 @@ bool VigasocoSDL::platformSpecificInit()
 	// creates the plugin handler
 	// TODO:
 	// esto no compila en Linux y no lo usamos en la version SDL
-	//_pluginHandler = new PluginHandler(_settings); 
+	//_pluginHandler = new PluginHandler(_settings);
 
 #ifdef _EE
 	return PS2SpecificInit();
@@ -281,7 +258,7 @@ void VigasocoSDL::addCustomLoaders(FileLoader *fl)
 {
 // TODO
 */
-/* !!! FALTA POR IMPLEMENTAR EN LINUX 
+/* !!! FALTA POR IMPLEMENTAR EN LINUX
 	HANDLE hSearch;
 	WIN32_FIND_DATA findData;
 
@@ -295,7 +272,7 @@ void VigasocoSDL::addCustomLoaders(FileLoader *fl)
 			DLLEntry entry;
 
 			// try to load the plugin from the DLL
-			if (_pluginHandler->loadPlugin(findData.cFileName, 
+			if (_pluginHandler->loadPlugin(findData.cFileName,
 				"CustomLoader", LOADER_PLUGIN, g_currentLoaderPluginVersion, &entry)){
 				customLoader = (ILoader *)entry.plugin;
 			}
@@ -324,7 +301,7 @@ void VigasocoSDL::addCustomLoaders(FileLoader *fl)
 void VigasocoSDL::createDrawPlugin()
 {
 	// load the plugin from a DLL
-	if (_pluginHandler->loadPlugin(g_videoPluginPath + _sDrawPluginsDLL, 
+	if (_pluginHandler->loadPlugin(g_videoPluginPath + _sDrawPluginsDLL,
 		_sDrawPlugin, VIDEO_PLUGIN, g_currentVideoPluginVersion, &_drawPluginInfo)){
 		_drawPlugin = (IDrawPlugin *)_drawPluginInfo.plugin;
 	}
@@ -337,7 +314,7 @@ void VigasocoSDL::createDrawPlugin()
 void VigasocoSDL::createAudioPlugin()
 {
 	// load the plugin from a DLL
-	if (_pluginHandler->loadPlugin(g_audioPluginPath + _sAudioPluginsDLL, 
+	if (_pluginHandler->loadPlugin(g_audioPluginPath + _sAudioPluginsDLL,
 		_sAudioPlugin, AUDIO_PLUGIN, g_currentAudioPluginVersion, &_audioPluginInfo)){
 		_audioPlugin = (IAudioPlugin *)_audioPluginInfo.plugin;
 	}
@@ -354,7 +331,7 @@ void VigasocoSDL::addCustomInputPlugins()
 		IInputPlugin *ip = 0;
 
 		// load the plugin from a DLL
-		if (_pluginHandler->loadPlugin(g_inputPluginPath + _sInputPluginsDLLs[i], 
+		if (_pluginHandler->loadPlugin(g_inputPluginPath + _sInputPluginsDLLs[i],
 			_sInputPlugins[i], INPUT_PLUGIN, g_currentInputPluginVersion, &entry)){
 			ip = (IInputPlugin *)entry.plugin;
 		}
@@ -363,7 +340,7 @@ void VigasocoSDL::addCustomInputPlugins()
 			// TODO: set plugin properties
 
 			// save DLL reference for later
-			_inputPluginsInfo.push_back(entry);	
+			_inputPluginsInfo.push_back(entry);
 
 			_inputHandler->addInputPlugin(ip);
 		}
@@ -386,7 +363,7 @@ void VigasocoSDL::createAsyncThread()
 
 void VigasocoSDL::initCompleted()
 {
-	std::string titulo_ventana = 
+	std::string titulo_ventana =
 #ifdef __abadIA_PROFILE__
 	"VigasocoSDL v0.094-abadIA-PROFILE: "
 #else
@@ -469,7 +446,7 @@ void VigasocoSDL::platformSpecificEnd()
 
 	delete _pluginHandler;
 	_pluginHandler = 0;
-} 
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // main loop template methods overrides
