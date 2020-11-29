@@ -30,7 +30,7 @@ public:
 	// constructor
 	Singleton()
 	{
-fprintf(stderr,"constructor Singleton %p deberia ser cero\n",g_singleton);
+// fprintf(stderr,"constructor Singleton %p deberia ser cero\n",g_singleton);
 		assert(!g_singleton);
 
 		// get the correct pointer in case of multiple inheritance
@@ -40,7 +40,7 @@ fprintf(stderr,"constructor Singleton %p deberia ser cero\n",g_singleton);
 	// destructor
 	~Singleton()
 	{
-fprintf(stderr,"destructor Singleton %p deberia NO ser cero\n",g_singleton);
+// fprintf(stderr,"destructor Singleton %p deberia NO ser cero\n",g_singleton);
 		assert(g_singleton != 0);
 
 		g_singleton = 0;

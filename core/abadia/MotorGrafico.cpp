@@ -109,7 +109,7 @@ UINT8 MotorGrafico::plantas[3][256] = {
 
 MotorGrafico::MotorGrafico(UINT8 *buffer, int lgtudBuffer)
 {
-fprintf(stderr,"constructor MotorGrafico\n");
+// fprintf(stderr,"constructor MotorGrafico\n");
 	roms = elJuego->roms;
 
 	posXPantalla = posYPantalla = 0;
@@ -308,7 +308,7 @@ void MotorGrafico::dibujaSprites()
 				elJuego->sprites[i]->haCambiado = false;
 			}
 		}
-		
+
 		// si adso es visible en la pantalla actual y tiene la lámpara, activa el sprite de la luz
 		if ((elJuego->personajes[1]->sprite->esVisible) && ((elJuego->personajes[1]->objetos & LAMPARA) != 0)){
 			elJuego->sprites[Juego::spriteLuz]->esVisible = true;
@@ -329,12 +329,12 @@ void MotorGrafico::dibujaPantalla()
 		// elige un color de fondo según el tipo de pantalla
 		// CPC int colorFondo = (pantallaIluminada) ? 0 : 3;
 #ifdef __abadIA__
-		// en __abadIA__ lo dejo a cero/negro porque 
+		// en __abadIA__ lo dejo a cero/negro porque
 		// al ir el juego acelerado queda muy feo el amarillo
 		int colorFondo = 0;
 #else
-		int colorFondo = (pantallaIluminada) ? 12 : 0; // VGA 
-		// el 3 era el negro en  CPC , pero para el caso contrario 
+		int colorFondo = (pantallaIluminada) ? 12 : 0; // VGA
+		// el 3 era el negro en  CPC , pero para el caso contrario
 		// el 0 era el cyan, ? cual se pone en VGA ??
 		// voy a poner el 12 que es un amarillo cantoso a ver si lo veo
 		// y comparo con Abadia32
@@ -348,7 +348,7 @@ void MotorGrafico::dibujaPantalla()
 
 		// rellena el buffer de tiles interpretando los bloques que forman la pantalla
 		genPant->genera(data);
-		
+
 		if (elJuego->GraficosCPC==false)
 		{
 			// Si usamos el mapa CPC con los tiles VGA
@@ -386,10 +386,10 @@ int MotorGrafico::actualizaCoordCamara(EntidadJuego *entidad, int &posXPant, int
 	if ((posXLocal < 0) || (posXLocal >= 40)) return -1;
 	if ((posYLocal < 0) || (posYLocal >= 40)) return -1;
 	if (obtenerAlturaBasePlanta(entidad->altura) != alturaBasePantalla) return -1;
-	
+
 	// transforma las coordenadas locales a coordenadas de cámara
 	transCoordLocalesACoordCamara(posXLocal, posYLocal);
-	
+
 	entidad->sprite->posXLocal = posXLocal;
 	entidad->sprite->posYLocal = posYLocal;
 
@@ -407,7 +407,7 @@ int MotorGrafico::actualizaCoordCamara(EntidadJuego *entidad, int &posXPant, int
 
 	// calcula la profundidad usada para ordenar el dibujado de sprites
 	sprPosY = posXLocal + posYLocal - 16;
-	
+
 	if (sprPosY < 0){
 		sprPosY = 0;
 	}

@@ -94,10 +94,10 @@ UINT8 BuscadorRutas::habitaciones[3][256] = {
 // posiciones alternativas para la búsqueda del camino
 /////////////////////////////////////////////////////////////////////////////
 
-PosicionJuego BuscadorRutas::alternativas[5];	
+PosicionJuego BuscadorRutas::alternativas[5];
 
 /////////////////////////////////////////////////////////////////////////////
-// tabla con las puertas y las habitaciones que comunican 
+// tabla con las puertas y las habitaciones que comunican
 /////////////////////////////////////////////////////////////////////////////
 
 UINT8 BuscadorRutas::habitacionesPuerta[6][4] = {
@@ -133,7 +133,7 @@ int BuscadorRutas::posDestinoOrientacion[4][2] = {
 
 BuscadorRutas::BuscadorRutas(UINT8 *buf, int lgtud)
 {
-fprintf(stderr,"constructor BuscadorRutas\n");
+// fprintf(stderr,"constructor BuscadorRutas\n");
 	buffer = (INT32 *)buf;
 	lgtudBuffer = lgtud/4;
 	posPila = 0;
@@ -297,13 +297,13 @@ void BuscadorRutas::procesaAlternativas(PersonajeConIA *pers, PosicionJuego *des
 // métodos de búsqueda y generación de rutas
 /////////////////////////////////////////////////////////////////////////////
 
-// comprueba si se ha llegado desde el origen al destino y si no es así, genera los comandos 
+// comprueba si se ha llegado desde el origen al destino y si no es así, genera los comandos
 // necesarios para que el personaje avance a la siguiente pantalla en la ruta buscada
 int BuscadorRutas::buscaCamino(PersonajeConIA *origen, PosicionJuego *destino)
 {
 	// si está en medio de una movimiento de guillermo, sale
 	if ((contadorAnimGuillermo & 0x01) != 0) return -2;
-	
+
 	// si se ha generado algún camino en esta iteración del bucle principal, sale
 	if (generadoCamino) return -2;
 
@@ -453,7 +453,7 @@ int BuscadorRutas::generaCaminoAPosicion(PersonajeConIA *pers, int posXDest, int
 
 	// busca una ruta dentro de una pantalla desde la posición de origen a la de destino
 	bool encontrado = buscaEnPantalla(posXDest, posYDest);
-	
+
 	// comprueba si se ha alcanzado la posición actual. Si es así sale. En otro caso, si se encontró
 	// un camino para llegar al destino, programa las acciones para seguirlo en esta pantalla
 	return compruebaFinCamino(pers, encontrado);
@@ -467,7 +467,7 @@ int BuscadorRutas::generaCaminoAPosicionSiAlcanzable(PersonajeConIA *pers, int p
 
 	// busca una ruta dentro de una pantalla desde la posición de origen a la de destino
 	bool encontrado = buscaEnPantallaSiAlcanzable(posXDest, posYDest);
-	
+
 	// comprueba si se ha alcanzado la posición actual. Si es así sale. En otro caso, si se encontró
 	// un camino para llegar al destino, programa las acciones para seguirlo en esta pantalla
 	return compruebaFinCamino(pers, encontrado);
@@ -694,28 +694,28 @@ bool BuscadorRutas::buscaEnPantallaComun()
 			int altura = rejilla->bufAlturas[posY][posX] & 0x0f;
 
 			if (esPosicionDestino(posX + 1, posY, altura)){
-				posXFinal = posX + 1; 
+				posXFinal = posX + 1;
 				posYFinal = posY;
 				oriFinal = IZQUIERDA;
 
 				return true;
 			}
 			if (esPosicionDestino(posX, posY - 1, altura)){
-				posXFinal = posX; 
+				posXFinal = posX;
 				posYFinal = posY - 1;
 				oriFinal = ARRIBA;
 
 				return true;
 			}
 			if (esPosicionDestino(posX - 1, posY, altura)){
-				posXFinal = posX - 1; 
+				posXFinal = posX - 1;
 				posYFinal = posY;
 				oriFinal = DERECHA;
 
 				return true;
 			}
 			if (esPosicionDestino(posX, posY + 1, altura)){
-				posXFinal = posX; 
+				posXFinal = posX;
 				posYFinal = posY + 1;
 				oriFinal = ABAJO;
 
@@ -878,28 +878,28 @@ bool BuscadorRutas::buscaPantalla(int numPlanta, int mascara)
 		} else {
 			// en otro caso, explora las posiciones vecinas
 			if (esPantallaDestino(posX + 1, posY, numPlanta, mascara, 0x04)){
-				posXFinal = posX + 1; 
+				posXFinal = posX + 1;
 				posYFinal = posY;
 				oriFinal = IZQUIERDA;
 
 				return true;
 			}
 			if (esPantallaDestino(posX, posY - 1, numPlanta, mascara, 0x08)){
-				posXFinal = posX; 
+				posXFinal = posX;
 				posYFinal = posY - 1;
 				oriFinal = ARRIBA;
 
 				return true;
 			}
 			if (esPantallaDestino(posX - 1, posY, numPlanta, mascara, 0x01)){
-				posXFinal = posX - 1; 
+				posXFinal = posX - 1;
 				posYFinal = posY;
 				oriFinal = DERECHA;
 
 				return true;
 			}
 			if (esPantallaDestino(posX, posY + 1, numPlanta, mascara, 0x02)){
-				posXFinal = posX; 
+				posXFinal = posX;
 				posYFinal = posY + 1;
 				oriFinal = ABAJO;
 

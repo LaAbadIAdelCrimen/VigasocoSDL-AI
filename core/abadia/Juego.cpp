@@ -114,19 +114,19 @@ const char *Juego::savefile[7] = {
 
 Juego::Juego(UINT8 *romData, CPC6128 *cpc)
 {
-fprintf(stderr,"constructor Juego\n");
+// fprintf(stderr,"constructor Juego\n");
 	idioma=0; // 0 español
-	mute=false; 
+	mute=false;
 	slot=0;
 	GraficosCPC=false;
 
 /* Para volcar lo que sería la ROM completa SDL
-   con presentación, rom original y gráficos VGA y CGA + gráficos flipeados 
+   con presentación, rom original y gráficos VGA y CGA + gráficos flipeados
    No se incluyen los sonidos al estar en wav externos */
 /*std::ofstream kk("volcadorom",std::ofstream::binary);
 for (int i=0;i<(0x24000+(174065+21600)*3);i++) {
 	std::cout << i << std::endl;
- kk << romData[i]; 
+ kk << romData[i];
 }*/
 
 	// apunta a los datos del juego, pero saltándose la de la presentación
@@ -162,7 +162,7 @@ for (int i=0;i<(0x24000+(174065+21600)*3);i++) {
 	pergamino = new Pergamino();
 	motor = new MotorGrafico(buffer, 8192);
 	marcador = new Marcador();
-	logica = new Logica(roms, buffer, 8192); 
+	logica = new Logica(roms, buffer, 8192);
 #ifndef __libabadIA__
 	infoJuego = new InfoJuego();
 #endif
@@ -212,9 +212,9 @@ void Juego::ReiniciaPantalla(void)
 	// limpia el área de juego y dibuja el marcador
 	// CPC limpiaAreaJuego(0);
 #ifdef __abadIA__
-	// en __abadIA__ lo dejo a cero/negro porque 
+	// en __abadIA__ lo dejo a cero/negro porque
 	// al ir el juego acelerado queda muy feo el amarillo
-	limpiaAreaJuego(0); 
+	limpiaAreaJuego(0);
 #else
 	limpiaAreaJuego(12); // el 0 es el cyan en CPC, no se cual poner en VGA
 	// pongo el 12 que es un amarillo cantoso, para comparar con Abadia32
@@ -256,7 +256,7 @@ bool Juego::menuCargar()
 
 	{
 		bool salir=false;
-		while(salir==false) {	
+		while(salir==false) {
 			pulsado=-1;
 			timer->sleep(100);
 			losControles->actualizaEstado();
@@ -282,7 +282,7 @@ bool Juego::menuCargar()
 			{
 				laLogica->inicia();
 				return cargar(0);
-			} 
+			}
 			if (losControles->estaSiendoPulsado(KEYBOARD_1) ||
 				pulsado==1 )
 			{
@@ -324,9 +324,9 @@ bool Juego::menuCargar()
 				pulsado==7 )
 			{
 				salir=true;
-			} 
+			}
 		}
-	
+
 	}
 
 	return false;
@@ -335,91 +335,91 @@ bool Juego::menuCargar()
 
 void Juego::pintaMenuGrabar(int seleccionado,bool efecto)
 {
-	static const char * textos[8][8] = 
-	{ 
+	static const char * textos[8][8] =
+	{
 		{ // 0 Castellano
-			"0 SLOT 0 AUTOGUARDADO", 
-			"1 SLOT 1", 
-			"2 SLOT 2", 
-			"3 SLOT 3", 
-			"4 SLOT 4", 
-			"5 SLOT 5", 
+			"0 SLOT 0 AUTOGUARDADO",
+			"1 SLOT 1",
+			"2 SLOT 2",
+			"3 SLOT 3",
+			"4 SLOT 4",
+			"5 SLOT 5",
 			"6 SLOT 6",
 			"7 VOLVER AL MENU ANTERIOR"
 		},
 		{ // 1 INGLES
 			"0 SLOT 0 AUTOSAVE",
-			"1 SLOT 1", 
-			"2 SLOT 2", 
-			"3 SLOT 3", 
-			"4 SLOT 4", 
-			"5 SLOT 5", 
+			"1 SLOT 1",
+			"2 SLOT 2",
+			"3 SLOT 3",
+			"4 SLOT 4",
+			"5 SLOT 5",
 			"6 SLOT 6",
 			"7 RETURN TO PREVIOUS MENU"
 		},
 		{ // 2 PORTUGUES BRASIL
-			"0 SLOT 0 AUTOGUARDADO", 
-			"1 SLOT 1", 
-			"2 SLOT 2", 
-			"3 SLOT 3", 
-			"4 SLOT 4", 
-			"5 SLOT 5", 
+			"0 SLOT 0 AUTOGUARDADO",
+			"1 SLOT 1",
+			"2 SLOT 2",
+			"3 SLOT 3",
+			"4 SLOT 4",
+			"5 SLOT 5",
 			"6 SLOT 6",
 			"7 VOLVER AL MENU ANTERIOR"
 		},
 		{ // 3 CATALAN
-			"0 SLOT 0 AUTOGUARDADO", 
-			"1 SLOT 1", 
-			"2 SLOT 2", 
-			"3 SLOT 3", 
-			"4 SLOT 4", 
-			"5 SLOT 5", 
+			"0 SLOT 0 AUTOGUARDADO",
+			"1 SLOT 1",
+			"2 SLOT 2",
+			"3 SLOT 3",
+			"4 SLOT 4",
+			"5 SLOT 5",
 			"6 SLOT 6",
 			"7 VOLVER AL MENU ANTERIOR"
 		},
 		{ // 4 GALLEGO
-			"0 SLOT 0 AUTOGUARDADO", 
-			"1 SLOT 1", 
-			"2 SLOT 2", 
-			"3 SLOT 3", 
-			"4 SLOT 4", 
-			"5 SLOT 5", 
+			"0 SLOT 0 AUTOGUARDADO",
+			"1 SLOT 1",
+			"2 SLOT 2",
+			"3 SLOT 3",
+			"4 SLOT 4",
+			"5 SLOT 5",
 			"6 SLOT 6",
 			"7 VOLVER AL MENU ANTERIOR"
 		},
 		{ // 5 ITALIANO
-			"0 SLOT 0 AUTOGUARDADO", 
-			"1 SLOT 1", 
-			"2 SLOT 2", 
-			"3 SLOT 3", 
-			"4 SLOT 4", 
-			"5 SLOT 5", 
+			"0 SLOT 0 AUTOGUARDADO",
+			"1 SLOT 1",
+			"2 SLOT 2",
+			"3 SLOT 3",
+			"4 SLOT 4",
+			"5 SLOT 5",
 			"6 SLOT 6",
 			"7 VOLVER AL MENU ANTERIOR"
 		},
 		{ // 6 FINES
 			"0 SLOT 0 AUTOSAVE",
-			"1 SLOT 1", 
-			"2 SLOT 2", 
-			"3 SLOT 3", 
-			"4 SLOT 4", 
-			"5 SLOT 5", 
+			"1 SLOT 1",
+			"2 SLOT 2",
+			"3 SLOT 3",
+			"4 SLOT 4",
+			"5 SLOT 5",
 			"6 SLOT 6",
 			"7 RETURN TO PREVIOUS MENU"
 		},
 		{ // 7 PORTUGUES
-			"0 SLOT 0 AUTOGUARDADO", 
-			"1 SLOT 1", 
-			"2 SLOT 2", 
-			"3 SLOT 3", 
-			"4 SLOT 4", 
-			"5 SLOT 5", 
+			"0 SLOT 0 AUTOGUARDADO",
+			"1 SLOT 1",
+			"2 SLOT 2",
+			"3 SLOT 3",
+			"4 SLOT 4",
+			"5 SLOT 5",
 			"6 SLOT 6",
 			"7 VOLVER AL MENU ANTERIOR"
 		}
 	};
 	// limpia el área que ocupa el marcador
-	limpiaAreaJuego(0); 
+	limpiaAreaJuego(0);
 
 	//repintar con un efecto para que vaya apareciendo el
 	// menu de izquierda a derecha y asi dar tiempo a soltar las teclas
@@ -431,7 +431,7 @@ void Juego::pintaMenuGrabar(int seleccionado,bool efecto)
 		cpc6128->fillMode1Rect(8, 0, x-1, 160, 0);
 		for (int i=0;i<8;i++)
 		{
-			marcador->imprimeFrase(textos[idioma][i], 
+			marcador->imprimeFrase(textos[idioma][i],
 				x, 32+(i*16),4, 0);
 		}
 		timer->sleep(50);
@@ -443,10 +443,10 @@ void Juego::pintaMenuGrabar(int seleccionado,bool efecto)
 	}
 
 	// pinta la opción seleccionado con el color de fondo y el color
-	// de letra cambiado 
-	marcador->imprimeFrase(textos[idioma][seleccionado], 88, 
+	// de letra cambiado
+	marcador->imprimeFrase(textos[idioma][seleccionado], 88,
 		32+(seleccionado*16), 0, 4);
-	
+
 }
 
 bool Juego::menuGrabar()
@@ -460,7 +460,7 @@ bool Juego::menuGrabar()
 
 	{
 		bool salir=false;
-		while(salir==false) {	
+		while(salir==false) {
 			pulsado=-1;
 			timer->sleep(100);
 			losControles->actualizaEstado();
@@ -485,8 +485,8 @@ bool Juego::menuGrabar()
 				pulsado==0 )
 			{
 				save(0);
-				salir=true;	
-			} 
+				salir=true;
+			}
 			if (losControles->estaSiendoPulsado(KEYBOARD_1) ||
 				pulsado==1 )
 			{
@@ -527,9 +527,9 @@ bool Juego::menuGrabar()
 				pulsado==7 )
 			{
 				salir=true;
-			} 
+			}
 		}
-	
+
 	}
 
 	return false;
@@ -550,7 +550,7 @@ bool Juego::menuIntroduccion()
 				P1_BUTTON1);
 	}
 
-	// Es necesario ya que el pergamino 
+	// Es necesario ya que el pergamino
 	// cambia la paleta
 	marcador->limpiaAreaMarcador();
 	ReiniciaPantalla();
@@ -566,8 +566,8 @@ bool Juego::menuIntroduccion()
 
 void Juego::pintaMenuTeclado(int seleccionado)
 {
-	static const char * textos[8][9] = 
-	{ 
+	static const char * textos[8][9] =
+	{
 		{ // 0 Castellano
 			"           MANEJO DEL TECLADO          ",
 			"CURSOR ARRIBA: MOVER A GUILLERMO",
@@ -588,7 +588,7 @@ void Juego::pintaMenuTeclado(int seleccionado)
 			"SPACE: DROP OBJECTS",
 			"SUPR: PAUSE",
 			"",
-			"           -PRESS SPACE-          " 
+			"           -PRESS SPACE-          "
 		},
 		{ // 2 PORTUGUES BRASIL
 			"           MANEJO DEL TECLADO          ",
@@ -652,7 +652,7 @@ void Juego::pintaMenuTeclado(int seleccionado)
 		}
 	};
 	// limpia el área que ocupa el marcador
-	limpiaAreaJuego(0); 
+	limpiaAreaJuego(0);
 
 	for (int i=0;i<9;i++)
 	{
@@ -660,10 +660,10 @@ void Juego::pintaMenuTeclado(int seleccionado)
 	}
 
 	// pinta la opción seleccionado con el color de fondo y el color
-	// de letra cambiado 
-	marcador->imprimeFrase(textos[idioma][seleccionado], 8, 
+	// de letra cambiado
+	marcador->imprimeFrase(textos[idioma][seleccionado], 8,
 		16+(seleccionado*16), 0, 4);
-	
+
 }
 
 bool Juego::menuTeclado()
@@ -682,7 +682,7 @@ bool Juego::menuTeclado()
 				P1_BUTTON1);
 	}
 
-	// Es necesario ya que el pergamino 
+	// Es necesario ya que el pergamino
 	// cambia la paleta
 	marcador->limpiaAreaMarcador();
 	ReiniciaPantalla();
@@ -690,7 +690,7 @@ bool Juego::menuTeclado()
 	pintaMenuTeclado(0);
 	{
 		bool salir=false;
-		while(salir==false) {	
+		while(salir==false) {
 			timer->sleep(100);
 			losControles->actualizaEstado();
 
@@ -707,13 +707,13 @@ bool Juego::menuTeclado()
 
 void Juego::pintaMenuMejoras(int seleccionado)
 {
-	static const char * textos[8][9] = 
-	{ 
+	static const char * textos[8][9] =
+	{
 		{ // 0 Castellano
-			"   USA ESTAS TECLAS DURANTE EL JUEGO   " , 
-			"G GRABAR LA PARTIDA" , 
+			"   USA ESTAS TECLAS DURANTE EL JUEGO   " ,
+			"G GRABAR LA PARTIDA" ,
 			"C CARGAR LA PARTIDA" ,
-			"F2 CAMBIAR ENTRE GRÁFICOS VGA O CPC", 
+			"F2 CAMBIAR ENTRE GRÁFICOS VGA O CPC",
 			"F3 PANTALLA COMPLETA",
 			"F5 MOSTRAR MAPAS",
 			"SUPR PAUSA",
@@ -729,13 +729,13 @@ void Juego::pintaMenuMejoras(int seleccionado)
 			"F5 SHOW MAPS",
 			"SUPR PAUSE",
 			"",
-			"           -PRESS SPACE-          " 
+			"           -PRESS SPACE-          "
 		},
 		{ // 2 PORTUGUES BRASIL
-			"   USA ESTAS TECLAS DURANTE EL JUEGO   " , 
-			"G GRABAR LA PARTIDA" , 
+			"   USA ESTAS TECLAS DURANTE EL JUEGO   " ,
+			"G GRABAR LA PARTIDA" ,
 			"C CARGAR LA PARTIDA" ,
-			"F2 CAMBIAR ENTRE GRÁFICOS VGA O CPC", 
+			"F2 CAMBIAR ENTRE GRÁFICOS VGA O CPC",
 			"F3 PANTALLA COMPLETA",
 			"F5 MOSTRAR MAPAS",
 			"SUPR PAUSA",
@@ -743,10 +743,10 @@ void Juego::pintaMenuMejoras(int seleccionado)
 			"    -PULSA ESPACIO PARA CONTINUAR-"
 		},
 		{ // 3 CATALAN
-			"   USA ESTAS TECLAS DURANTE EL JUEGO   " , 
-			"G GRABAR LA PARTIDA" , 
+			"   USA ESTAS TECLAS DURANTE EL JUEGO   " ,
+			"G GRABAR LA PARTIDA" ,
 			"C CARGAR LA PARTIDA" ,
-			"F2 CAMBIAR ENTRE GRÁFICOS VGA O CPC", 
+			"F2 CAMBIAR ENTRE GRÁFICOS VGA O CPC",
 			"F3 PANTALLA COMPLETA",
 			"F5 MOSTRAR MAPAS",
 			"SUPR PAUSA",
@@ -754,10 +754,10 @@ void Juego::pintaMenuMejoras(int seleccionado)
 			"    -PULSA ESPACIO PARA CONTINUAR-"
 		},
 		{ // 4 GALLEGO
-			"   USA ESTAS TECLAS DURANTE EL JUEGO   " , 
-			"G GRABAR LA PARTIDA" , 
+			"   USA ESTAS TECLAS DURANTE EL JUEGO   " ,
+			"G GRABAR LA PARTIDA" ,
 			"C CARGAR LA PARTIDA" ,
-			"F2 CAMBIAR ENTRE GRÁFICOS VGA O CPC", 
+			"F2 CAMBIAR ENTRE GRÁFICOS VGA O CPC",
 			"F3 PANTALLA COMPLETA",
 			"F5 MOSTRAR MAPAS",
 			"SUPR PAUSA",
@@ -765,10 +765,10 @@ void Juego::pintaMenuMejoras(int seleccionado)
 			"    -PULSA ESPACIO PARA CONTINUAR-"
 		},
 		{ // 5 ITALIANO
-			"   USA ESTAS TECLAS DURANTE EL JUEGO   " , 
-			"G GRABAR LA PARTIDA" , 
+			"   USA ESTAS TECLAS DURANTE EL JUEGO   " ,
+			"G GRABAR LA PARTIDA" ,
 			"C CARGAR LA PARTIDA" ,
-			"F2 CAMBIAR ENTRE GRÁFICOS VGA O CPC", 
+			"F2 CAMBIAR ENTRE GRÁFICOS VGA O CPC",
 			"F3 PANTALLA COMPLETA",
 			"F5 MOSTRAR MAPAS",
 			"SUPR PAUSA",
@@ -784,13 +784,13 @@ void Juego::pintaMenuMejoras(int seleccionado)
 			"F5 SHOW MAPS",
 			"SUPR PAUSE",
 			"",
-			"           -PRESS SPACE-          " 
+			"           -PRESS SPACE-          "
 		},
 		{ // 7 PORTUGUES
-			"   USA ESTAS TECLAS DURANTE EL JUEGO   " , 
-			"G GRABAR LA PARTIDA" , 
+			"   USA ESTAS TECLAS DURANTE EL JUEGO   " ,
+			"G GRABAR LA PARTIDA" ,
 			"C CARGAR LA PARTIDA" ,
-			"F2 CAMBIAR ENTRE GRÁFICOS VGA O CPC", 
+			"F2 CAMBIAR ENTRE GRÁFICOS VGA O CPC",
 			"F3 PANTALLA COMPLETA",
 			"F5 MOSTRAR MAPAS",
 			"SUPR PAUSA",
@@ -799,7 +799,7 @@ void Juego::pintaMenuMejoras(int seleccionado)
 		}
 	};
 	// limpia el área que ocupa el marcador
-	limpiaAreaJuego(0); 
+	limpiaAreaJuego(0);
 
 	for (int i=0;i<9;i++)
 	{
@@ -807,10 +807,10 @@ void Juego::pintaMenuMejoras(int seleccionado)
 	}
 
 	// pinta la opción seleccionado con el color de fondo y el color
-	// de letra cambiado 
-	marcador->imprimeFrase(textos[idioma][seleccionado], 8, 
+	// de letra cambiado
+	marcador->imprimeFrase(textos[idioma][seleccionado], 8,
 		16+(seleccionado*16), 0, 4);
-	
+
 }
 
 bool Juego::menuMejoras()
@@ -820,7 +820,7 @@ bool Juego::menuMejoras()
 	pintaMenuMejoras(0);
 	{
 		bool salir=false;
-		while(salir==false) {	
+		while(salir==false) {
 			timer->sleep(100);
 			losControles->actualizaEstado();
 
@@ -836,10 +836,10 @@ bool Juego::menuMejoras()
 
 void Juego::pintaMenuCamaras(int seleccionado)
 {
-	static const char * textos[8][9] = 
-	{ 
+	static const char * textos[8][9] =
+	{
 		{ // 0 Castellano
-			"   USA ESTAS TECLAS DURANTE EL JUEGO   " , 
+			"   USA ESTAS TECLAS DURANTE EL JUEGO   " ,
 			"1 DEJAD PULSADO PARA SEGUIR AL ABAD",
 			"2 DEJAD PULSADO PARA SEGUIR A SEVERINO",
 			"3 DEJAD PULSADO PARA SEGUIR A MALAQUIAS",
@@ -848,7 +848,7 @@ void Juego::pintaMenuCamaras(int seleccionado)
 			"6 DEJAD PULSADO PARA SEGUIR A BERNARDO",
 			"7 DEJAD PULSADO PARA SEGUIR A ADSO",
 			"    -PULSA ESPACIO PARA CONTINUAR-"
-			
+
 		},
 		{ // 1 INGLES
 			"ERR",
@@ -862,7 +862,7 @@ void Juego::pintaMenuCamaras(int seleccionado)
 			"PRESS SPACE TO CONTINUE"
 		},
 		{ // 2 PORTUGUES BRASIL
-			"TODO" , 
+			"TODO" ,
 			"",
 			"",
 			"",
@@ -873,7 +873,7 @@ void Juego::pintaMenuCamaras(int seleccionado)
 			"PRESS SPACE TO CONTINUE"
 		},
 		{ // 3 CATALAN
-			"TODO" , 
+			"TODO" ,
 			"" ,
 			"" ,
 			"" ,
@@ -884,7 +884,7 @@ void Juego::pintaMenuCamaras(int seleccionado)
 			"PRESS SPACE TO CONTINUE"
 		},
 		{ // 4 GALLEGO
-			"TODO" , 
+			"TODO" ,
 			"" ,
 			"" ,
 			"" ,
@@ -929,7 +929,7 @@ void Juego::pintaMenuCamaras(int seleccionado)
 		}
 	};
 	// limpia el área que ocupa el marcador
-	limpiaAreaJuego(0); 
+	limpiaAreaJuego(0);
 
 	for (int i=0;i<9;i++)
 	{
@@ -937,10 +937,10 @@ void Juego::pintaMenuCamaras(int seleccionado)
 	}
 
 	// pinta la opción seleccionado con el color de fondo y el color
-	// de letra cambiado 
-	marcador->imprimeFrase(textos[idioma][seleccionado], 1, 
+	// de letra cambiado
+	marcador->imprimeFrase(textos[idioma][seleccionado], 1,
 		16+(seleccionado*16), 0, 4);
-	
+
 }
 
 bool Juego::menuCamaras()
@@ -950,7 +950,7 @@ bool Juego::menuCamaras()
 	pintaMenuCamaras(0);
 	{
 		bool salir=false;
-		while(salir==false) {	
+		while(salir==false) {
 			timer->sleep(100);
 			losControles->actualizaEstado();
 
@@ -972,10 +972,10 @@ bool Juego::menuCamaras()
 
 void Juego::pintaMenuTutorial(int seleccionado,bool efecto)
 {
-	static const char * textos[8][8] = 
-	{ 
+	static const char * textos[8][8] =
+	{
 		{ // 0 Castellano
-			"0 PENDIENTE " , 
+			"0 PENDIENTE " ,
 			"",
 			"PULSA ESPACIO PARA CONTINUAR",
 			"",
@@ -1056,7 +1056,7 @@ void Juego::pintaMenuTutorial(int seleccionado,bool efecto)
 		}
 	};
 	// limpia el área que ocupa el marcador
-	limpiaAreaJuego(0); 
+	limpiaAreaJuego(0);
 
 	// repintar con un efecto para que vaya apareciendo el
 	// menu de izquierda a derecha y asi dar tiempo a soltar las teclas
@@ -1068,7 +1068,7 @@ void Juego::pintaMenuTutorial(int seleccionado,bool efecto)
 		cpc6128->fillMode1Rect(8, 0, x-1, 160, 0);
 		for (int i=0;i<8;i++)
 		{
-			marcador->imprimeFrase(textos[idioma][i], x, 
+			marcador->imprimeFrase(textos[idioma][i], x,
 				32+(i*16),4, 0);
 		}
 		timer->sleep(50);
@@ -1080,10 +1080,10 @@ void Juego::pintaMenuTutorial(int seleccionado,bool efecto)
 	}
 
 	// pinta la opción seleccionado con el color de fondo y el color
-	// de letra cambiado 
-	marcador->imprimeFrase(textos[idioma][seleccionado], 88, 
+	// de letra cambiado
+	marcador->imprimeFrase(textos[idioma][seleccionado], 88,
 		32+(seleccionado*16), 0, 4);
-	
+
 }
 
 bool Juego::menuTutorial()
@@ -1097,7 +1097,7 @@ bool Juego::menuTutorial()
 
 	{
 		bool salir=false;
-		while(salir==false) {	
+		while(salir==false) {
 			pulsado=-1;
 			timer->sleep(100);
 			losControles->actualizaEstado();
@@ -1115,10 +1115,10 @@ bool Juego::menuTutorial()
 
 void Juego::pintaMenuAyuda(int seleccionado,bool efecto)
 {
-	static const char * textos[8][8] = 
-	{ 
+	static const char * textos[8][8] =
+	{
 		{ // 0 Castellano
-			"0 INTRODUCCION" , 
+			"0 INTRODUCCION" ,
 			"1 MANEJO DEL TECLADO" ,
 			"2 AYUDAS Y MEJORAS" ,
 			"3 CAMARAS" ,
@@ -1128,7 +1128,7 @@ void Juego::pintaMenuAyuda(int seleccionado,bool efecto)
 			""
 		},
 		{ // 1 INGLES
-			"0 INTRODUCCION" , 
+			"0 INTRODUCCION" ,
 			"1 MANEJO DEL TECLADO" ,
 			"2 AYUDAS Y MEJORAS" ,
 			"3 CAMARAS" ,
@@ -1138,7 +1138,7 @@ void Juego::pintaMenuAyuda(int seleccionado,bool efecto)
 			""
 		},
 		{ // 2 PORTUGUES BRASIL
-			"0 INTRODUCCION" , 
+			"0 INTRODUCCION" ,
 			"1 MANEJO DEL TECLADO" ,
 			"2 AYUDAS Y MEJORAS" ,
 			"3 CAMARAS" ,
@@ -1148,7 +1148,7 @@ void Juego::pintaMenuAyuda(int seleccionado,bool efecto)
 			""
 		},
 		{ // 3 CATALAN
-			"0 INTRODUCCION" , 
+			"0 INTRODUCCION" ,
 			"1 MANEJO DEL TECLADO" ,
 			"2 AYUDAS Y MEJORAS" ,
 			"3 CAMARAS" ,
@@ -1158,7 +1158,7 @@ void Juego::pintaMenuAyuda(int seleccionado,bool efecto)
 			""
 		},
 		{ // 4 GALLEGO
-			"0 INTRODUCCION" , 
+			"0 INTRODUCCION" ,
 			"1 MANEJO DEL TECLADO" ,
 			"2 AYUDAS Y MEJORAS" ,
 			"3 CAMARAS" ,
@@ -1168,7 +1168,7 @@ void Juego::pintaMenuAyuda(int seleccionado,bool efecto)
 			""
 		},
 		{ // 5 ITALIANO
-			"0 INTRODUCCION" , 
+			"0 INTRODUCCION" ,
 			"1 MANEJO DEL TECLADO" ,
 			"2 AYUDAS Y MEJORAS" ,
 			"3 CAMARAS" ,
@@ -1178,7 +1178,7 @@ void Juego::pintaMenuAyuda(int seleccionado,bool efecto)
 			""
 		},
 		{ // 6 FINES
-			"0 INTRODUCCION" , 
+			"0 INTRODUCCION" ,
 			"1 MANEJO DEL TECLADO" ,
 			"2 AYUDAS Y MEJORAS" ,
 			"3 CAMARAS" ,
@@ -1188,7 +1188,7 @@ void Juego::pintaMenuAyuda(int seleccionado,bool efecto)
 			""
 		},
 		{ // 7 PORTUGUES
-			"0 INTRODUCCION" , 
+			"0 INTRODUCCION" ,
 			"1 MANEJO DEL TECLADO" ,
 			"2 AYUDAS Y MEJORAS" ,
 			"3 CAMARAS" ,
@@ -1199,7 +1199,7 @@ void Juego::pintaMenuAyuda(int seleccionado,bool efecto)
 		}
 	};
 	// limpia el área que ocupa el marcador
-	limpiaAreaJuego(0); 
+	limpiaAreaJuego(0);
 
 	// repintar con un efecto para que vaya apareciendo el
 	// menu de izquierda a derecha y asi dar tiempo a soltar las teclas
@@ -1211,7 +1211,7 @@ void Juego::pintaMenuAyuda(int seleccionado,bool efecto)
 		cpc6128->fillMode1Rect(8, 0, x-1, 160, 0);
 		for (int i=0;i<8;i++)
 		{
-			marcador->imprimeFrase(textos[idioma][i], x, 
+			marcador->imprimeFrase(textos[idioma][i], x,
 				32+(i*16),4, 0);
 		}
 		timer->sleep(50);
@@ -1223,10 +1223,10 @@ void Juego::pintaMenuAyuda(int seleccionado,bool efecto)
 	}
 
 	// pinta la opción seleccionado con el color de fondo y el color
-	// de letra cambiado 
-	marcador->imprimeFrase(textos[idioma][seleccionado], 88, 
+	// de letra cambiado
+	marcador->imprimeFrase(textos[idioma][seleccionado], 88,
 		32+(seleccionado*16), 0, 4);
-	
+
 }
 
 bool Juego::menuAyuda()
@@ -1239,7 +1239,7 @@ bool Juego::menuAyuda()
 	pintaMenuAyuda(seleccionado,true);
 	{
 		bool salir=false;
-		while(salir==false) {	
+		while(salir==false) {
 			pulsado=-1;
 			timer->sleep(100);
 			losControles->actualizaEstado();
@@ -1258,13 +1258,13 @@ bool Juego::menuAyuda()
 			    losControles->estaSiendoPulsado(KEYBOARD_INTRO) ) {
 				pulsado=seleccionado;
 			}
-			
+
 			if (losControles->estaSiendoPulsado(KEYBOARD_0) ||
 				pulsado==0 )
 			{
 				menuIntroduccion();
 				pintaMenuAyuda(seleccionado);
-			} 
+			}
 			if (losControles->estaSiendoPulsado(KEYBOARD_1) ||
 				pulsado==1 )
 			{
@@ -1300,7 +1300,7 @@ bool Juego::menuAyuda()
 						P1_BUTTON1);
 				}
 
-				// Es necesario ya que el pergamino 
+				// Es necesario ya que el pergamino
 				// cambia la paleta
 				marcador->limpiaAreaMarcador();
 				ReiniciaPantalla();
@@ -1320,9 +1320,9 @@ bool Juego::menuAyuda()
 				pulsado==7 )
 			{
 				salir=true;
-			} 
+			}
 		}
-	
+
 	}
 
 	return false;
@@ -1330,10 +1330,10 @@ bool Juego::menuAyuda()
 
 void Juego::pintaMenuIdioma(int seleccionado,bool efecto)
 {
-	static const char * textos[8][8] = 
-	{ 
+	static const char * textos[8][8] =
+	{
 		{ // 0 Castellano
-			"0 CASTELLANO" , 
+			"0 CASTELLANO" ,
 			"1 ENGLISH" ,
 			"2 PORTUGUÉS BRASIL" ,
 			"3 CATALÁN" ,
@@ -1343,7 +1343,7 @@ void Juego::pintaMenuIdioma(int seleccionado,bool efecto)
 			"7 PORTUGUÉS"
 		},
 		{ // 1 INGLES
-			"0 CASTELLANO" , 
+			"0 CASTELLANO" ,
 			"1 ENGLISH" ,
 			"2 PORTUGUÉS BRASIL" ,
 			"3 CATALÁN" ,
@@ -1353,7 +1353,7 @@ void Juego::pintaMenuIdioma(int seleccionado,bool efecto)
 			"7 PORTUGUÉS"
 		},
 		{ // 2 PORTUGUES BRASIL
-			"0 CASTELLANO" , 
+			"0 CASTELLANO" ,
 			"1 ENGLISH" ,
 			"2 PORTUGUÉS BRASIL" ,
 			"3 CATALÁN" ,
@@ -1363,7 +1363,7 @@ void Juego::pintaMenuIdioma(int seleccionado,bool efecto)
 			"7 PORTUGUÉS"
 		},
 		{ // 3 CATALAN
-			"0 CASTELLANO" , 
+			"0 CASTELLANO" ,
 			"1 ENGLISH" ,
 			"2 PORTUGUÉS BRASIL" ,
 			"3 CATALÁN" ,
@@ -1373,7 +1373,7 @@ void Juego::pintaMenuIdioma(int seleccionado,bool efecto)
 			"7 PORTUGUÉS"
 		},
 		{ // 4 GALLEGO
-			"0 CASTELLANO" , 
+			"0 CASTELLANO" ,
 			"1 ENGLISH" ,
 			"2 PORTUGUÉS BRASIL" ,
 			"3 CATALÁN" ,
@@ -1383,7 +1383,7 @@ void Juego::pintaMenuIdioma(int seleccionado,bool efecto)
 			"7 PORTUGUÉS"
 		},
 		{ // 5 ITALIANO
-			"0 CASTELLANO" , 
+			"0 CASTELLANO" ,
 			"1 ENGLISH" ,
 			"2 PORTUGUÉS BRASIL" ,
 			"3 CATALÁN" ,
@@ -1393,7 +1393,7 @@ void Juego::pintaMenuIdioma(int seleccionado,bool efecto)
 			"7 PORTUGUÉS"
 		},
 		{ // 6 FINES
-			"0 CASTELLANO" , 
+			"0 CASTELLANO" ,
 			"1 ENGLISH" ,
 			"2 PORTUGUÉS BRASIL" ,
 			"3 CATALÁN" ,
@@ -1403,7 +1403,7 @@ void Juego::pintaMenuIdioma(int seleccionado,bool efecto)
 			"7 PORTUGUÉS"
 		},
 		{ // 7 PORTUGUES
-			"0 CASTELLANO" , 
+			"0 CASTELLANO" ,
 			"1 ENGLISH" ,
 			"2 PORTUGUÉS BRASIL" ,
 			"3 CATALÁN" ,
@@ -1414,7 +1414,7 @@ void Juego::pintaMenuIdioma(int seleccionado,bool efecto)
 		}
 	};
 	// limpia el área que ocupa el marcador
-	limpiaAreaJuego(0); 
+	limpiaAreaJuego(0);
 
 	// repintar con un efecto para que vaya apareciendo el
 	// menu de izquierda a derecha y asi dar tiempo a soltar las teclas
@@ -1426,7 +1426,7 @@ void Juego::pintaMenuIdioma(int seleccionado,bool efecto)
 		cpc6128->fillMode1Rect(8, 0, x-1, 160, 0);
 		for (int i=0;i<8;i++)
 		{
-			marcador->imprimeFrase(textos[idioma][i], x, 
+			marcador->imprimeFrase(textos[idioma][i], x,
 				32+(i*16),4, 0);
 		}
 		timer->sleep(50);
@@ -1438,10 +1438,10 @@ void Juego::pintaMenuIdioma(int seleccionado,bool efecto)
 	}
 
 	// pinta la opción seleccionado con el color de fondo y el color
-	// de letra cambiado 
-	marcador->imprimeFrase(textos[idioma][seleccionado], 88, 
+	// de letra cambiado
+	marcador->imprimeFrase(textos[idioma][seleccionado], 88,
 		32+(seleccionado*16), 0, 4);
-	
+
 }
 
 bool Juego::menuIdioma()
@@ -1455,7 +1455,7 @@ bool Juego::menuIdioma()
 	pintaMenuIdioma(seleccionado,true);
 	{
 		bool salir=false;
-		while(salir==false) {	
+		while(salir==false) {
 			pulsado=-1;
 			timer->sleep(100);
 			losControles->actualizaEstado();
@@ -1474,13 +1474,13 @@ bool Juego::menuIdioma()
 			    losControles->estaSiendoPulsado(KEYBOARD_INTRO) ) {
 				pulsado=seleccionado;
 			}
-			
+
 			if (losControles->estaSiendoPulsado(KEYBOARD_0) ||
 				pulsado==0 )
 			{
 				idioma=0;
 				salir=true;
-			} 
+			}
 			if (losControles->estaSiendoPulsado(KEYBOARD_1) ||
 				pulsado==1 )
 			{
@@ -1522,9 +1522,9 @@ bool Juego::menuIdioma()
 			{
 				idioma=7;
 				salir=true;
-			} 
+			}
 		}
-	
+
 	}
 
 	return false;
@@ -1533,8 +1533,8 @@ bool Juego::menuIdioma()
 
 void Juego::pintaMenuPrincipal(int seleccionado,bool efecto)
 {
-	static const char * textos[8][9] = 
-	{ 
+	static const char * textos[8][9] =
+	{
 		{ // 0 Castellano
 			"0 IDIOMA",
 			"1 CARGAR PARTIDA" ,
@@ -1543,11 +1543,11 @@ void Juego::pintaMenuPrincipal(int seleccionado,bool efecto)
 			"4 AYUDA" ,
 			"5 TUTORIAL",
 			"6 REINICIAR",
-			"7 SONIDO", 
+			"7 SONIDO",
 			"8 JUGAR"
 		},
 		{ // 1 INGLES
-			"0 IDIOMA" , 
+			"0 IDIOMA" ,
 			"1 LOAD GAME" ,
 			"2 SAVE GAME" ,
 			"3 GRAPHICS VGA-CPC" ,
@@ -1558,81 +1558,81 @@ void Juego::pintaMenuPrincipal(int seleccionado,bool efecto)
 			"8 PLAY"
 		},
 		{ // 2 PORTUGUES BRASIL
-			"0 IDIOMA" , 
+			"0 IDIOMA" ,
 			"1 CARGAR PARTIDA" ,
 			"2 GRABAR PARTIDA" ,
 			"3 GRÁFICOS VGA-CPC" ,
 			"4 AYUDA" ,
 			"5 TUTORIAL",
 			"6 REINICIAR",
-			"7 SONIDO", 
+			"7 SONIDO",
 			"8 JUGAR"
 		},
 		{ // 3 CATALAN
-			"0 IDIOMA" , 
+			"0 IDIOMA" ,
 			"1 CARGAR PARTIDA" ,
 			"2 GRABAR PARTIDA" ,
 			"3 GRÁFICOS VGA-CPC" ,
 			"4 AYUDA" ,
 			"5 TUTORIAL",
 			"6 REINICIAR",
-			"7 SONIDO", 
+			"7 SONIDO",
 			"8 JUGAR"
 		},
 		{ // 4 GALLEGO
-			"0 IDIOMA" , 
+			"0 IDIOMA" ,
 			"1 CARGAR PARTIDA" ,
 			"2 GRABAR PARTIDA" ,
 			"3 GRÁFICOS VGA-CPC" ,
 			"4 AYUDA" ,
 			"5 TUTORIAL",
 			"6 REINICIAR",
-			"7 SONIDO", 
+			"7 SONIDO",
 			"8 JUGAR"
 		},
 		{ // 5 ITALIANO
-			"0 IDIOMA" , 
+			"0 IDIOMA" ,
 			"1 CARGAR PARTIDA" ,
 			"2 GRABAR PARTIDA" ,
 			"3 GRÁFICOS VGA-CPC" ,
 			"4 AYUDA" ,
 			"5 TUTORIAL",
 			"6 REINICIAR",
-			"7 SONIDO", 
+			"7 SONIDO",
 			"8 JUGAR"
 		},
 		{ // 6 FINES
-			"0 IDIOMA" , 
+			"0 IDIOMA" ,
 			"1 CARGAR PARTIDA" ,
 			"2 GRABAR PARTIDA" ,
 			"3 GRÁFICOS VGA-CPC" ,
 			"4 AYUDA" ,
 			"5 TUTORIAL",
 			"6 REINICIAR",
-			"7 SONIDO", 
+			"7 SONIDO",
 			"8 JUGAR"
 		},
 		{ // 7 PORTUGUES
-			"0 IDIOMA" , 
+			"0 IDIOMA" ,
 			"1 CARGAR PARTIDA" ,
 			"2 GRABAR PARTIDA" ,
 			"3 GRÁFICOS VGA-CPC" ,
 			"4 AYUDA" ,
 			"5 TUTORIAL",
 			"6 REINICIAR",
-			"7 SONIDO", 
+			"7 SONIDO",
 			"8 JUGAR"
 		}
 	};
 	// limpia el área que ocupa el marcador
-	limpiaAreaJuego(0); 
+	limpiaAreaJuego(0);
 	// repinta todo el menu
 	for(int x=efecto?8:88;x<88;x+=10)
 	{
 		cpc6128->fillMode1Rect(8, 0, x-1, 160, 0);
 		for (int i=0;i<9;i++)
 		{
-			marcador->imprimeFrase(textos[idioma][i], x, 
+			marcador->imprimeFrase(textos[idioma][i], x,
 				16+(i*16),4, 0);
 		}
 		timer->sleep(50);
@@ -1644,10 +1644,10 @@ void Juego::pintaMenuPrincipal(int seleccionado,bool efecto)
 	}
 
 	// pinta la opción seleccionado con el color de fondo y el color
-	// de letra cambiado 
-	marcador->imprimeFrase(textos[idioma][seleccionado], 88, 
+	// de letra cambiado
+	marcador->imprimeFrase(textos[idioma][seleccionado], 88,
 		16+(seleccionado*16), 0, 4);
-	
+
 }
 
 bool Juego::menu()
@@ -1659,7 +1659,7 @@ bool Juego::menu()
 	pintaMenuPrincipal(seleccionado,true);
 	{
 		bool salir=false;
-		while(salir==false) {	
+		while(salir==false) {
 			pulsado=-1;
 			timer->sleep(100);
 			losControles->actualizaEstado();
@@ -1668,17 +1668,17 @@ bool Juego::menu()
 				seleccionado++;
 				if (seleccionado==9) seleccionado=0;
 				pintaMenuPrincipal(seleccionado);
-			} 
+			}
 			if (losControles->estaSiendoPulsado(P1_UP)) {
 				seleccionado--;
 				if (seleccionado==-1) seleccionado=8;
 				pintaMenuPrincipal(seleccionado);
-			} 
+			}
 			if (losControles->estaSiendoPulsado(P1_BUTTON1) ||
 			    losControles->estaSiendoPulsado(KEYBOARD_INTRO) ) {
 				pulsado=seleccionado;
-			} 
-			
+			}
+
 			if (losControles->estaSiendoPulsado(KEYBOARD_0) ||
 				pulsado==0 )
 			{
@@ -1742,9 +1742,9 @@ bool Juego::menu()
 				pulsado==8 )
 			{
 				salir=true;
-			} 
+			}
 		}
-	
+
 	}
 
 	return false;
@@ -1757,14 +1757,14 @@ bool Juego::menu()
 #ifdef __libabadIA__
 void Juego::init()
 {
-fprintf(stderr,"Juego::init 0\n");
+// fprintf(stderr,"Juego::init 0\n");
 	// obtiene los recursos para el juego
 	timer = VigasocoMain->getTimingHandler();
-fprintf(stderr,"Juego::init 1\n");
+// fprintf(stderr,"Juego::init 1\n");
 	controles->init(VigasocoMain->getInputHandler());
-fprintf(stderr,"Juego::init 2\n");
+// fprintf(stderr,"Juego::init 2\n");
 	audio_plugin = VigasocoMain->getAudioPlugin();
-fprintf(stderr,"Juego::init 3\n");
+// fprintf(stderr,"Juego::init 3\n");
 	// obtiene las direcciones de los datos relativos a la habitación del espejo
 //TODO; intento llevarme esto al principio
 //porque ahora en creaEntidadesJuego llamo a logica->inicia
@@ -1773,15 +1773,15 @@ fprintf(stderr,"Juego::init 3\n");
 
 	// crea las entidades del juego (sprites, personajes, puertas y objetos)
 	creaEntidadesJuego(); // esto ya llama a logica->inicia en la ver abadia,no en el original
-fprintf(stderr,"Juego::init 4\n");
+// fprintf(stderr,"Juego::init 4\n");
 
 	// genera los gráficos flipeados en x de las entidades que lo necesiten
 	generaGraficosFlipeados();
-fprintf(stderr,"Juego::init 5\n");
+// fprintf(stderr,"Juego::init 5\n");
 
 	// inicialmente la cámara sigue a guillermo
 	motor->personaje = personajes[0];
-fprintf(stderr,"Juego::init 6\n");
+// fprintf(stderr,"Juego::init 6\n");
 
 #ifndef __libabadIA__
 // TODO: soportar esto en algún momento para libabadIA
@@ -1791,7 +1791,7 @@ fprintf(stderr,"Juego::init 6\n");
 
 	// obtiene las direcciones de los datos relativos a la habitación del espejo
 //	logica->despHabitacionEspejo();
-fprintf(stderr,"Juego::init 7\n");
+// fprintf(stderr,"Juego::init 7\n");
 
 	//TODO: contemplar cambiar el idioma en init
 
@@ -1799,11 +1799,11 @@ fprintf(stderr,"Juego::init 7\n");
 // porque se podría generar fuera
 	// limpia el área que ocupa el marcador
 	marcador->limpiaAreaMarcador();
-fprintf(stderr,"Juego::init 8\n");
+// fprintf(stderr,"Juego::init 8\n");
 
 	//TODO: revisar
 //	logica->inicia();
-//	ReiniciaPantalla(); // para forzar que se establezca numPantalla		
+//	ReiniciaPantalla(); // para forzar que se establezca numPantalla
 }
 
 //666 #ifdef __libabadIA__
@@ -1843,7 +1843,7 @@ kk_tmp++;
 //return tmp;
 if (tmp==2) {
 	// ñapa DUMP
-	std::string tmp=dump();	
+	std::string tmp=dump();
 	while (!elJuego->frases.empty()) {
 		elJuego->frases.pop();
 	}
@@ -1867,7 +1867,7 @@ int Juego::step(void)
 	//save(0);
 	// no tiene sentido cargar y grabar en el step
 	// vale solo para el escenario serverless
-	// pero para un uso como lib embebida, el juego 
+	// pero para un uso como lib embebida, el juego
 	// sigue en memoria en cada paso
 
 //		while (true){	// el bucle principal del juego empieza aquí
@@ -1937,8 +1937,8 @@ int Juego::step(void)
 				// reiniciamos para volver a guardar solo los sonidos entre dump y dump
 		                for (int index=0;index<12;index++)
 		                        VigasocoMain->getAudioPlugin()->setProperty("sonidos",index,false);
-	
-				// Devolvemos el control al HTTPPlugin para que pueda leer el DUMP	
+
+				// Devolvemos el control al HTTPPlugin para que pueda leer el DUMP
 				VigasocoMain->getInputHandler()->unAcquire();
 				// Esperamos a que el HTTPInputPlugin haya leido el DUMP
 				VigasocoMain->getInputHandler()->acquire();
@@ -1962,7 +1962,7 @@ return 2;
 //#endif
 			}
 #else
-			if (compruebaReinicio()) 
+			if (compruebaReinicio())
 //				goto despues_de_cargar_o_iniciar;
 				return 1;
 #endif
@@ -2000,12 +2000,12 @@ return 2;
 			}
 
 
-			// comprueba si se quieren cambiar de graficos 
+			// comprueba si se quieren cambiar de graficos
 			// CPC a VGA o viceversa
 			compruebaCambioCPC_VGA();
 
 			// comprueba si se quiere entrar al menu
-			if ( compruebaMenu() ) 
+			if ( compruebaMenu() )
 				//goto despues_de_cargar_o_iniciar;
 				return 1;
 
@@ -2063,9 +2063,9 @@ return 2;
 			// si guillermo o adso están frente al espejo, muestra su reflejo
 			laLogica->realizaReflejoEspejo();
 
-			// si está en modo información, 
+			// si está en modo información,
 			// muestra la información interna del juego
-			// con transparencia 
+			// con transparencia
 			if (cambioModoInformacion && modoInformacion ) {
 				limpiaAreaJuego(12);
 				cambioModoInformacion=false;
@@ -2073,10 +2073,10 @@ return 2;
 
 			if (cambioModoInformacion && !modoInformacion ) {
 				// TODO: Revisar el entrar y salir del modo
-				// informacion con puertas, objetos, 
+				// informacion con puertas, objetos,
 				// pantalla con iluminacion y lampara, etc
 				limpiaAreaJuego(12);
-			 	motor->compruebaCambioPantalla(true);	
+			 	motor->compruebaCambioPantalla(true);
 				cambioModoInformacion=false;
 			}
 
@@ -2085,7 +2085,7 @@ return 2;
 #ifndef __libabadIA__
 				infoJuego->muestraInfo();
 #endif
-			} else 
+			} else
 #endif
 			{
 
@@ -2145,7 +2145,7 @@ void Juego::run()
 	// que el menu se encuentre ya objetos inicializados
 	//
 	// limpia el área que ocupa el marcador
-	// no se limpia en menu() porque cuando se llame al menu 
+	// no se limpia en menu() porque cuando se llame al menu
 	// dentro del juego, no se debe borrar el marcador
 //	marcador->limpiaAreaMarcador();
 	// menu, sobretodo para permitir cambiar el idioma al empezar
@@ -2183,7 +2183,7 @@ void Juego::run()
 	// obtiene las direcciones de los datos relativos a la habitación del espejo
 	logica->despHabitacionEspejo();
 
-	//iniciar antes del menu, para que si a alguien le da por 
+	//iniciar antes del menu, para que si a alguien le da por
 	//grabar antes de empezar una partida, se guarden
 	//datos inicializados.
 	//otra opcion seria desactivar el menu grabar
@@ -2311,7 +2311,7 @@ void Juego::generaGraficosFlipeadosVGA()
 	dest += size;
 
 	// genera los gráficos de las animaciones de adso flipeados respecto a x
-	size = 59668 - 57768; // ok, coincide con 0x1db *4 
+	size = 59668 - 57768; // ok, coincide con 0x1db *4
 	flipeaGraficosVGA(&romsVGA[57768], &romsVGAFlip[dest], 5*4, size);
 	dest += size;
 	size = 61108 - 59668; // ok , es 0x168 * 4
@@ -2481,7 +2481,7 @@ void Juego::compruebaPausa()
 // comprueba si se desea cambiar los graficos VGA por CPC
 void Juego::cambioCPC_VGA()
 {
-	// En Memoria esta la rom de 0x24000 bytes 
+	// En Memoria esta la rom de 0x24000 bytes
 	//  seguidos de 174065 bytes con los graficos de 8 bits a usar
 	//  seguidos de 174065+21600 bytes con los graficos VGA de 8 bits
 	//  seguidos de 174065+21600 bytes con los graficos CPC de 8 bits
@@ -2507,7 +2507,7 @@ void Juego::cambioCPC_VGA()
 	// genera los gráficos flipeados en x de las entidades que lo necesiten
 	generaGraficosFlipeados();
 
-	ReiniciaPantalla();		
+	ReiniciaPantalla();
 }
 
 
@@ -2623,7 +2623,7 @@ void Juego::save(int slot)
 	std::ofstream out(savefile[slot],
 			std::ofstream::out|std::ofstream::trunc);
 
-	out << logica; 
+	out << logica;
 
 	if ( out.fail() )
 	{
@@ -2654,20 +2654,20 @@ void Juego::compruebaSave()
 		while (elGestorFrases->mostrandoFrase)
 		{
 			elGestorFrases->actualizaEstado();
-		} 
+		}
 
 		// Preguntamos
 		// CPC elMarcador->imprimeFrase("¿GRABAR? S:N", 110, 164, 2, 3);
 		//elMarcador->imprimeFrase(",.WÑ", 110, 164, 4, 0); // VGA
 //		elMarcador->imprimeFrase("¿GRABAR? S:N", 110, 164, 4, 0); // VGA
 		elMarcador->imprimeFrase("¿GRABAR? S:N", 110, 164, 4, 0); // VGA
-		//se estaba guardando el ¿ como multibyte c2bf 
+		//se estaba guardando el ¿ como multibyte c2bf
 		// en vez de un simple char bf
 		// con imprimeFrase no se cambia la Ñ por la W
 		// la ¿ por el caracter adecuado ...
 		//elMarcador->imprimeFrase("\xbfGRABAR? S:N", 110, 164, 4, 0); // VGA
 		// TODO esto deberia tener su numero de frase  y estar traducido
-		// e imprimirse con  
+		// e imprimirse con
 		//elGestorFrases->muestraFrase¿ya?
 
 		do
@@ -2701,7 +2701,7 @@ bool Juego::compruebaLoad()
 		while (elGestorFrases->mostrandoFrase)
 		{
 			elGestorFrases->actualizaEstado();
-		} 
+		}
 
 		// Preguntamos
 		// CPC elMarcador->imprimeFrase("¿CARGAR? S:N", 110, 164, 2, 3);
@@ -2718,7 +2718,7 @@ bool Juego::compruebaLoad()
 		}
 		while (losControles->estaSiendoPulsado(KEYBOARD_N) == false);
 		elGestorFrases->muestraFraseYa(0x38);
-	} 
+	}
 	return false;
 }
 
@@ -2731,7 +2731,7 @@ bool Juego::compruebaMenu()
 	if (controles->seHaPulsado(KEYBOARD_Z))
 	{
 		bool res=menu();
-		motor->compruebaCambioPantalla(true);	
+		motor->compruebaCambioPantalla(true);
 		return res;
 	}
 
@@ -2941,23 +2941,23 @@ bool Juego::muestraPantallaFinInvestigacion()
 void Juego::creaEntidadesJuego()
 {
 	// sprites de los personajes
-fprintf(stderr,"Juego::creaEntidadesJuego 1\n");
+// fprintf(stderr,"Juego::creaEntidadesJuego 1\n");
 	// sprite de guillermo
 	if (sprites[0]) delete sprites[0];
 	sprites[0] = new Sprite();
-fprintf(stderr,"Juego::creaEntidadesJuego 2\n");
+// fprintf(stderr,"Juego::creaEntidadesJuego 2\n");
 
 	// sprite de adso
 	if (sprites[1]) delete sprites[1];
 	sprites[1] = new Sprite();
-fprintf(stderr,"Juego::creaEntidadesJuego 3\n");
+// fprintf(stderr,"Juego::creaEntidadesJuego 3\n");
 
 	// sprite de los monjes
 	for (int i = 2; i < 8; i++){
 		if (sprites[i]) delete sprites[i];
 		sprites[i] = new SpriteMonje();
 	}
-fprintf(stderr,"Juego::creaEntidadesJuego 4\n");
+// fprintf(stderr,"Juego::creaEntidadesJuego 4\n");
 
 	// sprite de las puertas
 	for (int i = primerSpritePuertas; i < primerSpritePuertas + numPuertas; i++){
@@ -2966,12 +2966,12 @@ fprintf(stderr,"Juego::creaEntidadesJuego 4\n");
 		sprites[i]->ancho = sprites[i]->oldAncho = 0x06;
 		sprites[i]->alto = sprites[i]->oldAlto = 0x28;
 	}
-fprintf(stderr,"Juego::creaEntidadesJuego 5\n");
+// fprintf(stderr,"Juego::creaEntidadesJuego 5\n");
 
 	// CPC int despObjetos[8] = { 0x88f0, 0x9fb0, 0x9f80, 0xa010, 0x9fe0, 0x9fe0, 0x9fe0, 0x88c0 };
 	// VGA
 	/*
-	int despObjetos[8] = { 
+	int despObjetos[8] = {
 		0x24000 - 1 - 0x4000 + 11200,  // LIBRO
 		0x24000 - 1 - 0x4000 + 34496,  // GUANTES
 		0x24000 - 1 - 0x4000 + 34304,  // GAFAS
@@ -2983,7 +2983,7 @@ fprintf(stderr,"Juego::creaEntidadesJuego 5\n");
 	}; */
 	// En Sprite::dibujaVGA ya le anyade el 0x24000 - 1 - 0x4000 para saltarse la rom CPC e ir a los graficos VGA
 	// ¡¡¡ ojo !!! , entonces en Marcador::dibujaObjetos hay que incluir este salto ...
-	int despObjetos[8] = { 
+	int despObjetos[8] = {
 		11200,  // LIBRO
 		34496,  // GUANTES
 		34304,  // GAFAS
@@ -2994,8 +2994,8 @@ fprintf(stderr,"Juego::creaEntidadesJuego 5\n");
 		11008  // ?LAMPARA?
 	};// TODO: los desplazamientos estan bien, lo que no se si se corresponde
 	// del todo es el indice, o sea, que el objeto 7 en el juego es la lampara
-	// y el 3 el pergamino... 
-fprintf(stderr,"Juego::creaEntidadesJuego 6\n");
+	// y el 3 el pergamino...
+// fprintf(stderr,"Juego::creaEntidadesJuego 6\n");
 
 	// sprite de los objetos
 	for (int i = primerSpriteObjetos; i < primerSpriteObjetos + numObjetos; i++){
@@ -3013,30 +3013,30 @@ fprintf(stderr,"Juego::creaEntidadesJuego 6\n");
 		// sumo 16*12* el numero de objeto que busco
 		//sprites[i]->despGfx = 0x24000 - 1 - 0x4000 + 34304 + (i - primerSpriteObjetos)*16*12;
 		//muy bonito , si los graficos estuviesen en el mismo orden logico que los objetos en el juego
-	
+
 		// igual que en CPC , pero con el array despObjetos "actualizado" a las posiciones VGA
 		sprites[i]->despGfx = despObjetos[i - primerSpriteObjetos];
 
 	}
-fprintf(stderr,"Juego::creaEntidadesJuego 7\n");
+// fprintf(stderr,"Juego::creaEntidadesJuego 7\n");
 
 	// sprite de los reflejos en el espejo
 	if (sprites[spritesReflejos]) delete sprites[spritesReflejos];
 	sprites[spritesReflejos] = new Sprite();
 	if (sprites[spritesReflejos+1]) delete sprites[spritesReflejos+1];
 	sprites[spritesReflejos + 1] = new Sprite();
-fprintf(stderr,"Juego::creaEntidadesJuego 8\n");
+// fprintf(stderr,"Juego::creaEntidadesJuego 8\n");
 
 	// sprite de la luz
 	if (sprites[spriteLuz]) delete sprites[spriteLuz];
 	sprites[spriteLuz] = new SpriteLuz();
-fprintf(stderr,"Juego::creaEntidadesJuego 9\n");
+// fprintf(stderr,"Juego::creaEntidadesJuego 9\n");
 
 	// crea los personajes del juego
 	for (int i = 0; i < 8; i++){
 		if (personajes[i]) delete personajes[i];
 	}
-fprintf(stderr,"Juego::creaEntidadesJuego 10\n");
+// fprintf(stderr,"Juego::creaEntidadesJuego 10\n");
 	personajes[0] = new Guillermo(sprites[0]);
 	personajes[1] = new Adso(sprites[1]);
 	personajes[2] = new Malaquias((SpriteMonje *)sprites[2]);
@@ -3045,7 +3045,7 @@ fprintf(stderr,"Juego::creaEntidadesJuego 10\n");
 	personajes[5] = new Severino((SpriteMonje *)sprites[5]);
 	personajes[6] = new Jorge((SpriteMonje *)sprites[6]);
 	personajes[7] = new Bernardo((SpriteMonje *)sprites[7]);
-fprintf(stderr,"Juego::creaEntidadesJuego 11\n");
+// fprintf(stderr,"Juego::creaEntidadesJuego 11\n");
 
 	// inicia los valores comunes
 	for (int i = 0; i < 8; i++){
@@ -3053,24 +3053,24 @@ fprintf(stderr,"Juego::creaEntidadesJuego 11\n");
 		personajes[i]->despY = -34;
 	}
 	personajes[1]->despY = -32;
-	
-fprintf(stderr,"Juego::creaEntidadesJuego 12\n");
+
+// fprintf(stderr,"Juego::creaEntidadesJuego 12\n");
 	// crea las puertas del juego
 	for (int i = 0; i < numPuertas; i++){
 		if(puertas[i]) delete puertas[i];
 		puertas[i] = new Puerta(sprites[primerSpritePuertas + i]);
 	}
 
-fprintf(stderr,"Juego::creaEntidadesJuego 14\n");
+// fprintf(stderr,"Juego::creaEntidadesJuego 14\n");
 	// crea los objetos del juego
 	for (int i = 0; i < numObjetos; i++){
 		if(objetos[i]) delete objetos[i];
 		objetos[i] = new Objeto(sprites[primerSpriteObjetos + i]);
 	}
-fprintf(stderr,"Juego::creaEntidadesJuego 15\n");
+// fprintf(stderr,"Juego::creaEntidadesJuego 15\n");
 
 	logica->inicia();
-fprintf(stderr,"Juego::creaEntidadesJuego 16\n");
+// fprintf(stderr,"Juego::creaEntidadesJuego 16\n");
 }
 
 #ifdef __libabadIA__
@@ -3110,15 +3110,15 @@ std::string Juego::dump(void) {
                 dump["sonidos"]=Sonidos;
                 // reiniciamos para volver a guardar solo los sonidos entre dump y dump
 // NO, ahora
-// se vacia en el bucle principal de juego,no aqui  
-// se vacia solo cuando el agente ha pedido un dump 
+// se vacia en el bucle principal de juego,no aqui
+// se vacia solo cuando el agente ha pedido un dump
 //                for (int index=0;index<12;index++)
 //                        VigasocoMain->getAudioPlugin()->setProperty("sonidos",index,false);
 
                 // Frases
                 nlohmann::json Frases = nlohmann::json::array();
-// se vacia en el bucle principal de juego,no aqui  
-// se vacia solo cuando el agente ha pedido un dump 
+// se vacia en el bucle principal de juego,no aqui
+// se vacia solo cuando el agente ha pedido un dump
 /*
                 while (!elJuego->frases.empty()) {
                         nlohmann::json frase = elJuego->frases.top();
