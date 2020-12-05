@@ -3,6 +3,7 @@
 // Versión fake para montar la abadía como lib
 /////////////////////////////////////////////////////////////////////////////
 
+
 #include "VigasocoLibSDL.h"
 #include <fstream>
 
@@ -16,8 +17,38 @@ extern "C" {
 	}
 
     char *LibAbadIA_step(int *controles, char *resultado, size_t resultadoMaxLength) {
+        fprintf(stderr,"LibAbadIA before step()\n");
+        fprintf(stderr,"LibAbadIA before resultado (%d-%s) maxlenght %d\n" , strlen(resultado), resultado, resultadoMaxLength);
+        fprintf(stderr,"LibAbadIA before controles (%zu) resultado (%zu)\n", controles, resultado);
 		std::string tmp=VigasocoLibSDL::getSingletonPtr()->step(controles);
+        fprintf(stderr,"LibAbadIA step() resultado(%d-%d) tmp (%d-%d) %s \n", strlen(resultado), resultadoMaxLength, strlen(tmp.c_str()), tmp.length(), tmp.c_str());
 		strncpy(resultado,tmp.c_str(), resultadoMaxLength>=tmp.length()+1?tmp.length()+1:resultadoMaxLength-1);
+		return resultado;
+    }
+
+    char *LibAbadIA_step2(int control, char *resultado) {
+        int controles[END_OF_INPUTS] = {0};
+        int ii;
+        controles[control] = 1;
+        // fprintf(stderr,"LibAbadIA.so before step2(%d)\n", control);
+        // fflush(stderr);
+        for (ii = 0; ii <10 ; ii++) {
+            fprintf(stderr,"%02x " , resultado[ii]);
+            }
+        // fflush(stderr);
+        // fprintf(stderr,"\nLibAbadIA.so before resultado %d->(%s)\n" , strlen(resultado), resultado);
+        // fflush(stderr);
+        // fprintf(stderr,"LibAbadIA.so voy a llamar\n");
+        // fflush(stderr);
+
+		std::string tmp=VigasocoLibSDL::getSingletonPtr()->step((int *)(&controles));
+        // std::string tmp="[{}]";
+        // fprintf(stderr,"LibAbadIA.so llamada\n");
+        // fflush(stderr);
+
+        // fprintf(stderr,"LibAbadIA.so step2(%d) resultado(%d) tmp (%d-%d) %s \n", control, strlen(resultado), strlen(tmp.c_str()), tmp.length(), tmp.c_str());
+        // fflush(stderr);
+		strncpy(resultado, tmp.c_str(), tmp.length()+1);
 		return resultado;
     }
 

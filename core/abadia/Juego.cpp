@@ -1814,32 +1814,23 @@ int kk_tmp;
 //int Juego::step(int *source) {
 std::string Juego::step(int *source) {
 
+    fprintf(stderr,"Voy a ejecutar la acccion\n");
+    fflush(stderr);
 	// Si he muerto o acabado el juego
 	// solo respondo al RESET
 	if (logica->haFracasado and source[KEYBOARD_E]!=1) {
 		return dump();
 	}
 
-// borramos la lista de frases
-// para que la siguiente vez tenga solo las frases desde la ultima
-// vez que nos pidio un dump
-//while (!elJuego->frases.empty()) {
-//	elJuego->frases.pop();
-//}
-//TODO: ahora que se devuelve dump en cada paso
-// igual no tiene sentido tener esta pila de frases
-// ya que no se van a acumular varias ...
-// igual con un array como los sonidos vale
-
-
-
-//fprintf(stderr,"%d Juego::step UP %d RESET %d LEFT %d\n",kk_tmp,source[P1_UP],source[KEYBOARD_E],source[P1_LEFT]);
 	controles->libabadIAInput(source);
-//	return step();
-int tmp=step();
-//fprintf(stderr,"%d FIN Juego::step UP %d RESET %d LEFT %d\n",kk_tmp,source[P1_UP],source[KEYBOARD_E],source[P1_LEFT]);
-if (kk_tmp<5) save(kk_tmp); // grabar los 5 primeros pasos para depurar
-kk_tmp++;
+
+    int tmp=step();
+    fprintf(stderr,"%d FIN Juego::step UP %d RESET %d LEFT %d\n",kk_tmp,source[P1_UP],source[KEYBOARD_E],source[P1_LEFT]);
+
+    if (kk_tmp<5) save(kk_tmp); // grabar los 5 primeros pasos para depurar
+        fprintf(stderr, "Grabando los 5 primeros pasos ???\n");
+        kk_tmp++;
+
 //return tmp;
 if (tmp==2) {
 	// ñapa DUMP
@@ -1851,6 +1842,8 @@ if (tmp==2) {
 		VigasocoMain->getAudioPlugin()->setProperty("sonidos",index,false);
 	return tmp;
 } else {
+
+fprintf(stderr, "Voy a hacer el dump\n");
 return dump();
 }
 }
