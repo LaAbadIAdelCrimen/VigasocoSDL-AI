@@ -1,5 +1,5 @@
 #CXXFLAGS=-march=native -frecord-gcc-switches -Ofast -fopenmp -std=c++11 -I../core `sdl-config --cflags` 
-CXXFLAGS=-march=x86-64 -mtune=generic -frecord-gcc-switches -Ofast -fopenmp -std=c++11 -I../core `sdl-config --cflags` 
+CXXFLAGS=-march=native -mtune=generic -frecord-gcc-switches -Ofast -fopenmp -std=c++11 -I../core `sdl-config --cflags` 
 LDFLAGS=-frecord-gcc-switches
 VPATH=.:../core:../core/abadia:../core/util:../core/systems
 
