@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
  strace \
  libsdl1.2-dev \
  x11vnc \
- libboost-all-dev \
+ libboost-all-dev libstdc++-dev \
  libboost-system-dev libboost-filesystem-dev libboost-thread-dev \
  virtualenv \
  && groupadd -r VigasocoSDL \
