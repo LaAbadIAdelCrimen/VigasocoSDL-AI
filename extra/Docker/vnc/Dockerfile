@@ -32,7 +32,6 @@ RUN cd /home/abadIA \
   && git clone https://github.com/LaAbadIAdelCrimen/VigasocoSDL-AI.git \
   && cd VigasocoSDL-AI \
   && git checkout master \
-  && find / -name asio.hpp -print \
   && make clean \
   && make 
 
