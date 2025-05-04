@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
  libsdl1.2-dev \
  x11vnc \
  libboost-all-dev \
+ libboost-system-dev libboost-filesystem-dev libboost-thread-dev \
  virtualenv \
  && groupadd -r VigasocoSDL \
  && useradd --no-log-init -r -m -g VigasocoSDL abadIA
@@ -31,6 +32,7 @@ RUN cd /home/abadIA \
   && git clone https://github.com/LaAbadIAdelCrimen/VigasocoSDL-AI.git \
   && cd VigasocoSDL-AI \
   && git checkout master \
+  && find / -name asio.hpp -print \
   && make clean \
   && make 
 
