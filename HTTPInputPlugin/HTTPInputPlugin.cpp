@@ -6,7 +6,7 @@
 #include "HTTPInputPlugin.h"
 
 #include <vector>
-#define CROW_ENABLE_DEBUG
+#define CROW_ENABLE_DEBUG 1
 #include "crow_all.h"
 #include "../core/util/json.hpp"
 
