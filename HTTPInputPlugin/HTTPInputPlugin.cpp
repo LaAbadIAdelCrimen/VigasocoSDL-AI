@@ -6,8 +6,9 @@
 #include "HTTPInputPlugin.h"
 
 #include <vector>
-#define CROW_ENABLE_DEBUG 1
+// #define CROW_ENABLE_DEBUG 
 #include "crow_all.h"
+
 #include "../core/util/json.hpp"
 
 SDLKey HTTPInputPlugin::g_keyMapping[END_OF_INPUTS];
@@ -504,8 +505,8 @@ auto j2 = R"(
 		});
 #endif
 
+  /*
 		CROW_ROUTE(app,"/ws")
-		.websocket()
 		.onopen([&](crow::websocket::connection& conn){
 				CROW_LOG_INFO << "new websocket connection";
 				})
@@ -527,6 +528,7 @@ auto j2 = R"(
 				CROW_LOG_INFO << "websocket res: " << res;
 				conn.send_text(res);
 		}); 
+		*/
 
 //#ifndef __abadIA_SELFTEST__
 #ifndef __abadIA_PROFILE__
@@ -567,7 +569,8 @@ R"(
 )";
 
 	CROW_LOG_INFO << "Antes de selfTest para obtener información de profiling";
-		app.handle(req,res);
+	    std::unique_ptr<crow::routing_handle_result> found;
+		app.handle(req,res,found);
 	CROW_LOG_INFO << "Después de selfTest.";
 #endif
         });

@@ -1,0 +1,31 @@
+input-plugins-dir := VigasocoSDL/input 
+audio-plugins-dir := VigasocoSDL/audio
+video-plugins-dir := VigasocoSDL/video
+
+all: | $(input-plugins-dir) $(audio-plugins-dir) $(video-plugins-dir)
+	cd SDLInputKeyboardPlugin && make -f Makefile.MACOS
+	cd HTTPInputPlugin && make -f Makefile.MACOS
+	cd SDLVideoPlugins && make -f Makefile.MACOS
+	cd SDLAudioPlugin && make -f Makefile.MACOS
+	cd NULLAudioPlugin && make -f Makefile.MACOS
+	cd NULLVideoPlugin && make -f Makefile.MACOS
+	cd VigasocoSDL && make -f Makefile.MACOS all
+
+$(input-plugins-dir):
+	mkdir $(input-plugins-dir)
+
+$(audio-plugins-dir):
+	mkdir $(audio-plugins-dir)
+
+$(video-plugins-dir):
+	mkdir $(video-plugins-dir)
+
+clean:
+	cd SDLInputKeyboardPlugin && make clean -f Makefile.MACOS
+	cd HTTPInputPlugin && make clean -f Makefile.MACOS
+	cd SDLVideoPlugins && make clean -f Makefile.MACOS
+	cd SDLAudioPlugin && make clean -f Makefile.MACOS
+	cd NULLAudioPlugin && make clean -f Makefile.MACOS
+	cd NULLVideoPlugin && make clean -f Makefile.MACOS
+	cd VigasocoSDL && make mrproper -f Makefile.MACOS
+	
