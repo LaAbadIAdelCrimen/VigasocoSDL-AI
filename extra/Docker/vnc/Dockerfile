@@ -6,6 +6,9 @@ RUN apt-get update && apt-get install -y \
  xvfb \
  make \
  g++ \
+ net-tools \
+ curl \
+ strace \
  libsdl1.2-dev \
  x11vnc \
  libboost-all-dev \
