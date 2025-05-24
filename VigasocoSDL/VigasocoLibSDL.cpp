@@ -12,7 +12,7 @@ extern "C" {
 	void LibAbadIA_init() {
 		VigasocoLibSDL *vigasocoTest=new VigasocoLibSDL();
 		VigasocoLibSDL::getSingletonPtr()->init();
-        // fprintf(stderr,"LibAbadIA_init() singleton %p\n", VigasocoLibSDL::getSingletonPtr());
+        fprintf(stderr,"LibAbadIA_init() singleton %p\n", VigasocoLibSDL::getSingletonPtr());
 	}
 
     char *LibAbadIA_step(int *controles, char *resultado, size_t resultadoMaxLength) {
@@ -30,7 +30,7 @@ extern "C" {
     bool LibAbadIA_load(const char * const input) {
 		VigasocoLibSDL::getSingletonPtr()->reset();
 		bool res=VigasocoLibSDL::getSingletonPtr()->load(input);
-		// fprintf(stderr,"C load %d un bool true es %d y un false es %d\n",res,true,false);
+		fprintf(stderr,"C load %d un bool true es %d y un false es %d\n",res,true,false);
 		return res;
 	}
 }
@@ -40,16 +40,16 @@ bool gb_test(false);  // Âestamos en modo normal o ejecutando tests de pruebas?
 std::string g_test("");  // Escenario de pruebas
 VigasocoLibSDL::VigasocoLibSDL() {
 
-    // fprintf(stderr,"constructor VigasocoLibSDL\n");
+    fprintf(stderr,"constructor VigasocoLibSDL\n");
     // JT: aqui es donde cargo la ROM a cholon
-    // fprintf(stderr,"Cargando la ROM\n");
+    fprintf(stderr,"Cargando la ROM\n");
     abadiaROM = new unsigned char[734451];
     std::ifstream fin("abadiaROM.bin");
     if(!fin)
           printf("failed to load abadiaROM.bin");
     fin.read((char *)abadiaROM, 734451);
     fin.close();
-   //  fprintf(stderr,"Cargada\n");
+    fprintf(stderr,"Cargada\n");
 
 	_palette=new SDLPalette();
 	_palette->init(256);
@@ -67,7 +67,7 @@ VigasocoLibSDL::VigasocoLibSDL() {
 
 VigasocoLibSDL::~VigasocoLibSDL()
 {
-// fprintf(stderr,"destructir VigasocoLibSDL\n");
+fprintf(stderr,"destructir VigasocoLibSDL\n");
 	// destruye la sección crítica
 	if (cs != 0){
 		cs->destroy();
@@ -92,9 +92,9 @@ if (_abadiaGame) delete _abadiaGame;
 _abadiaGame = new Abadia::Juego(abadiaROM, cpc6128); init();
 }
 void VigasocoLibSDL::init(void) {
-// fprintf(stderr," VigasocoLibSDL::init\n");
+fprintf(stderr," VigasocoLibSDL::init\n");
 	_abadiaGame->init();
-// fprintf(stderr,"FIN VigasocoLibSDL::init\n");
+fprintf(stderr,"FIN VigasocoLibSDL::init\n");
 }
 
 std::string VigasocoLibSDL::step(int *controles) {
