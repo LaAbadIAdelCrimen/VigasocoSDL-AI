@@ -160,11 +160,18 @@ for (int i=0;i<(0x24000+(174065+21600)*3);i++) {
 	//paleta = new Paleta();
 	paleta = new Paleta(romData+0x24000-1); // le pasamos los datos de la paleta VGA
 	pergamino = new Pergamino();
+#ifdef __abadIA__
+	motor = new MotorGrafico(buffer, 8192*2);
+	marcador = new Marcador();
+	logica = new Logica(roms, buffer, 8192*2); 
+#else
 	motor = new MotorGrafico(buffer, 8192);
 	marcador = new Marcador();
 	logica = new Logica(roms, buffer, 8192); 
+#endif
+
 #ifndef __libabadIA__
-	infoJuego = new InfoJuego();
+	infoJuego = new InfoJuego(); // no hay infojuego en libabadia
 #endif
 	controles = new Controles();
 
@@ -1814,11 +1821,13 @@ int kk_tmp;
 //int Juego::step(int *source) {
 std::string Juego::step(int *source) {
 
+/* no se por que puse esto porque falla behave en el test de morir al coger el libro
 	// Si he muerto o acabado el juego
 	// solo respondo al RESET
 	if (logica->haFracasado and source[KEYBOARD_E]!=1) {
 		return dump();
 	}
+*/
 
 // borramos la lista de frases
 // para que la siguiente vez tenga solo las frases desde la ultima
@@ -1838,21 +1847,24 @@ std::string Juego::step(int *source) {
 //	return step();
 int tmp=step();
 //fprintf(stderr,"%d FIN Juego::step UP %d RESET %d LEFT %d\n",kk_tmp,source[P1_UP],source[KEYBOARD_E],source[P1_LEFT]);
-if (kk_tmp<5) save(kk_tmp); // grabar los 5 primeros pasos para depurar
-kk_tmp++;
+//if (kk_tmp<5) save(kk_tmp); // grabar los 5 primeros pasos para depurar
+//kk_tmp++;
 //return tmp;
-if (tmp==2) {
-	// ñapa DUMP
-	std::string tmp=dump();	
-	while (!elJuego->frases.empty()) {
-		elJuego->frases.pop();
+	if (tmp==2) {
+		// ñapa DUMP
+		std::string tmp=dump();	
+		while (!elJuego->frases.empty()) {
+			elJuego->frases.pop();
+		}
+		for (int index=0;index<12;index++)
+			VigasocoMain->getAudioPlugin()->setProperty("sonidos",index,false);
+		return tmp;
+	} else {
+//		if (tmp==-2) 
+//			return dump(); // TODO revisar si necesita tratamiento especial
+//		else 
+		return dump();
 	}
-	for (int index=0;index<12;index++)
-		VigasocoMain->getAudioPlugin()->setProperty("sonidos",index,false);
-	return tmp;
-} else {
-return dump();
-}
 }
 #endif
 
@@ -2015,6 +2027,15 @@ return 2;
 
 			// si guillermo ha muerto, empieza una partida
 			if (muestraPantallaFinInvestigacion()){
+ 
+#ifdef __libabadIA__
+                                controles->actualizaEstado();
+                                if (    controles->estaSiendoPulsado(P1_BUTTON1) ||
+                                        controles->estaSiendoPulsado(KEYBOARD_SPACE))  {
+                                        reinicio();
+                                        return -2;
+                                } else
+#endif
 //				break;
 				return -1;
 			}
@@ -2552,7 +2573,9 @@ fprintf(stderr,"cargar in.fail() %d\n",in.fail());
 		ReiniciaPantalla();
 fprintf(stderr,"tras cargar la pantalla es %d\n",motor->numPantalla);
 	// todo , falta llamar a inicia si se hay fail
-	return in.fail();
+	//return in.fail();
+	// Misterio, la lib ha estado funcionando bien asi y ahora resulta que la logica estaba al reves 
+	return !in.fail();
 
 }
 

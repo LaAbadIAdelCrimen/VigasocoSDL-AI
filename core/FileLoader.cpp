@@ -126,5 +126,6 @@ bool FileLoader::loadGameData(std::string game, GameDataEntity *gde)
 		}
 	}
 
+	delete[] fileLoaded; // valgrind
 	return loadComplete;
 }

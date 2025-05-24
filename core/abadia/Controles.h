@@ -25,7 +25,7 @@ protected:
 	InputHandler *ih;							// manejador de los controles
 
 	int _controles[END_OF_INPUTS];				// datos sobre los controles
-	int _oldControles[END_OF_INPUTS];			// datos anteriores sobre los controles
+	int _oldControles[END_OF_INPUTS]={0};			// datos anteriores sobre los controles // valgrind
 
 // métodos
 public:

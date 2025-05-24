@@ -21,7 +21,7 @@ public:
 	int estado2;								// guarda información extra sobre el estado del personaje
 
 protected:
-	int contadorEnScriptorium;					// indica el tiempo que guillermo está sin salir del scriptorium
+	int contadorEnScriptorium=0;					// indica el tiempo que guillermo está sin salir del scriptorium// valgrind 
 	static PosicionJuego posicionesPredef[9];	// posiciones a las que puede ir el personaje según el estado
 
 // métodos

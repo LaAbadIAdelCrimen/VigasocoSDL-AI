@@ -23,7 +23,7 @@ struct PaletteEntry {
 	UINT8 R; 
 	UINT8 alpha;
 
-	PaletteEntry(){}
+	PaletteEntry(){ B=0;G=0;R=0;alpha=0;} // para contentar a valgrind
 	PaletteEntry(int r, int g, int b) { R = r; G = g; B = b; alpha = 0xff; }
 	PaletteEntry(int r, int g, int b, int a) { R = r; G = g; B = b; alpha = a; }
 }

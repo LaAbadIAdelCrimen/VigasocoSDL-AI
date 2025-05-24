@@ -19,8 +19,8 @@ class Abad : public Monje
 public:
 	int contador;								// contador usado en varias situaciones
 	int numFrase;								// indica la frase que debe decir en varias situaciones
-	int guillermoBienColocado;					// indica si guillermo está bien colocado en misa o en el refectorio
-	int lleganLosMonjes;						// indica si los monjes han llegado a misa o al refectorio
+	int guillermoBienColocado=0;					// indica si guillermo está bien colocado en misa o en el refectorio// valgrind 
+	int lleganLosMonjes=0;						// indica si los monjes han llegado a misa o al refectorio // valgrind
 	bool guillermoHaCogidoElPergamino;			// indica si guillermo ha cogido el pergamino cuando lo vigilaba berengario
 
 protected:

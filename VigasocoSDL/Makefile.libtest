@@ -25,11 +25,11 @@ abadiaROM.o: abadiaROM.bin
 
 OBJECTS = $(OBJECTS_ABADIA) ICriticalSection.o TimingHandler.o cpc6128.o IPalette.o SDLPalette.o  VigasocoLibSDL.o abadiaROM.o
 
-TARGETS=libtest LibAbadIA.so
+TARGETS=libtest libAbadIA.so
 
-LibAbadIA.so: $(OBJECTS)
+libAbadIA.so: $(OBJECTS)
 #	$(CXX) -shared -Wl,-soname,LibAbadIA.so -o $@  $^ `sdl-config --libs`
-	$(CXX) -shared -Wl,-soname,LibAbadIA.so -o $@  $^ 
+	$(CXX) -shared -Wl,-soname,libAbadIA.so -o $@  $^ 
 
 libtest: $(OBJECTS) libtest.o
 #	$(CXX) $^ `sdl-config --libs` -o $@

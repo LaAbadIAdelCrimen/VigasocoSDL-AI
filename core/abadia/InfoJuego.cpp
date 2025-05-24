@@ -61,7 +61,7 @@ InfoJuego::InfoJuego()
 InfoJuego::~InfoJuego()
 {
 	for (int i = 0; i < 3; i++){
-		delete [] alturasPlanta[i];
+		delete [] alturasPlanta[i]; // TODO revisar si falta delete del alturasPlanta, valgrind se queja
 	}
 }
 
@@ -465,6 +465,7 @@ void InfoJuego::generaAlturasPlanta()
 			}
 		}
 	}
+	delete rejilla; // valgrind
 }
 
 // dibuja el mapa completo de la planta en una posición determinada

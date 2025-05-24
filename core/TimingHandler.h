@@ -24,9 +24,9 @@ public:
 // types
 protected:
 	struct Perfomance {
-		INT64 lastFpsTime;
-		int framesSinceLastFPS;
-		double currentFPS;
+		INT64 lastFpsTime=0; // valgrind
+		int framesSinceLastFPS=0; // valgrind
+		double currentFPS=0; // valgrind
 	};
 
 // fields
@@ -55,7 +55,7 @@ protected:
 
 	int _frameSkipCnt;					// current frameskip count
 	int _videoFrameSkip;				// number of video frames to skip
-	bool _lastVideoFrameSkipped;		// true if we skipped the last video frame
+	bool _lastVideoFrameSkipped=false;		// true if we skipped the last video frame // valgrind
 
 	int _numIntsModLogicInts;
 	int _numIntsModVideoInts;

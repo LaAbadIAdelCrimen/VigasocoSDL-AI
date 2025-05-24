@@ -78,7 +78,11 @@ public:
 	Controles *controles;					// acceso a los controles del juego
 	Paleta *paleta;							// paleta del juego
 	TimingHandler *timer;					// manejador del temporizador
-	UINT8 buffer[8192];						// buffer para mezclar los sprites y para buscar las rutas
+#ifdef __abadIA__
+	UINT8 buffer[8192*2];						// buffer para mezclar los sprites y para buscar las rutas
+#else
+	UINT8 buffer[8192*2];						// buffer para mezclar los sprites y para buscar las rutas
+#endif
 	UINT8 *roms;							// puntero a las roms originales
 
 	Logica *logica;							// objeto que se encarga de gestionar la lógica del juego
@@ -94,8 +98,8 @@ public:
 	volatile int contadorInterrupcion;		// contador incrementado en la interrupción para sincronizar el juego
 
 	bool pausa;								// indica si el juego está pausado
-	bool modoInformacion;					// modo de información del juego
-	bool cambioModoInformacion; // se ha cambiado el estado
+	bool modoInformacion=false;					// modo de información del juego// valgrind 
+	bool cambioModoInformacion=false; // se ha cambiado el estado // valgrind 
 #ifndef __libabadIA__
 	InfoJuego *infoJuego;					// objeto para mostrar información interna del juego
 #endif

@@ -82,7 +82,7 @@ Controles = c_int * 70
 class AbadIA(object):
 	def __init__(self):
 		print("AbadIA CONSTRUCTOR")
-		self.lib = cdll.LoadLibrary('./LibAbadIA.so')
+		self.lib = cdll.LoadLibrary('./libAbadIA.so')
 		self.lib.LibAbadIA_init()
 		self.lib.LibAbadIA_step.restype = c_char_p
 #falta revisar tipo de controles

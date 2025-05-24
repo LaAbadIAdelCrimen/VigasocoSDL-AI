@@ -89,8 +89,8 @@ public:
 
 	bool espejoCerrado;			// indica si el espejo está cerrado o se ha abierto
 	int numeroRomano;			// indica el número romano de la habitación del espejo (en el caso de que se haya generado)
-	int despDatosAlturaEspejo;	// desplazamiento hasta el final de los datos de altura de la habitación del espejo
-	int despBloqueEspejo;		// desplazamiento hasta los datos del bloque que forma el espejo
+	int despDatosAlturaEspejo=0;	// desplazamiento hasta el final de los datos de altura de la habitación del espejo// valgrind
+	int despBloqueEspejo=0;		// desplazamiento hasta los datos del bloque que forma el espejo // valgrind 
 
 	bool seAcabaLaNoche;		// indica si falta poco para que se termine la noche
 	bool haAmanecido;			// indica si ya ha amanecido
@@ -103,7 +103,7 @@ public:
 	int cntLeeLibroSinGuantes;	// contador para llevar un control del tiempo que lee guillermo el libro sin los guantes
 	bool pergaminoGuardado;		// indica que el pergamino lo tiene el abad en su habitación o está detrás de la habitación del espejo
 
-	int numeroAleatorio;		// número aleatorio
+	int numeroAleatorio=-1;		// número aleatorio // inicializo por valgrind y por si alguien da a save antes de ejecutar un step
 
 	bool hayMovimiento;			// cuando hay algún movimiento de un personaje, esto se pone a true
 	int cntMovimiento;			// contador que se pone a 0 con cada movimiento de guillermo (usado para cambios de cámara)
