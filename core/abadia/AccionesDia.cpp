@@ -200,7 +200,6 @@ void AccionesNona::ejecuta(AccionesDia *ad)
 	}
 	
 	VigasocoMain->getAudioPlugin()->Play(SONIDOS::Tintineo);
-//fprintf(stderr," AccionesNona::ejecuta \n");
 }
 
 void AccionesVisperas::ejecuta(AccionesDia *ad)

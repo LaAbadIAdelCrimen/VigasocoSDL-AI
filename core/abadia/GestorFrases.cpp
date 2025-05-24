@@ -512,7 +512,6 @@ using namespace Abadia;
 
 GestorFrases::GestorFrases()
 {
-fprintf(stderr,"constructor GestorFrases\n");
 	cpc6128 = elJuego->cpc6128;
 	contadorActualizacion = 0;
 	reproduciendoFrase = mostrandoFrase = false;
@@ -521,7 +520,6 @@ fprintf(stderr,"constructor GestorFrases\n");
 
 GestorFrases::~GestorFrases()
 {
-fprintf(stderr,"destructor GestorFrases\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////

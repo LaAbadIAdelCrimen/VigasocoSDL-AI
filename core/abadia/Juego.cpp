@@ -114,7 +114,6 @@ const char *Juego::savefile[7] = {
 
 Juego::Juego(UINT8 *romData, CPC6128 *cpc)
 {
-fprintf(stderr,"constructor Juego\n");
 	idioma=0; // 0 español
 	mute=false; 
 	slot=0;
@@ -181,7 +180,6 @@ for (int i=0;i<(0x24000+(174065+21600)*3);i++) {
 
 Juego::~Juego()
 {
-fprintf(stderr,"destructor Juego\n");
 	// borra los sprites del juego
 	for (int i = 0; i < numSprites; i++){
 		delete sprites[i];
@@ -1764,14 +1762,10 @@ bool Juego::menu()
 #ifdef __libabadIA__
 void Juego::init()
 {
-fprintf(stderr,"Juego::init 0\n");
 	// obtiene los recursos para el juego
 	timer = VigasocoMain->getTimingHandler();
-fprintf(stderr,"Juego::init 1\n");
 	controles->init(VigasocoMain->getInputHandler());
-fprintf(stderr,"Juego::init 2\n");
 	audio_plugin = VigasocoMain->getAudioPlugin();
-fprintf(stderr,"Juego::init 3\n");
 	// obtiene las direcciones de los datos relativos a la habitación del espejo
 //TODO; intento llevarme esto al principio
 //porque ahora en creaEntidadesJuego llamo a logica->inicia
@@ -1780,15 +1774,12 @@ fprintf(stderr,"Juego::init 3\n");
 
 	// crea las entidades del juego (sprites, personajes, puertas y objetos)
 	creaEntidadesJuego(); // esto ya llama a logica->inicia en la ver abadia,no en el original
-fprintf(stderr,"Juego::init 4\n");
 
 	// genera los gráficos flipeados en x de las entidades que lo necesiten
 	generaGraficosFlipeados();
-fprintf(stderr,"Juego::init 5\n");
 
 	// inicialmente la cámara sigue a guillermo
 	motor->personaje = personajes[0];
-fprintf(stderr,"Juego::init 6\n");
 
 #ifndef __libabadIA__
 // TODO: soportar esto en algún momento para libabadIA
@@ -1798,27 +1789,17 @@ fprintf(stderr,"Juego::init 6\n");
 
 	// obtiene las direcciones de los datos relativos a la habitación del espejo
 //	logica->despHabitacionEspejo();
-fprintf(stderr,"Juego::init 7\n");
 
 	//TODO: contemplar cambiar el idioma en init
 
-// TODO: ¿necesitamos marcador? ¿o solo si generamos imagen?
-// porque se podría generar fuera
+	// TODO: ¿necesitamos marcador? ¿o solo si generamos imagen?
+	// porque se podría generar fuera
 	// limpia el área que ocupa el marcador
 	marcador->limpiaAreaMarcador();
-fprintf(stderr,"Juego::init 8\n");
 
-	//TODO: revisar
-//	logica->inicia();
-//	ReiniciaPantalla(); // para forzar que se establezca numPantalla		
 }
 
-//666 #ifdef __libabadIA__
-//int Juego::step2(int controles[END_OF_INPUTS]) {
-//int Juego::step2(void) {
 
-int kk_tmp;
-//int Juego::step(int *source) {
 std::string Juego::step(int *source) {
 
 /* no se por que puse esto porque falla behave en el test de morir al coger el libro
@@ -1842,14 +1823,8 @@ std::string Juego::step(int *source) {
 
 
 
-//fprintf(stderr,"%d Juego::step UP %d RESET %d LEFT %d\n",kk_tmp,source[P1_UP],source[KEYBOARD_E],source[P1_LEFT]);
 	controles->libabadIAInput(source);
-//	return step();
-int tmp=step();
-//fprintf(stderr,"%d FIN Juego::step UP %d RESET %d LEFT %d\n",kk_tmp,source[P1_UP],source[KEYBOARD_E],source[P1_LEFT]);
-//if (kk_tmp<5) save(kk_tmp); // grabar los 5 primeros pasos para depurar
-//kk_tmp++;
-//return tmp;
+	int tmp=step();
 	if (tmp==2) {
 		// ñapa DUMP
 		std::string tmp=dump();	
@@ -1871,20 +1846,6 @@ int tmp=step();
 // TODO , ¿step o mainLoop?
 int Juego::step(void)
 {
-//666	controles->actualizaEstado();
-
-	// TODO, no cargar de fichero, y recibir la partida
-	// cargar(0);
-	// TODO, no grabar a fichero, y devolver la partida
-	//save(0);
-	// no tiene sentido cargar y grabar en el step
-	// vale solo para el escenario serverless
-	// pero para un uso como lib embebida, el juego 
-	// sigue en memoria en cada paso
-
-//		while (true){	// el bucle principal del juego empieza aquí
-//fprintf(stderr,"run6\n");
-//fprintf(stderr,"step inicio x %d y %d UP %d RESET %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP),controles->seHaPulsado(KEYBOARD_E));
 #ifdef __abadIA__
 /*
 			if (chivato_partida_perfecta && laLogica->obsequium!=31) {
@@ -1895,11 +1856,8 @@ int Juego::step(void)
 //__gcov_flush();
 			VigasocoMain->getInputHandler()->acquire();
 #endif
-//fprintf(stderr,"run7\n");
 
 			controles->actualizaEstado();
-//fprintf(stderr,"DESPUES ACTUALIZA ESTADO step inicio x %d y %d UP %d RESET %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP),controles->seHaPulsado(KEYBOARD_E));
-//fprintf(stderr,"run8\n");
 
 #ifdef __abadIA_HEADLESS__
 //TODO:headless o en abadIA también???
@@ -1908,7 +1866,6 @@ int Juego::step(void)
 				return -1;
 			}
 #endif
-//fprintf(stderr,"run9\n");
 
 #ifdef __abadIA__
                         if (controles->seHaPulsado(SERVICE_1)){
@@ -1917,7 +1874,6 @@ int Juego::step(void)
                                 _numInterruptsPerLogicUpdate=_numInterruptsPerLogicUpdate/2;
                                 //TODO: ¿se puede quedar a cero y ya no se podría recuperar la velocidad con SLOWDOWN?
                                 VigasocoMain->getInputHandler()->unAcquire();
-//                                continue;
 				return 0;
                         }
 
@@ -1926,17 +1882,12 @@ int Juego::step(void)
                                 // a cámara lenta
                                 _numInterruptsPerLogicUpdate=_numInterruptsPerLogicUpdate*2;
                                 VigasocoMain->getInputHandler()->unAcquire();
-                        //        continue;
 				return 0;
                         }
-//fprintf(stderr,"guillermo visible %d\n",elJuego->personajes[0]->sprite->esVisible);
 
 		        if (controles->seHaPulsado(KEYBOARD_D)){  // D de DUMP
 #ifndef __libabadIA__
 				infoJuego->muestraInfo();
-//#else
-//fprintf(stderr,"DUMP %s\n",dump().c_str());
-//#endif
 				// si ha pedido volcado el agente, borramos la lista de frases
 				// para que la siguiente vez tenga solo las frases desde la ultima
 				// vez que nos pidio un dump
@@ -1963,23 +1914,19 @@ int Juego::step(void)
 //				continue;
 				return 0;
 #else
-return 2;
+				return 2;
 #endif
 			}
 			if (compruebaReinicio()) {
 				VigasocoMain->getInputHandler()->unAcquire();
 //				goto despues_de_cargar_o_iniciar;
-//#ifndef __libabadIA__
 				return 1;
-//#endif
 			}
 #else
 			if (compruebaReinicio()) 
 //				goto despues_de_cargar_o_iniciar;
 				return 1;
 #endif
-//fprintf(stderr,"despues reinicio guillermo visible %d\n",elJuego->personajes[0]->sprite->esVisible);
-//fprintf(stderr,"despues reinicio camara guillermo %d\n",motor->personaje==elJuego->personajes[0]);
 
 			// obtiene el contador de la animación de guillermo para saber si se generan caminos en esta iteración
 			elBuscadorDeRutas->contadorAnimGuillermo = laLogica->guillermo->contadorAnimacion;
@@ -2007,7 +1954,6 @@ return 2;
 
 				VigasocoMain->getInputHandler()->unAcquire();
 #endif
-//				goto despues_de_cargar_o_iniciar;
 				return 1;
 			}
 
@@ -2134,33 +2080,23 @@ return 2;
 #endif
 			// reinicia el contador de la interrupción
 			contadorInterrupcion = 0;
-//		}
-//fprintf(stderr,"step FIN x %d y %d UP %d RESET %d\n", personajes[0]->posX, personajes[0]->posY,controles->seHaPulsado(P1_UP),controles->seHaPulsado(KEYBOARD_E));
 
 	return 0;
 }
-// 666 #endif
-/*
-void Juego::mainLoop()
-{
-}
-*/
+
 void Juego::run()
 {
 	// obtiene los recursos para el juego
 	timer = VigasocoMain->getTimingHandler();
 	controles->init(VigasocoMain->getInputHandler());
 	audio_plugin = VigasocoMain->getAudioPlugin();
-//fprintf(stderr,"run\n");
 
 	// muestra la imagen de presentación
 #ifndef __abadIA__
 	muestraPresentacion();
 #endif
-//fprintf(stderr,"run1\n");
 	// para borrar la presentacion antes del menu
 	marcador->limpiaAreaMarcador();
-//fprintf(stderr,"run2\n");
 
 	// llevo menu y pergamino mas atras para
 	// que el menu se encuentre ya objetos inicializados
@@ -2178,17 +2114,12 @@ void Juego::run()
 
 	// crea las entidades del juego (sprites, personajes, puertas y objetos)
 	creaEntidadesJuego();
-//printf(stderr,"run3\n");
-
 
 	// genera los gráficos flipeados en x de las entidades que lo necesiten
 	generaGraficosFlipeados();
-//fprintf(stderr,"run4\n");
-
 
 	// inicialmente la cámara sigue a guillermo
 	motor->personaje = personajes[0];
-//fprintf(stderr,"run5\n");
 
 #ifndef __libabadIA__
 	// inicia el objeto que muestra información interna del juego
@@ -2459,21 +2390,18 @@ void Juego::reinicio()
 	for (int index=0;index<12;index++)
 		VigasocoMain->getAudioPlugin()->setProperty("sonidos",index,false);
 #endif
-//	logica->inicia();
+	//	logica->inicia();
 	// no es suficiente con reiniciar la lógica
 	creaEntidadesJuego();
-//fprintf(stderr,"reinicio motor->personaje es Guillermo %d\n",motor->personaje==personajes[0]);
-ReiniciaPantalla(); //666
+	ReiniciaPantalla(); //666
 }
 
 // comprueba si se solicita reiniciar la partida
 // con una pulsacion de tecla (no desde el menu)
 bool Juego::compruebaReinicio()
 {
-//fprintf(stderr,"comprueba reinicio\n");
         // si se ha pulsado suprimir, se para hasta que se vuelva a pulsar
         if (controles->seHaPulsado(KEYBOARD_E)){  // ?E de rEset
-//fprintf(stderr,"pedido reinicio\n");
                 reinicio();
                 return true;
         }
@@ -2546,32 +2474,22 @@ void Juego::compruebaCambioCPC_VGA()
 }
 
 bool Juego::cargar(std::string input) {
-/*
-int controles[END_OF_INPUTS];
-controles[KEYBOARD_C]=1;
-controles[KEYBOARD_S]=1;
-step(controles);
-		ReiniciaPantalla();
-return true; */
-/* 666 */
-				// borramos las frases que pudieran quedar de la partida anterior
-				while (!elJuego->frases.empty()) {
-					elJuego->frases.pop();
-				}
-				// borramos los sonidos que pudieran quedar de la partida anterior
-				for (int index=0;index<12;index++)
-					VigasocoMain->getAudioPlugin()->setProperty("sonidos",index,false);
-				for (int index=0;index<12;index++)
-					fprintf(stderr,"limpiando en cargar sonido %d %d\n",index,VigasocoMain->getAudioPlugin()->getProperty("sonidos", index));
+	// borramos las frases que pudieran quedar de la partida anterior
+	while (!elJuego->frases.empty()) {
+		elJuego->frases.pop();
+	}
+	// borramos los sonidos que pudieran quedar de la partida anterior
+	for (int index=0;index<12;index++)
+		VigasocoMain->getAudioPlugin()->setProperty("sonidos",index,false);
+	//for (int index=0;index<12;index++)
+	//	fprintf(stderr,"limpiando en cargar sonido %d %d\n",index,VigasocoMain->getAudioPlugin()->getProperty("sonidos", index));
 
-logica->inicia();
+	logica->inicia();
 
 	std::istringstream in(input);
 	in >> logica;
-fprintf(stderr,"cargar in.fail() %d\n",in.fail());
 
-		ReiniciaPantalla();
-fprintf(stderr,"tras cargar la pantalla es %d\n",motor->numPantalla);
+	ReiniciaPantalla();
 	// todo , falta llamar a inicia si se hay fail
 	//return in.fail();
 	// Misterio, la lib ha estado funcionando bien asi y ahora resulta que la logica estaba al reves 
@@ -2582,8 +2500,8 @@ fprintf(stderr,"tras cargar la pantalla es %d\n",motor->numPantalla);
 bool Juego::cargar(int slot)
 {
 #ifdef __abadIA__
-//igual esto se debe aplicar en todo caso
-logica->inicia();
+	//igual esto se debe aplicar en todo caso
+	logica->inicia();
 #endif
 	std::ifstream in(savefile[slot]);
 	in >> logica;
@@ -2622,7 +2540,6 @@ std::string Juego::save(void) {
 
 	// TODO
 	if ( out.fail() ) {
-		fprintf(stderr,"Juego::save fail\n");
 		return "ERROR";
 	} else return out.str();
 }
@@ -2964,23 +2881,19 @@ bool Juego::muestraPantallaFinInvestigacion()
 void Juego::creaEntidadesJuego()
 {
 	// sprites de los personajes
-fprintf(stderr,"Juego::creaEntidadesJuego 1\n");
 	// sprite de guillermo
 	if (sprites[0]) delete sprites[0];
 	sprites[0] = new Sprite();
-fprintf(stderr,"Juego::creaEntidadesJuego 2\n");
 
 	// sprite de adso
 	if (sprites[1]) delete sprites[1];
 	sprites[1] = new Sprite();
-fprintf(stderr,"Juego::creaEntidadesJuego 3\n");
 
 	// sprite de los monjes
 	for (int i = 2; i < 8; i++){
 		if (sprites[i]) delete sprites[i];
 		sprites[i] = new SpriteMonje();
 	}
-fprintf(stderr,"Juego::creaEntidadesJuego 4\n");
 
 	// sprite de las puertas
 	for (int i = primerSpritePuertas; i < primerSpritePuertas + numPuertas; i++){
@@ -2989,7 +2902,6 @@ fprintf(stderr,"Juego::creaEntidadesJuego 4\n");
 		sprites[i]->ancho = sprites[i]->oldAncho = 0x06;
 		sprites[i]->alto = sprites[i]->oldAlto = 0x28;
 	}
-fprintf(stderr,"Juego::creaEntidadesJuego 5\n");
 
 	// CPC int despObjetos[8] = { 0x88f0, 0x9fb0, 0x9f80, 0xa010, 0x9fe0, 0x9fe0, 0x9fe0, 0x88c0 };
 	// VGA
@@ -3018,7 +2930,6 @@ fprintf(stderr,"Juego::creaEntidadesJuego 5\n");
 	};// TODO: los desplazamientos estan bien, lo que no se si se corresponde
 	// del todo es el indice, o sea, que el objeto 7 en el juego es la lampara
 	// y el 3 el pergamino... 
-fprintf(stderr,"Juego::creaEntidadesJuego 6\n");
 
 	// sprite de los objetos
 	for (int i = primerSpriteObjetos; i < primerSpriteObjetos + numObjetos; i++){
@@ -3041,25 +2952,21 @@ fprintf(stderr,"Juego::creaEntidadesJuego 6\n");
 		sprites[i]->despGfx = despObjetos[i - primerSpriteObjetos];
 
 	}
-fprintf(stderr,"Juego::creaEntidadesJuego 7\n");
 
 	// sprite de los reflejos en el espejo
 	if (sprites[spritesReflejos]) delete sprites[spritesReflejos];
 	sprites[spritesReflejos] = new Sprite();
 	if (sprites[spritesReflejos+1]) delete sprites[spritesReflejos+1];
 	sprites[spritesReflejos + 1] = new Sprite();
-fprintf(stderr,"Juego::creaEntidadesJuego 8\n");
 
 	// sprite de la luz
 	if (sprites[spriteLuz]) delete sprites[spriteLuz];
 	sprites[spriteLuz] = new SpriteLuz();
-fprintf(stderr,"Juego::creaEntidadesJuego 9\n");
 
 	// crea los personajes del juego
 	for (int i = 0; i < 8; i++){
 		if (personajes[i]) delete personajes[i];
 	}
-fprintf(stderr,"Juego::creaEntidadesJuego 10\n");
 	personajes[0] = new Guillermo(sprites[0]);
 	personajes[1] = new Adso(sprites[1]);
 	personajes[2] = new Malaquias((SpriteMonje *)sprites[2]);
@@ -3068,7 +2975,6 @@ fprintf(stderr,"Juego::creaEntidadesJuego 10\n");
 	personajes[5] = new Severino((SpriteMonje *)sprites[5]);
 	personajes[6] = new Jorge((SpriteMonje *)sprites[6]);
 	personajes[7] = new Bernardo((SpriteMonje *)sprites[7]);
-fprintf(stderr,"Juego::creaEntidadesJuego 11\n");
 
 	// inicia los valores comunes
 	for (int i = 0; i < 8; i++){
@@ -3077,23 +2983,19 @@ fprintf(stderr,"Juego::creaEntidadesJuego 11\n");
 	}
 	personajes[1]->despY = -32;
 	
-fprintf(stderr,"Juego::creaEntidadesJuego 12\n");
 	// crea las puertas del juego
 	for (int i = 0; i < numPuertas; i++){
 		if(puertas[i]) delete puertas[i];
 		puertas[i] = new Puerta(sprites[primerSpritePuertas + i]);
 	}
 
-fprintf(stderr,"Juego::creaEntidadesJuego 14\n");
 	// crea los objetos del juego
 	for (int i = 0; i < numObjetos; i++){
 		if(objetos[i]) delete objetos[i];
 		objetos[i] = new Objeto(sprites[primerSpriteObjetos + i]);
 	}
-fprintf(stderr,"Juego::creaEntidadesJuego 15\n");
 
 	logica->inicia();
-fprintf(stderr,"Juego::creaEntidadesJuego 16\n");
 }
 
 #ifdef __libabadIA__
@@ -3101,9 +3003,6 @@ fprintf(stderr,"Juego::creaEntidadesJuego 16\n");
 // con toda la parafernalia de gráficos que tiene
 // si solo queremos un save que vuelca en JSON
 std::string Juego::dump(void) {
-//                std::ofstream out("abadIA.dump",
-//                                std::ofstream::out|std::ofstream::trunc);
-//              out << "test\n";
                 nlohmann::json dump;
                 dump["dia"]=laLogica->dia;
                 dump["momentoDia"]= laLogica->momentoDia;
@@ -3132,16 +3031,16 @@ std::string Juego::dump(void) {
                 }
                 dump["sonidos"]=Sonidos;
                 // reiniciamos para volver a guardar solo los sonidos entre dump y dump
-// NO, ahora
-// se vacia en el bucle principal de juego,no aqui  
-// se vacia solo cuando el agente ha pedido un dump 
-//                for (int index=0;index<12;index++)
-//                        VigasocoMain->getAudioPlugin()->setProperty("sonidos",index,false);
+		// NO, ahora
+		// se vacia en el bucle principal de juego,no aqui  
+		// se vacia solo cuando el agente ha pedido un dump 
+		//  for (int index=0;index<12;index++)
+		//          VigasocoMain->getAudioPlugin()->setProperty("sonidos",index,false);
 
                 // Frases
                 nlohmann::json Frases = nlohmann::json::array();
-// se vacia en el bucle principal de juego,no aqui  
-// se vacia solo cuando el agente ha pedido un dump 
+		// se vacia en el bucle principal de juego,no aqui  
+		// se vacia solo cuando el agente ha pedido un dump 
 /*
                 while (!elJuego->frases.empty()) {
                         nlohmann::json frase = elJuego->frases.top();

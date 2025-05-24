@@ -30,7 +30,6 @@ public:
 	// constructor
 	Singleton()
 	{
-fprintf(stderr,"constructor Singleton %p deberia ser cero\n",g_singleton);
 		assert(!g_singleton);
 
 		// get the correct pointer in case of multiple inheritance

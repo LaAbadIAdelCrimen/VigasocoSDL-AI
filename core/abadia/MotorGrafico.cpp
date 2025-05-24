@@ -109,7 +109,6 @@ UINT8 MotorGrafico::plantas[3][256] = {
 
 MotorGrafico::MotorGrafico(UINT8 *buffer, int lgtudBuffer)
 {
-fprintf(stderr,"constructor MotorGrafico\n");
 	roms = elJuego->roms;
 
 	posXPantalla = posYPantalla = 0;
@@ -132,7 +131,6 @@ fprintf(stderr,"constructor MotorGrafico\n");
 
 MotorGrafico::~MotorGrafico()
 {
-fprintf(stderr,"destructor MotorGrafico\n");
 	// borra las transformaciones depentdientes de la cámara
 	for (int i = 0; i < 4; i++){
 		delete transCamara[i];
@@ -286,7 +284,6 @@ void MotorGrafico::actualizaPersonajes()
 		if (actualizaCoordCamara(pers, posXPant, posYPant, sprPosY) != -1){
 			pers->notificaVisibleEnPantalla(posXPant, posYPant, sprPosY);
 		} else {
-//fprintf(stderr," MotorGrafico::actualizaPersonajes %d no es visible\n",i);
 			pers->sprite->esVisible = false;
 		}
 

@@ -29,13 +29,11 @@ private:
 public:
 	virtual void Play(int sample, bool loop=false) { 
 		// TODO: falta assert para comprobar rango
-//fprintf(stderr,"IAudioPlugin::Play %d\n",sample);
 		sonidos[sample]=true;
 	};
 	virtual void Stop(int sample) {};
         virtual void setProperty(std::string prop, int data) {};
         virtual void setProperty(std::string prop, int index, int data) {
-//fprintf(stderr,"IAudioPlugin setproperty %s index %d data %d\n",prop.c_str(),index,data);
 		if (prop == "sonidos"){
                 	//if ((index >= 0) && (index < SONIDOS::END_OF_SOUNDS)){
 	                if ((index >= 0) && (index < 12)){ // TODO: no usar constante 12
@@ -61,13 +59,12 @@ private:
 	int _controles[END_OF_INPUTS];
 // methods
 public:
-//	void copyInputsState(int *dest) { memcpy(dest,_controles,sizeof(int)*END_OF_INPUTS); dest[KEYBOARD_E]=1; };  // fprintf(stderr,"InputHandler::copyInputsState fake UP\n");};
-	void copyInputsState(int *dest) { memcpy(dest,_controles,sizeof(int)*END_OF_INPUTS); };  // fprintf(stderr,"InputHandler::copyInputsState fake UP\n");};
+	void copyInputsState(int *dest) { memcpy(dest,_controles,sizeof(int)*END_OF_INPUTS); };  
 	// getters
 	void acquire() {};
         void unAcquire() {};
 
-	void process(int controles[END_OF_INPUTS]) { memcpy(_controles,controles,sizeof(int)*END_OF_INPUTS); }; // fprintf(stderr,"InputHandler::process fake UP\n"); };
+	void process(int controles[END_OF_INPUTS]) { memcpy(_controles,controles,sizeof(int)*END_OF_INPUTS); }; 
 };
 
 class TimingHandler {
@@ -81,7 +78,6 @@ public:
 		gettimeofday(&tmp, NULL);
 		return tmp.tv_sec*1000+tmp.tv_usec/1000;
 	}
-	//void sleep(UINT32 milliSeconds) { fprintf(stderr,"TimingHandler::sleep %d\n",milliSeconds); };
 	void sleep(UINT32 milliSeconds) { };
 	
 };

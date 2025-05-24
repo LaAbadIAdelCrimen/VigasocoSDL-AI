@@ -40,14 +40,12 @@ int Marcador::duracionEtapasDia[7][7] = {
 
 Marcador::Marcador()
 {
-fprintf(stderr,"constructor marcador\n");
 	cpc6128 = elJuego->cpc6128;
 	roms = elJuego->roms;
 }
 
 Marcador::~Marcador()
 {
-fprintf(stderr,"destructor marcador\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -210,7 +208,6 @@ void Marcador::realizaScrollMomentoDia()
 				cpc6128->setVGAPixel(44 + i - 8, 180 + j, cpc6128->getMode1Pixel(44 + i, 180 + j));
 			}
 		}
-//fprintf(stderr,"Marcador::realizaScrollMomentoDia %c [%d] y el rarito es - [%d]\n",caracter,(int)caracter,(int)'-');		
 		// imprime el caracter que toca
 		// CPC imprimirCaracter(caracter, 84, 180, 3, 2);
 		imprimirCaracter(caracter, 84, 180, 0, 4); // VGA
