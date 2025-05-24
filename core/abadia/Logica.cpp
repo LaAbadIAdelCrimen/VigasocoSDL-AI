@@ -2,7 +2,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifdef  __libabadIA__
+#ifdef  __libabadIA__ 
 #include "../../VigasocoSDL/VigasocoLibSDL.h"
 #else
 #include "../TimingHandler.h"
@@ -50,7 +50,7 @@ using namespace Abadia;
 
 Logica::Logica(UINT8 *romData, UINT8 *buf, int lgtud)
 {
-// fprintf(stderr,"constructor Logica\n");
+fprintf(stderr,"constructor Logica\n");
 	// crea los objetos usados por la lógica
 	accionesDia = new AccionesDia();
 	buscRutas = new BuscadorRutas(buf, lgtud);
@@ -74,20 +74,20 @@ fprintf(stderr,"destructor Logica\n");
 // inicia la lógica
 void Logica::inicia()
 {
-// fprintf(stderr,"Logica::inicia 0\n");
+fprintf(stderr,"Logica::inicia 0\n");
 	// inicia las entidades del juego
 	iniciaSprites();
-// fprintf(stderr,"Logica::inicia 1\n");
+fprintf(stderr,"Logica::inicia 1\n");
 	iniciaPersonajes();
-// fprintf(stderr,"Logica::inicia 2\n");
+fprintf(stderr,"Logica::inicia 2\n");
 	iniciaPuertas();
-//fprintf(stderr,"Logica::inicia 3\n");
+fprintf(stderr,"Logica::inicia 3\n");
 	iniciaObjetos();
-// fprintf(stderr,"Logica::inicia 4\n");
+fprintf(stderr,"Logica::inicia 4\n");
 
 	// inicia la lógica relacionada con la habitación del espejo
 	iniciaHabitacionEspejo();
-// fprintf(stderr,"Logica::inicia 5\n");
+fprintf(stderr,"Logica::inicia 5\n");
 
 	// inicia las variables de la lógica del juego
 	dia = 1;
@@ -122,7 +122,7 @@ void Logica::inicia()
 	elMotorGrafico->personaje = guillermo;
 
 	buscRutas->generadoCamino = false;
-// fprintf(stderr,"Logica::inicia 100\n");
+fprintf(stderr,"Logica::inicia 100\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -145,7 +145,7 @@ void Logica::compruebaLecturaLibro()
 		// modifica el estado de fray guillermo para que suba al morir
 		guillermo->estado = guillermo->sprite->posYPant/2;
 		guillermo->incrPosY = -2;
-
+		
 		haFracasado = true;
 
 		// escribe en el marcador la frase: ESTAIS MUERTO, FRAY GUILLERMO, HABEIS CAIDO EN LA TRAMPA
@@ -160,47 +160,47 @@ void Logica::compruebaLecturaLibro()
 void Logica::actualizaBonusYCamara()
 {
 	// Este comportamiento difiere al original
-	// es una ayuda-trampa-cheat
+	// es una ayuda-trampa-cheat 
 	// ¡¡¡ojo!!! estas teclas (1-7) se usan tambien para infuego.cpp
 	// aunque algunas no funcionan en SDL por carencias del SDLVideoPlugin
 	// pero 5 y 6 si coinciden: ¡¡¡ CAMBIAR EN INFOJUEGO !!!
-	if (losControles->estaSiendoPulsado(KEYBOARD_1))
+	if (losControles->estaSiendoPulsado(KEYBOARD_1)) 
 	{
 		opcionPersonajeCamara=3; // abad
 		return;
 	}
-	else
-	if (losControles->estaSiendoPulsado(KEYBOARD_2))
+	else 
+	if (losControles->estaSiendoPulsado(KEYBOARD_2)) 
 	{
 		opcionPersonajeCamara=5; // severino
 		return;
 	}
-	else
-	if (losControles->estaSiendoPulsado(KEYBOARD_3))
+	else	
+	if (losControles->estaSiendoPulsado(KEYBOARD_3)) 
 	{
 		opcionPersonajeCamara=2; // malaquias
 		return;
 	}
-	else
-	if (losControles->estaSiendoPulsado(KEYBOARD_4))
+	else	
+	if (losControles->estaSiendoPulsado(KEYBOARD_4)) 
 	{
 		opcionPersonajeCamara=4; // berengario
 		return;
 	}
-	else
-	if (losControles->estaSiendoPulsado(KEYBOARD_5))
+	else	
+	if (losControles->estaSiendoPulsado(KEYBOARD_5)) 
 	{
 		opcionPersonajeCamara=6; // jorge
 		return;
 	}
-	else
-	if (losControles->estaSiendoPulsado(KEYBOARD_6))
+	else	
+	if (losControles->estaSiendoPulsado(KEYBOARD_6)) 
 	{
 		opcionPersonajeCamara=7; // bernardo
 		return;
 	}
-	else
-	if (losControles->estaSiendoPulsado(KEYBOARD_7))
+	else	
+	if (losControles->estaSiendoPulsado(KEYBOARD_7)) 
 	{
 		opcionPersonajeCamara=1; // adso
 		return;
@@ -277,7 +277,7 @@ void Logica::actualizaBonusYCamara()
 	if ((momentoDia == NOCHE) && (guillermo->posX < 0x60)){
 		bonus |= 0x0001;
 	}
-
+	
 	// si guillermo está en la biblioteca
 	if (guillermo->altura >= 0x16){
 		// si tiene las gafas
@@ -415,7 +415,7 @@ void Logica::compruebaCogerDejarObjetos()
 	// calcula los objetos que se han cambiado
 	int difObjetos = guillermo->objetos ^ objetosGuillermo;
 
-	// si ha cambiado el estado de las gafas o el pergamino, y si tenemos los 2 objetos, comprueba
+	// si ha cambiado el estado de las gafas o el pergamino, y si tenemos los 2 objetos, comprueba 
 	// si hay que generar el número del espejo y muestra el texto del pergamino
 	if ((difObjetos & (PERGAMINO | GAFAS)) != 0){
 		if ((guillermo->objetos & (PERGAMINO | GAFAS)) == (PERGAMINO | GAFAS)){
@@ -774,7 +774,7 @@ void Logica::compruebaAbreEspejo()
 	// indica que se ha abierto el espejo y hay que la pantalla ha cambiado
 	elMotorGrafico->posXPantalla = elMotorGrafico->posYPantalla = -1;
 	espejoCerrado = false;
-
+	
 	VigasocoMain->getAudioPlugin()->Play(SONIDOS::Espejo);
 }
 
@@ -857,7 +857,7 @@ void Logica::despHabitacionEspejo()
 // fija el estado inicial de la habitación del espejo
 void Logica::iniciaHabitacionEspejo()
 {
-// fprintf(stderr,"Logica::iniciaHabitacionEspejo 0\n");
+fprintf(stderr,"Logica::iniciaHabitacionEspejo 0\n");
 	// inicialmente, el espejo está cerrado y no se ha generado el número romano para el enigma del espejo
 	espejoCerrado = true;
     numeroRomano = 0;
@@ -865,19 +865,19 @@ void Logica::iniciaHabitacionEspejo()
 	int datosAltura[] = { 0xf5, 0x20, 0x62, 0x0b, 0xff };
 
 	// modifica los datos de altura de la habitación del espejo
- 	for (int i = 0; i < 5; i++){
+	for (int i = 0; i < 5; i++){
 		roms[despDatosAlturaEspejo + i] = datosAltura[i];
 	}
-// fprintf(stderr,"Logica::iniciaHabitacionEspejo 1\n");
-// fprintf(stderr,"Logica::iniciaHabitacionEspejo %d\n",despBloqueEspejo);
+fprintf(stderr,"Logica::iniciaHabitacionEspejo 1\n");
+fprintf(stderr,"Logica::iniciaHabitacionEspejo %d\n",despBloqueEspejo);
 
 	// modifica la habitación del espejo para que el espejo aparezca cerrado
 	roms[despBloqueEspejo] = 0x11;
-// fprintf(stderr,"Logica::iniciaHabitacionEspejo 2\n");
+fprintf(stderr,"Logica::iniciaHabitacionEspejo 2\n");
 
 	// modifica la habitación del espejo para que la trampa no esté abierta
 	roms[despBloqueEspejo - 2] = 0x1f;
-// fprintf(stderr,"Logica::iniciaHabitacionEspejo 3\n");
+fprintf(stderr,"Logica::iniciaHabitacionEspejo 3\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -945,8 +945,8 @@ void Logica::iniciaPersonajes()
 	adso->oldEstado = 0;
 	adso->movimientosFrustados = 0;
 	adso->cntParaDormir = 0;
-	adso->objetos=0;
-
+	adso->objetos=0; 
+	
 	// malaquías
 	malaquias->posX = 0x26;
 	malaquias->posY = 0x26;

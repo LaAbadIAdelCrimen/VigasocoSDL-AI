@@ -15,13 +15,13 @@ using namespace Abadia;
 
 Controles::Controles()
 {
-// fprintf(stderr,"constructor Controles\n");
+fprintf(stderr,"constructor Controles\n");
 	ih = 0;
 }
 
 Controles::~Controles()
 {
-// fprintf(stderr,"destructor Controles\n");
+fprintf(stderr,"destructor Controles\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -64,7 +64,7 @@ void Controles::actualizaEstado()
 bool Controles::seHaPulsado(Inputs input)
 {
 //fprintf(stderr,"Controles::seHaPulsado\n");
-//_oldControles[P1_UP]=0x01; // 666
+//_oldControles[P1_UP]=0x01; // 666 
 	// detecta transiciones de 0 a 1
 	return _oldControles[input] == 0x01;
 }

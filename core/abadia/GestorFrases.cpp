@@ -512,7 +512,7 @@ using namespace Abadia;
 
 GestorFrases::GestorFrases()
 {
-// fprintf(stderr,"constructor GestorFrases\n");
+fprintf(stderr,"constructor GestorFrases\n");
 	cpc6128 = elJuego->cpc6128;
 	contadorActualizacion = 0;
 	reproduciendoFrase = mostrandoFrase = false;
@@ -521,7 +521,7 @@ GestorFrases::GestorFrases()
 
 GestorFrases::~GestorFrases()
 {
-// fprintf(stderr,"destructor GestorFrases\n");
+fprintf(stderr,"destructor GestorFrases\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -546,7 +546,7 @@ void GestorFrases::muestraFraseYa(int numFrase)
 	// para la frase actual
 	reproduciendoFrase = mostrandoFrase = false;
 
-	// limpia la parte del marcador donde se muestran las frases
+	// limpia la parte del marcador donde se muestran las frases 
 	elJuego->marcador->limpiaAreaFrases();
 
 	// prepara todo para que se muestre la frase
@@ -566,7 +566,7 @@ void GestorFrases::actualizaEstado()
 // dibujo de la frase
 /////////////////////////////////////////////////////////////////////////////
 
-// inicia el proceso para mostrar una frase por el marcador
+// inicia el proceso para mostrar una frase por el marcador 
 void GestorFrases::dibujaFrase(int numFrase)
 {
 	// inicia la frase
@@ -591,8 +591,8 @@ void GestorFrases::dibujaFrase(int numFrase)
 
 void GestorFrases::procesaFraseActual()
 {
-// TODO: revisar si activando esto para abadIA
-// y lanzando NOPs desde la interfaz web se consigue
+// TODO: revisar si activando esto para abadIA 
+// y lanzando NOPs desde la interfaz web se consigue 
 // mejor simulación. El problema puede estar en
 // situaciones interactivas como cuando se pide guardar
 // y se limpia el marcador de frases
@@ -613,7 +613,7 @@ void GestorFrases::procesaFraseActual()
 	if (!reproduciendoFrase){
 		return;
 	}
-
+	
 	// si no se ha terminado la frase actual, muestra otro caracter en el marcador
 	if (!fraseTerminada){
 #ifdef __abadIA__
@@ -639,7 +639,7 @@ void GestorFrases::procesaFraseActual()
 					char fourthByte = *(frase + 3);
 					codePoint += (fourthByte & 0x3f);
 
-					offset=4;
+					offset=4;	
 				}
 				else
 				{
@@ -649,7 +649,7 @@ void GestorFrases::procesaFraseActual()
 					char thirdByte = *(frase + 2);
 					codePoint +=  (thirdByte & 0x3f);
 
-					offset=3;
+					offset=3;	
 				}
 			}
 			else
@@ -658,7 +658,7 @@ void GestorFrases::procesaFraseActual()
 				char secondByte = *(frase + 1);
 				codePoint +=  (secondByte & 0x3f);
 
-				offset=2;
+				offset=2;	
 			}
 		}
 		else
