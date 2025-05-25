@@ -30,6 +30,8 @@ TARGETS=libtest libAbadIA.so
 libAbadIA.so: $(OBJECTS)
 #	$(CXX) -shared -Wl,-soname,LibAbadIA.so -o $@  $^ `sdl-config --libs`
 	$(CXX) -shared -Wl,-soname,libAbadIA.so -o $@  $^ 
+	ln -s $^ ../extra/mcp-server/mcp/.
+	ln -s $^ ../extra/mcp-server/tests/.
 
 libtest: $(OBJECTS) libtest.o
 #	$(CXX) $^ `sdl-config --libs` -o $@

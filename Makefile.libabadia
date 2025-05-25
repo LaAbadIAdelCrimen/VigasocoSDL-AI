@@ -1,0 +1,6 @@
+all: 
+	cd VigasocoSDL && make -f Makefile.libtest libAbadIA.so libtest
+
+clean:
+	cd VigasocoSDL && make mrproper
+	
