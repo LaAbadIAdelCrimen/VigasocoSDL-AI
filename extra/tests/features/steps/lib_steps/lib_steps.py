@@ -1,6 +1,6 @@
 from behave import *
 import json
-import requests
+#import requests
 # todo, quitar sys
 import sys
 from ctypes import cdll,c_int,c_char_p,c_size_t,create_string_buffer,sizeof,POINTER

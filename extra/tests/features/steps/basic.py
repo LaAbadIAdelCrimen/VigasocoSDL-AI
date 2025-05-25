@@ -13,7 +13,7 @@
 from behave import *
 #from websocket import create_connection
 import json
-import requests
+#import requests
 
 @given('una partida recien iniciada')
 def step_impl(context):
