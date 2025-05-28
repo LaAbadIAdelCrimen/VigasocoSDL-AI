@@ -49,6 +49,7 @@ public:
 				return sonidos[index];
 			}
 		}
+		return -1;
 	};
 };
 
@@ -64,7 +65,17 @@ public:
 	void acquire() {};
         void unAcquire() {};
 
-	void process(int controles[END_OF_INPUTS]) { memcpy(_controles,controles,sizeof(int)*END_OF_INPUTS); }; 
+	void process(int controles[END_OF_INPUTS]) { 
+		memcpy(_controles,controles,sizeof(int)*END_OF_INPUTS); 
+		// equivalencias por si al agente le da por usar las otras
+		// alternativas de las instrucciones originales
+		if (_controles[KEYBOARD_A]) _controles[P1_UP]=1;
+		if (_controles[KEYBOARD_K]) _controles[P1_RIGHT]=1;
+		if (_controles[KEYBOARD_L]) _controles[P1_LEFT]=1;
+		if (_controles[KEYBOARD_Z]) _controles[P1_DOWN]=1;
+		// en realidad Vigasoco emula mal porque el P1_BUTTON1 lo equivale al espacio
+		// pero en realidad debería ser igual a P1_DOWN:
+	}; 
 };
 
 class TimingHandler {

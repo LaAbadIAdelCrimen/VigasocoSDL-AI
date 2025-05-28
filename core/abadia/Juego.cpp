@@ -3003,6 +3003,9 @@ void Juego::creaEntidadesJuego()
 // con toda la parafernalia de gráficos que tiene
 // si solo queremos un save que vuelca en JSON
 std::string Juego::dump(void) {
+std::ofstream kk("/tmp/abadiaFB/screen.data",std::ofstream::binary);
+kk.write(reinterpret_cast<char*>(cpc6128->screenBuffer), sizeof(cpc6128->screenBuffer));
+kk.close();
                 nlohmann::json dump;
                 dump["dia"]=laLogica->dia;
                 dump["momentoDia"]= laLogica->momentoDia;

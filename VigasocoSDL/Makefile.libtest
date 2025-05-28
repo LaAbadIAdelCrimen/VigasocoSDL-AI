@@ -1,6 +1,7 @@
 #CXXFLAGS=-march=native -frecord-gcc-switches -Ofast -fopenmp -std=c++11 -I../core `sdl-config --cflags` 
 #CXXFLAGS=-fPIC -D __libabadIA__ -D__abadIA__ -D__abadIA_FAST__ -D__abadIA_HEADLESS__ -march=x86-64 -mtune=generic -frecord-gcc-switches -Ofast -fopenmp -std=c++11 -I../core `sdl-config --cflags` 
-CXXFLAGS=-fPIC -D __libabadIA__ -D__abadIA__ -D__abadIA_FAST__ -D__abadIA_HEADLESS__ -march=x86-64 -mtune=generic -frecord-gcc-switches -Ofast -fopenmp -std=c++11 -I../core 
+#CXXFLAGS=-fPIC -D __libabadIA__ -D__abadIA__ -D__abadIA_FAST__ -D__abadIA_HEADLESS__ -march=x86-64 -mtune=generic -frecord-gcc-switches -Ofast -fopenmp -std=c++11 -I../core 
+CXXFLAGS=-fPIC -D __libabadIA__ -D__abadIA__ -D__abadIA_HEADLESS__ -march=x86-64 -mtune=generic -frecord-gcc-switches -Ofast -fopenmp -std=c++11 -I../core 
 LDFLAGS=-fPIC -frecord-gcc-switches
 VPATH=.:../core:../core/abadia:../core/util:../core/systems
 
@@ -30,8 +31,15 @@ TARGETS=libtest libAbadIA.so
 libAbadIA.so: $(OBJECTS)
 #	$(CXX) -shared -Wl,-soname,LibAbadIA.so -o $@  $^ `sdl-config --libs`
 	$(CXX) -shared -Wl,-soname,libAbadIA.so -o $@  $^ 
-	ln -s $(CURDIR)/$@ ../extra/mcp-server/mcp/.
-	ln -s $(CURDIR)/$@ ../extra/mcp-server/tests/.
+
+../extra/mcp-server/mcp/libAbadIA.so: libAbadIA.so
+	ln -s $(CURDIR)/libAbadIA.so ../extra/mcp-server/mcp/.
+
+../extra/mcp-server/tests/libAbadIA.so: libAbadIA.so
+	ln -s $(CURDIR)/libAbadIA.so ../extra/mcp-server/tests/.
+
+../extra/tests/features/libAbadIA.so: libAbadIA.so
+	ln -s $(CURDIR)/libAbadIA.so ../extra/tests/features/.
 
 libtest: $(OBJECTS) libtest.o
 #	$(CXX) $^ `sdl-config --libs` -o $@
