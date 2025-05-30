@@ -10,12 +10,12 @@ int main(int argc, char **argv) {
 	int controles[END_OF_INPUTS];
 	memset(controles,0,sizeof(int)*END_OF_INPUTS);
 	controles[KEYBOARD_E]=1;
-	fprintf(stderr,"dump0 %s\n",VigasocoMain->step(controles).c_str());
+//	fprintf(stderr,"dump0 %s\n",VigasocoMain->step(controles).c_str());
 	controles[KEYBOARD_E]=0;
-	fprintf(stderr,"save \n****INICIO SAVE****\n%s\n****FIN SAVE*****\n",VigasocoMain->save().c_str());
+//	fprintf(stderr,"save \n****INICIO SAVE****\n%s\n****FIN SAVE*****\n",VigasocoMain->save().c_str());
 	controles[P1_LEFT]=0;
-	fprintf(stderr,"dump1 %s\n",VigasocoMain->step(controles).c_str());
-	fprintf(stderr,"dump2 %s\n",VigasocoMain->step(controles).c_str());
+//	fprintf(stderr,"dump1 %s\n",VigasocoMain->step(controles).c_str());
+//	fprintf(stderr,"dump2 %s\n",VigasocoMain->step(controles).c_str());
 
 	// PRUEBAS CARGAR
 	std::string partida = 
@@ -457,14 +457,14 @@ R"(
 	for (tmp=0; tmp<300000; tmp++) {
 		int res=VigasocoMain->load(partida);
 		if (res!=1) {
-			fprintf(stderr,"paso %d error load %d\n",tmp,res);
+//			fprintf(stderr,"paso %d error load %d\n",tmp,res);
 			return -1;
 		}
 	}
 
 	for (tmp=0; tmp<300000; tmp++) {
 	controles[P1_UP]=1;
-	fprintf(stderr,"dump3 %s\n",VigasocoMain->step(controles).c_str());
+//	fprintf(stderr,"dump3 %s\n",VigasocoMain->step(controles).c_str());
 }
 	controles[P1_UP]=0;
 

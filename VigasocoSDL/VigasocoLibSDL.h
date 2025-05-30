@@ -22,32 +22,81 @@
 
 class IAudioPlugin {
 private:
-	bool sonidos[12]; 
+	bool sonidos[12]={0,0,0,0,0,0,0,0,0,0,0,0}; 
+	bool sonidoslib[12]={0,0,0,0,0,0,0,0,0,0,0,0}; 
 	// TODO, creo que se puede simplificar los sonidos
 	// ahora que se devuelve dump en cada paso
 // getters
 public:
 	virtual void Play(int sample, bool loop=false) { 
 		// TODO: falta assert para comprobar rango
+	                if ((sample>= 0) && (sample < 12)){ // TODO: no usar constante 12
 		sonidos[sample]=true;
+		sonidoslib[sample]=true;
+			} 
+//			else fprintf(stderr,"Play sample BAD INDEX %d\n",sample);
+//fprintf(stderr,"Play sample %d arrayi %d\n",sample,sonidos[sample]);
 	};
-	virtual void Stop(int sample) {};
+	virtual void Stop(int sample) {
+	                if ((sample >= 0) && (sample < 12)){ // TODO: no usar constante 12
+		sonidoslib[sample]=false;
+			} 
+//			else fprintf(stderr,"STOP sample BAD INDEX %d\n",sample);
+	};
         virtual void setProperty(std::string prop, int data) {};
         virtual void setProperty(std::string prop, int index, int data) {
 		if (prop == "sonidos"){
                 	//if ((index >= 0) && (index < SONIDOS::END_OF_SOUNDS)){
 	                if ((index >= 0) && (index < 12)){ // TODO: no usar constante 12
                         	sonidos[index]=data;
+				sonidoslib[index]=data;
                 	}
+//			else fprintf(stderr,"setProperty sonidos sample BAD INDEX %d\n",index);
 		}
+//../core/abadia/Juego.cpp:       audio_plugin->Play(SONIDOS::Inicio,true);
+//../core/abadia/Juego.cpp:       audio_plugin->Play(SONIDOS::Final,true);
+//../core/abadia/Logica.cpp:              VigasocoMain->getAudioPlugin()->Play(SONIDOS::Fondo,true);
+// en la version HTTP cuando se pedía explicitamente un dump se borraban los sonidos
+// asi si sonaban varias cosas cuando se consultaba se tenia acumulado todo lo que había sonado
+// en la lib se hace un dump al final de cada paso 
+// no se puede poner todo a false al acabar porque hay sonidos que suena solo un momento
+// mientras que 
+		if (prop == "resetSonidosLib") {
+			static const UINT8 Abrir = 0;
+			static const UINT8 Aporrear = 1;
+			static const UINT8 Campanas = 2;
+			static const UINT8 Cerrar = 3;
+			static const UINT8 Coger = 4;
+			static const UINT8 Dejar = 5;
+			static const UINT8 Espejo = 6;
+			static const UINT8 Final = 7;
+			static const UINT8 Fondo = 8;
+			static const UINT8 Inicio = 9;
+			static const UINT8 Pasos = 10;
+			static const UINT8 Tintineo = 11;
+			sonidoslib[Abrir]=false;
+			sonidoslib[Aporrear]=false;
+			sonidoslib[Campanas]=false;
+			sonidoslib[Cerrar]=false;
+			sonidoslib[Coger]=false;
+			sonidoslib[Dejar]=false;
+			sonidoslib[Espejo]=false;
+			//sonidoslib[Final]=false;
+			//sonidoslib[Fondo]=false;
+			//sonidoslib[Inicio]=false;
+			sonidoslib[Pasos]=false;
+			sonidoslib[Tintineo]=false;
+		} 
         };
 
 	virtual int getProperty(std::string prop,int index) { 
 		if (prop == "sonidos"){
 			//if ((index >= 0) && (index < SONIDOS::END_OF_SOUNDS)){
 			if ((index >= 0) && (index < 12)){ // TODO: no usar constante 1
-				return sonidos[index];
+				return sonidoslib[index];
+//				return sonidos[index];
 			}
+//			else fprintf(stderr,"getProperty resetsonidoslib sample BAD INDEX %d\n",index);
 		}
 		return -1;
 	};

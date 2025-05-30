@@ -214,6 +214,7 @@ Juego::~Juego()
 
 void Juego::ReiniciaPantalla(void)
 {
+//	fprintf(stderr,"Juego::ReiniciaPantalla");
 	// limpia el área de juego y dibuja el marcador
 	// CPC limpiaAreaJuego(0);
 #ifdef __abadIA__
@@ -1797,6 +1798,10 @@ void Juego::init()
 	// limpia el área que ocupa el marcador
 	marcador->limpiaAreaMarcador();
 
+	// 666 daba core en  Abadia::Marcador::realizaScrollMomentoDia
+	// porque llegaba sin inicializar y luego petaba un caracter = *nombreMomentoDia;
+	ReiniciaPantalla();
+
 }
 
 
@@ -1825,6 +1830,10 @@ std::string Juego::step(int *source) {
 
 	controles->libabadIAInput(source);
 	int tmp=step();
+std::ofstream kk("/tmp/abadiaFB/screen.data",std::ofstream::binary);
+kk.write(reinterpret_cast<char*>(cpc6128->screenBuffer), sizeof(cpc6128->screenBuffer));
+kk.close();
+	/* ¿esto tiene sentido ahora que siempre se devuelve dump tras cada step */
 	if (tmp==2) {
 		// ñapa DUMP
 		std::string tmp=dump();	
@@ -1834,12 +1843,18 @@ std::string Juego::step(int *source) {
 		for (int index=0;index<12;index++)
 			VigasocoMain->getAudioPlugin()->setProperty("sonidos",index,false);
 		return tmp;
-	} else {
+	}  else {
 //		if (tmp==-2) 
 //			return dump(); // TODO revisar si necesita tratamiento especial
 //		else 
-		return dump();
-	}
+//		return dump();
+		std::string stmp=dump();
+		// desconectamos los sonidos inmediatos que no son melodias que se quedan sonando
+		// hasta que se indica stop
+		VigasocoMain->getAudioPlugin()->setProperty("resetSonidosLib",0,false);
+		return stmp;
+	} 
+
 }
 #endif
 
@@ -3003,9 +3018,11 @@ void Juego::creaEntidadesJuego()
 // con toda la parafernalia de gráficos que tiene
 // si solo queremos un save que vuelca en JSON
 std::string Juego::dump(void) {
-std::ofstream kk("/tmp/abadiaFB/screen.data",std::ofstream::binary);
-kk.write(reinterpret_cast<char*>(cpc6128->screenBuffer), sizeof(cpc6128->screenBuffer));
-kk.close();
+
+//el screen lo sacamos ahora en step
+//std::ofstream kk("/tmp/abadiaFB/screen.data",std::ofstream::binary);
+//kk.write(reinterpret_cast<char*>(cpc6128->screenBuffer), sizeof(cpc6128->screenBuffer));
+//kk.close();
                 nlohmann::json dump;
                 dump["dia"]=laLogica->dia;
                 dump["momentoDia"]= laLogica->momentoDia;
