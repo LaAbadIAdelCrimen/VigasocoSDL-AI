@@ -1,8 +1,8 @@
 #CXXFLAGS=-O3 -fPIC -I../core -I../VigasocoSDL/ `sdl-config --cflags` -std=c++11 -D__abadIA__ 
 #CXXFLAGS=-march=native -Ofast -fopenmp -fPIC -I../core -I../core/util  -I../VigasocoSDL/ `sdl-config --cflags` -std=c++11 -D__abadIA__ 
 #TODO: falta ver si se puede hacer profiling en ejecución de una librería dinámica y recompilar optimizando
-CXXFLAGS=-march=native -mtune=generic -frecord-gcc-switches -Ofast -std=c++17 -D__abadIA__ -DBOOST_ASIO_USE_TS_EXECUTOR_AS_DEFAULT -fPIC -I../core -I../core/util -I../VigasocoSDL  `sdl-config --cflags` -stdlib=libc++
-LDFLAGS=-frecord-gcc-switches `sdl-config --libs` -lc++fs -lSDL
+CXXFLAGS=-march=native -mtune=generic -frecord-gcc-switches -Ofast -std=c++17 -D__abadIA__ -DBOOST_ASIO_USE_TS_EXECUTOR_AS_DEFAULT -fPIC -I/opt/homebrew/opt/boost/include -DCROW_USE_BOOST -I../core -I../core/util -I../VigasocoSDL  `sdl-config --cflags` -stdlib=libc++
+LDFLAGS=-frecord-gcc-switches -L/opt/homebrew/opt/boost/lib -lSDL
 VPATH=.:../core:../core/abadia:../core/util:../core/systems
 
 all: ../VigasocoSDL/input/libVigasocoHTTPInputPlugin.so 
@@ -19,10 +19,10 @@ $(OBJECTS_profile): CXXFLAGS+=-D__abadIA_PROFILE__
 all: ../VigasocoSDL/input/libVigasocoHTTPInputPlugin.so ../VigasocoSDL/input/libVigasocoHTTPInputPlugin-profile.so
 
 ../VigasocoSDL/input/libVigasocoHTTPInputPlugin.so: $(OBJECTS)
-	$(CXX) -fPIC -shared $(OBJECTS) `sdl-config --libs` -lboost_thread -lboost_system -o $@
+	$(CXX) -fPIC -shared $(OBJECTS) $(LDFLAGS) `sdl-config --libs` -lboost_thread -o $@
 
 ../VigasocoSDL/input/libVigasocoHTTPInputPlugin-profile.so: $(OBJECTS_profile)
-	$(CXX) -fPIC -shared $(OBJECTS_profile) `sdl-config --libs` -lboost_thread -lboost_system -o $@
+	$(CXX) -fPIC -shared $(OBJECTS_profile) $(LDFLAGS) `sdl-config --libs` -lboost_thread -o $@
 
 clean:
 	rm -f $(OBJECTS) $(OBJECTS_profile) ../VigasocoSDL/input/libVigasocoHTTPInputPlugin.so 

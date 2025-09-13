@@ -34,7 +34,7 @@ $(OBJECTS_profile): CXXFLAGS+=-D__abadIA__ -D__abadIA_PROFILE__  -D__abadIA_FAST
 	@echo  $(@:.gcda=.profile.gcda) debería estar generado al ejecutarse abadIA-profile	
 	@cp $(@:.gcda=.profile.gcda) $@ 
 
-TARGETS=VigasocoSDL abadIA # abadIA-profile abadIA-HEADLESS abadIA
+TARGETS=VigasocoSDL abadIA # abadIA-HEADLESS
 
 VigasocoSDL: $(OBJECTS)
 	$(CXX) $^ `sdl-config --libs` -o $@
